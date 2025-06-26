@@ -5,6 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>$ONETAP</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      perspective: 1px;
+      transform-style: preserve-3d;
+      overflow-x: hidden;
+    }
+    section, header, footer {
+      position: relative;
+      transform-style: preserve-3d;
+      transition: all 0.6s ease;
+    }
+    section.visible, header.visible {
+      transform: translateZ(0);
+      opacity: 1;
+    }
+    section, header {
+      opacity: 0;
+      transform: translateY(50px) scale(0.98);
+    }
+  </style>
 </head>
 <body>
   <header class="hero">
@@ -71,7 +94,7 @@
   </footer>
 
   <script>
-    const sections = document.querySelectorAll("section");
+    const sections = document.querySelectorAll("section, header");
     const reveal = () => {
       const trigger = window.innerHeight * 0.85;
       sections.forEach(sec => {
