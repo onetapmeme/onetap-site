@@ -33,6 +33,30 @@
       pointer-events: none;
     }
 
+    #killfeedScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.95);
+      z-index: 9999;
+      color: #ff5555;
+      font-family: monospace;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    #killfeedScreen.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     section, header, footer {
       position: relative;
       z-index: 1;
@@ -99,6 +123,7 @@
   </style>
 </head>
 <body>
+  <div id="killfeedScreen">$ONETAP 🔫 Deagle HEADSHOT 💀 Transitioning...</div>
   <canvas id="deagleCanvas"></canvas>
   <header class="hero">
     <h1>$ONETAP</h1>
@@ -106,18 +131,13 @@
     <a class="cta-button" href="#buy">Buy on Uniswap</a>
   </header>
 
-  <section class="lore">
+  <section class="lore" id="lore">
     <h2>Lore & Backstory</h2>
-    <p>
-      Born from eco rounds and silent plays, $ONETAP was forged in the fire of precision.
-      No sprays. No panic. Just one bullet, one moon.
-    </p>
-    <p>
-      When the market goes full-auto, $ONETAP stands still.
-    </p>
+    <p>Born from eco rounds and silent plays, $ONETAP was forged in the fire of precision. No sprays. No panic. Just one bullet, one moon.</p>
+    <p>When the market goes full-auto, $ONETAP stands still.</p>
   </section>
 
-  <section class="tokenomics">
+  <section class="tokenomics" id="tokenomics">
     <h2>Tokenomics</h2>
     <ul>
       <li>50% Liquidity</li>
@@ -127,25 +147,16 @@
     </ul>
   </section>
 
-  <section class="drop">
+  <section class="drop" id="drop">
     <h2>$DROP Crates</h2>
-    <p>
-      Unlock NFT skins, pixel sprays, and leaderboard flex with $DROP loot crates.
-    </p>
-    <p>
-      Every headshot gets you closer to a legendary item.
-    </p>
+    <p>Unlock NFT skins, pixel sprays, and leaderboard flex with $DROP loot crates.</p>
+    <p>Every headshot gets you closer to a legendary item.</p>
   </section>
 
-  <section class="dao">
+  <section class="dao" id="dao">
     <h2>DAO & Community</h2>
-    <p>
-      $ONETAP is community-powered. One voice, one shot.
-      Governance, memes, and upgrades by the holders.
-    </p>
-    <p>
-      Join us on <a href="#">Telegram</a> and <a href="#">Twitter</a>
-    </p>
+    <p>$ONETAP is community-powered. One voice, one shot. Governance, memes, and upgrades by the holders.</p>
+    <p>Join us on <a href="#">Telegram</a> and <a href="#">Twitter</a></p>
   </section>
 
   <section id="buy" class="buy">
@@ -196,7 +207,7 @@
     }
 
     const bullets = [];
-    const links = ['#lore', '#tokenomics', '#drop', '#dao', '#buy', '#extra'];
+    const links = ['#lore', '#tokenomics', '#drop', '#dao', '#buy', '#lore'];
     const startX = canvas.width / 2 - 100;
     const startY = canvas.height - 100;
     const spacing = Math.PI / 6;
@@ -221,7 +232,12 @@
         const dx = e.clientX - bullet.x;
         const dy = e.clientY - bullet.y;
         if (Math.sqrt(dx*dx + dy*dy) < bullet.radius * 2) {
-          window.location.href = bullet.link;
+          const killfeed = document.getElementById('killfeedScreen');
+          killfeed.classList.add('visible');
+          setTimeout(() => {
+            killfeed.classList.remove('visible');
+            window.location.href = bullet.link;
+          }, 1200);
         }
       });
     });
