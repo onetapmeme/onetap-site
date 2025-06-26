@@ -1,94 +1,93 @@
 
 body {
-    font-family: 'Orbitron', sans-serif;
-    background: linear-gradient(135deg, #0f0f0f 0%, #1c1c1c 100%);
-    color: #e8e8e8;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(-45deg, #0f0f0f, #1c1c1c, #101010, #1a1a1a);
+    background-size: 400% 400%;
+    animation: gradientBackground 20s ease infinite;
+    color: #f0f0f0;
     margin: 0;
     padding: 0;
-    line-height: 1.75;
-    animation: backgroundScroll 30s linear infinite;
+    line-height: 1.8;
 }
 
-@keyframes backgroundScroll {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 100% 100%; }
+@keyframes gradientBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 header {
-    background-color: #1a1a1a;
     text-align: center;
-    padding: 4rem 2rem;
+    padding: 5rem 2rem;
     animation: fadeIn 1s ease-in;
 }
 
 header h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     color: #00ffff;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px #000;
+    text-shadow: 0 0 10px #00ffffaa;
 }
 
 .cta-button {
     background-color: #00ffff;
     color: #000;
     padding: 1rem 2rem;
-    border-radius: 6px;
-    font-weight: bold;
+    border-radius: 10px;
+    font-weight: 600;
     text-decoration: none;
+    box-shadow: 0 0 10px #00ffff88;
     transition: all 0.3s ease-in-out;
 }
 
 .cta-button:hover {
     background-color: #00cccc;
-    transform: scale(1.05);
+    transform: scale(1.06);
+    box-shadow: 0 0 20px #00ffffcc;
 }
 
 section {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s ease, transform 1s ease;
     padding: 3rem 1.5rem;
     max-width: 900px;
-    margin: auto;
-    background-color: rgba(25, 25, 25, 0.85);
-    border-radius: 10px;
-    margin-bottom: 2rem;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    animation: slideUp 1.2s ease-out;
+    margin: 2rem auto;
+    background-color: rgba(25, 25, 25, 0.9);
+    border-radius: 14px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
 }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 h2 {
     color: #ffcc00;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-top: 0;
-    text-shadow: 1px 1px #000;
+    text-shadow: 0 0 5px #ffcc00aa;
 }
 
 ul {
     list-style: disc;
     padding-left: 2rem;
+    margin-bottom: 1rem;
 }
 
 footer {
     text-align: center;
     padding: 2rem;
     background-color: #121212;
-    color: #888;
+    color: #aaa;
     font-size: 0.9rem;
     border-top: 1px solid #333;
-    animation: fadeIn 2s ease-in;
 }
 
-/* Killfeed style */
+/* Killfeed */
 .killfeed {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #ff6666;
     font-weight: 500;
     background-color: rgba(255, 255, 255, 0.03);
@@ -99,6 +98,5 @@ footer {
     border-bottom: 1px solid #333;
     max-width: 700px;
     margin: 0 auto 2rem auto;
-    border-radius: 6px;
-    animation: fadeIn 1.5s ease-in;
+    border-radius: 8px;
 }
