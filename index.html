@@ -1,103 +1,77 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>$ONETAP</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(-45deg, #0f0f0f, #1c1c1c, #101010, #1a1a1a);
-  background-size: 400% 400%;
-  animation: gradientBackground 20s ease infinite;
-  color: #f0f0f0;
-  margin: 0;
-  padding: 0;
-  line-height: 1.8;
-}
+  <header>
+    <h1>$ONETAP</h1>
+    <p>One tap to the moon. Pixel-perfect memecoin for true headshotters.</p>
+    <a class="cta-button" href="#">Buy on Uniswap</a>
+  </header>
 
-@keyframes gradientBackground {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+  <section>
+    <h2>What is $ONETAP?</h2>
+    <p>$ONETAP is a precision-based memecoin inspired by Counter-Strike and pixel memes. No spam. Just aim. Click once. Headshot the market.</p>
+  </section>
 
-header {
-  text-align: center;
-  padding: 5rem 2rem;
-  animation: fadeIn 1s ease-in;
-}
+  <section>
+    <h2>Tokenomics</h2>
+    <ul>
+      <li>🔥 50% Liquidity</li>
+      <li>🎁 25% Community Airdrop</li>
+      <li>💼 15% Dev & Marketing</li>
+      <li>🧠 10% DAO Vault</li>
+    </ul>
+  </section>
 
-header h1 {
-  font-size: 3rem;
-  color: #00ffff;
-  margin-bottom: 1rem;
-  text-shadow: 0 0 10px #00ffffaa;
-}
+  <section>
+    <h2>📖 $ONETAP Lore</h2>
+    <p><strong>Mission Briefing:</strong><br>
+    $ONETAP is not just a token. It’s a philosophy. A lifestyle. A one-bullet chance to moon or bust.</p>
 
-.cta-button {
-  background-color: #00ffff;
-  color: #000;
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  font-weight: 600;
-  text-decoration: none;
-  box-shadow: 0 0 10px #00ffff88;
-  transition: all 0.3s ease-in-out;
-}
+    <p><strong>Backstory:</strong><br>
+    Born from the ashes of eco rounds and tilted buys, $ONETAP represents precision over panic. 
+    It's the weapon of choice for those who don't spray and pray — they click once, and walk away.</p>
 
-.cta-button:hover {
-  background-color: #00cccc;
-  transform: scale(1.06);
-  box-shadow: 0 0 20px #00ffffcc;
-}
+    <ul>
+      <li>🎯 Precision-based tokenomics</li>
+      <li>🧠 Community-driven strategies (DAO-powered)</li>
+      <li>🔫 NFT-based skin drops via $DROP crates</li>
+      <li>🔥 Headshot leaderboard for top holders</li>
+      <li>👻 True pixel-meme identity built on CS nostalgia</li>
+    </ul>
+  </section>
 
-section {
-  opacity: 0;
-  transform: translateY(50px);
-  transition: opacity 1s ease, transform 1s ease;
-  padding: 3rem 1.5rem;
-  max-width: 900px;
-  margin: 2rem auto;
-  background-color: rgba(25, 25, 25, 0.9);
-  border-radius: 14px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.4);
-}
+  <div class="killfeed">
+    <p>$ONETAP 🔫 Deagle 🔫 HEADSHOT 💀 the Market</p>
+    <p>SatoshiOneTap 🔫 Deagle 🔫 HEADSHOT 💀 FOMO Bot</p>
+    <p>rektmaster 🔫 Deagle 🔫 HEADSHOT 💀 GasFeeKing</p>
+  </div>
 
-section.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+  <footer>
+    <p>&copy; 2025 $ONETAP. Click once. Headshot forever.</p>
+  </footer>
 
-h2 {
-  color: #ffcc00;
-  font-size: 1.8rem;
-  margin-top: 0;
-  text-shadow: 0 0 5px #ffcc00aa;
-}
+  <!-- Script animation scroll -->
+  <script>
+    const sections = document.querySelectorAll("section");
+    const reveal = () => {
+      const trigger = window.innerHeight * 0.85;
+      sections.forEach(sec => {
+        const top = sec.getBoundingClientRect().top;
+        if (top < trigger) {
+          sec.classList.add("visible");
+        }
+      });
+    };
+    window.addEventListener("scroll", reveal);
+    window.addEventListener("load", reveal);
+  </script>
 
-ul {
-  list-style: disc;
-  padding-left: 2rem;
-  margin-bottom: 1rem;
-}
-
-footer {
-  text-align: center;
-  padding: 2rem;
-  background-color: #121212;
-  color: #aaa;
-  font-size: 0.9rem;
-  border-top: 1px solid #333;
-}
-
-/* Killfeed */
-.killfeed {
-  font-size: 1rem;
-  color: #ff6666;
-  font-weight: 500;
-  background-color: rgba(255, 255, 255, 0.03);
-  padding: 1rem;
-  text-align: center;
-  font-family: monospace;
-  border-top: 1px solid #333;
-  border-bottom: 1px solid #333;
-  max-width: 700px;
-  margin: 0 auto 2rem auto;
-  border-radius: 8px;
-}
+</body>
+</html>
