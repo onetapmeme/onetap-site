@@ -1,23 +1,31 @@
 
 body {
     font-family: 'Orbitron', sans-serif;
-    background-color: #0f0f0f;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1c1c1c 100%);
     color: #e8e8e8;
     margin: 0;
     padding: 0;
     line-height: 1.75;
+    animation: backgroundScroll 30s linear infinite;
+}
+
+@keyframes backgroundScroll {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
 }
 
 header {
     background-color: #1a1a1a;
     text-align: center;
     padding: 4rem 2rem;
+    animation: fadeIn 1s ease-in;
 }
 
 header h1 {
     font-size: 2.5rem;
     color: #00ffff;
     margin-bottom: 1rem;
+    text-shadow: 2px 2px #000;
 }
 
 .cta-button {
@@ -39,16 +47,28 @@ section {
     padding: 3rem 1.5rem;
     max-width: 900px;
     margin: auto;
-    background-color: #191919;
+    background-color: rgba(25, 25, 25, 0.85);
     border-radius: 10px;
     margin-bottom: 2rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    animation: slideUp 1.2s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 h2 {
     color: #ffcc00;
     font-size: 1.5rem;
     margin-top: 0;
+    text-shadow: 1px 1px #000;
 }
 
 ul {
@@ -63,6 +83,7 @@ footer {
     color: #888;
     font-size: 0.9rem;
     border-top: 1px solid #333;
+    animation: fadeIn 2s ease-in;
 }
 
 /* Killfeed style */
@@ -79,4 +100,5 @@ footer {
     max-width: 700px;
     margin: 0 auto 2rem auto;
     border-radius: 6px;
+    animation: fadeIn 1.5s ease-in;
 }
