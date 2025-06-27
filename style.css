@@ -218,6 +218,7 @@ body::before {
 .section {
   min-height: 88vh;
   padding: 6rem 0 3.5rem 0;
+  margin-bottom: 3rem;    /* <-- AJOUT : espace entre les sections */
   opacity: 0;
   transform: translateY(60px) scale(0.95) rotateX(8deg);
   transition: opacity 0.8s cubic-bezier(.36,.07,.19,.97), transform 0.8s cubic-bezier(.36,.07,.19,.97);
@@ -258,8 +259,8 @@ body::before {
 
 /* --- Tokenomics corrigé --- */
 #tokenomics {
-  background: #101828e6;
-  box-shadow: 0 2px 18px #26B6FA33;
+  background: #101828;  /* <-- opaque, plus de transparence */
+  box-shadow: 0 2px 18px #26B6FA33, 0 0 0 4px #FF842A33;
   border-radius: 1.6rem;
   margin: 2.5rem auto;
   max-width: 900px;
