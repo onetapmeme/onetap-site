@@ -3,125 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>$ONETAP Inventory</title>
-  <meta name="description" content="Découvrez l'inventaire $ONETAP : crypto, lore, skins NFT, airdrop, et bien plus. Une landing page immersive, 100% gaming.">
+  <title>$ONETAP – Meme Token Landing</title>
+  <meta name="description" content="Landing page immersive du projet $ONETAP : crypto, NFT, airdrop, DAO, meme farming et plus.">
   <link rel="stylesheet" href="style.css" />
-  <meta property="og:title" content="$ONETAP Inventory">
-  <meta property="og:description" content="Landing page immersive et rétro autour du token $ONETAP et de son univers crypto/gaming."/>
-  <meta property="og:type" content="website"/>
 </head>
 <body>
-  <header>
-    <h1 class="inventory-title" tabindex="0">$ONETAP Inventory</h1>
-  </header>
-  <main>
-    <div class="inventory-grid">
-      <!-- Slots (identiques à avant, avec tabindex/aria-label) -->
-      <div class="inventory-slot" tabindex="0" role="button" aria-label="Voir le Deagle" data-title="$ONETAP Deagle" data-desc="The legendary one tap! Precision, style, and moonshot." data-link="#">
-        <img src="logo_onetap.png" alt="Logo Deagle" class="slot-img" loading="lazy">
-        <span class="slot-label">Deagle</span>
-      </div>
-      <div class="inventory-slot" tabindex="0" role="button" aria-label="Acheter $ONETAP" data-title="Buy $ONETAP" data-desc="Available on Uniswap. One click, one shot to the moon!" data-link="#buy">
-        <img src="https://img.icons8.com/pastel-glyph/64/00ffff/shopping-cart--v2.png" alt="Buy" class="slot-img" loading="lazy">
-        <span class="slot-label">Buy</span>
-      </div>
-      <div class="inventory-slot" tabindex="0" role="button" aria-label="Voir le Lore" data-title="Lore" data-desc="Forged in eco rounds. No panic. Just one bullet, one legend." data-link="#lore">
-        <img src="https://img.icons8.com/pastel-glyph/64/00ffff/story.png" alt="Lore" class="slot-img" loading="lazy">
-        <span class="slot-label">Lore</span>
-      </div>
-      <div class="inventory-slot" tabindex="0" role="button" aria-label="Voir la Tokenomics" data-title="Tokenomics" data-desc="50% Liquidity, 25% Airdrop, 15% Marketing & Dev, 10% DAO Vault" data-link="#tokenomics">
-        <img src="https://img.icons8.com/pastel-glyph/64/00ffff/stack-of-coins--v2.png" alt="Tokenomics" class="slot-img" loading="lazy">
-        <span class="slot-label">Tokenomics</span>
-      </div>
-      <div class="inventory-slot" tabindex="0" role="button" aria-label="Lire le Whitepaper" data-title="Whitepaper" data-desc="All the details, all the alpha, all the fun. Read the doc." data-link="#whitepaper">
-        <img src="https://img.icons8.com/pastel-glyph/64/00ffff/document--v2.png" alt="Whitepaper" class="slot-img" loading="lazy">
-        <span class="slot-label">Whitepaper</span>
-      </div>
-      <div class="inventory-slot" tabindex="0" role="button" aria-label="Voir le DAO" data-title="DAO" data-desc="Governance and upgrades by the holders. One tap, one vote." data-link="#dao">
-        <img src="https://img.icons8.com/pastel-glyph/64/00ffff/crowd--v2.png" alt="DAO" class="slot-img" loading="lazy">
-        <span class="slot-label">DAO</span>
-      </div>
-      <div class="inventory-slot" tabindex="0" role="button" aria-label="Voir les NFT Skins" data-title="NFT Skins" data-desc="Unlock legendary NFT skins and sprays!" data-link="#skins">
-        <img src="https://img.icons8.com/pastel-glyph/64/00ffff/paint-spray.png" alt="Skins" class="slot-img" loading="lazy">
-        <span class="slot-label">NFT Skins</span>
-      </div>
-      <div class="inventory-slot" tabindex="0" role="button" aria-label="Participer à l'airdrop" data-title="Airdrop" data-desc="Claim your share. The moon is calling." data-link="#airdrop">
-        <img src="https://img.icons8.com/pastel-glyph/64/00ffff/parcel--v2.png" alt="Airdrop" class="slot-img" loading="lazy">
-        <span class="slot-label">Airdrop</span>
-      </div>
+  <!-- Menu sticky -->
+  <nav class="navbar">
+    <div class="nav-logo">$ONETAP</div>
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">Lore</a></li>
+      <li><a href="#tokenomics">Tokenomics</a></li>
+      <li><a href="#whitepaper">Whitepaper</a></li>
+      <li><a href="#dao">DAO</a></li>
+      <li><a href="#skins">NFT Skins</a></li>
+      <li><a href="#airdrop">Airdrop</a></li>
+      <li><a href="#farming">Meme Farming</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="section hero" id="hero">
+    <div class="hero-content">
+      <img src="logo_onetap.png" alt="$ONETAP Logo" class="hero-logo">
+      <h1 class="hero-title">$ONETAP</h1>
+      <p class="hero-desc">The legendary one tap meme token.<br>No sprays, just headshots.</p>
+      <a class="btn-primary" href="#buy">Buy on Uniswap</a>
     </div>
-  </main>
+    <div class="hero-bg-glow"></div>
+  </section>
+
+  <!-- ABOUT/LORE -->
+  <section class="section" id="about">
+    <div class="container">
+      <h2>Lore</h2>
+      <p>
+        Forged in eco rounds, $ONETAP is the meme token for sharpshooters.<br>
+        Precision, style, and a single bullet to the moon.
+      </p>
+    </div>
+  </section>
+
+  <!-- TOKENOMICS -->
+  <section class="section" id="tokenomics">
+    <div class="container">
+      <h2>Tokenomics</h2>
+      <div class="tokenomics-grid">
+        <div>
+          <div class="tokenomics-num">50%</div>
+          <div class="tokenomics-label">Liquidity</div>
+        </div>
+        <div>
+          <div class="tokenomics-num">25%</div>
+          <div class="tokenomics-label">Airdrop</div>
+        </div>
+        <div>
+          <div class="tokenomics-num">15%</div>
+          <div class="tokenomics-label">Marketing & Dev</div>
+        </div>
+        <div>
+          <div class="tokenomics-num">10%</div>
+          <div class="tokenomics-label">DAO Vault</div>
+        </div>
+      </div>
+      <p class="tokenomics-desc">
+        Fair launch, zero sprays. Everything for the community!
+      </p>
+    </div>
+  </section>
+
+  <!-- WHITEPAPER -->
+  <section class="section" id="whitepaper">
+    <div class="container">
+      <h2>Whitepaper</h2>
+      <p>
+        All the details, all the alpha, all the fun.<br>
+        <a href="#" class="link-neon">Read the doc (coming soon)</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- DAO -->
+  <section class="section" id="dao">
+    <div class="container">
+      <h2>DAO</h2>
+      <p>
+        Governance and upgrades by the holders.<br>
+        One tap, one vote. Your voice, your game.
+      </p>
+    </div>
+  </section>
+
+  <!-- NFT SKINS -->
+  <section class="section" id="skins">
+    <div class="container">
+      <h2>NFT Skins</h2>
+      <div class="skins-gallery">
+        <img src="skin1.png" alt="NFT Skin 1" />
+        <img src="skin2.png" alt="NFT Skin 2" />
+        <img src="skin3.png" alt="NFT Skin 3" />
+      </div>
+      <p>
+        Unlock legendary NFT skins and sprays! Mint soon.
+      </p>
+    </div>
+  </section>
+
+  <!-- AIRDROP -->
+  <section class="section" id="airdrop">
+    <div class="container">
+      <h2>Airdrop</h2>
+      <p>
+        Claim your share. The moon is calling.<br>
+        <a href="#" class="btn-secondary">Join the airdrop</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- MEME FARMING -->
+  <section class="section" id="farming">
+    <div class="container">
+      <h2>Meme Farming</h2>
+      <p>
+        Stake memes. Win rewards. Only the dankest memes survive.<br>
+        Meme farming event coming soon!
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
   <footer>
-    <p>Powered by $ONETAP | All drops legendary. No sprays, just headshots.</p>
+    <div class="footer-content">
+      Powered by $ONETAP &bull; All drops legendary.<br>
+      <span class="footer-links">
+        <a href="#">Contact</a> | <a href="#">Twitter</a> | <a href="#">Telegram</a>
+      </span>
+    </div>
   </footer>
 
-  <!-- Popup Modal -->
-  <div class="modal" id="popupModal" aria-modal="true" role="dialog" tabindex="-1">
-    <div class="modal-content">
-      <span class="modal-close" id="closeModal" tabindex="0" role="button" aria-label="Fermer la fenêtre">&times;</span>
-      <h2 id="modalTitle"></h2>
-      <p id="modalDesc"></p>
-      <a href="#" class="modal-link" id="modalLink" target="_blank" rel="noopener noreferrer">Go</a>
-    </div>
-  </div>
-
-  <!-- Bruitages -->
-  <audio id="slotSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_11f89a6a8e.mp3"></audio>
-  <audio id="inspectSound" src="https://cdn.pixabay.com/audio/2022/02/23/audio_115b423c7b.mp3"></audio>
-
   <script>
-    // Helper: open modal
-    function openModal(slot) {
-      document.getElementById('slotSound').currentTime = 0;
-      document.getElementById('slotSound').play();
-      document.getElementById('modalTitle').textContent = slot.getAttribute('data-title');
-      document.getElementById('modalDesc').textContent = slot.getAttribute('data-desc');
-      document.getElementById('modalLink').href = slot.getAttribute('data-link') || "#";
-      document.getElementById('popupModal').style.display = 'flex';
-      setTimeout(() => {
-        document.getElementById('inspectSound').currentTime = 0;
-        document.getElementById('inspectSound').play();
-      }, 200);
-      document.body.style.overflow = 'hidden'; // Block scroll
-      document.getElementById('popupModal').focus();
-      // Change document title for immersion
-      document.title = slot.getAttribute('data-title') + " | $ONETAP Inventory";
-    }
-
-    // Helper: close modal
-    function closeModal() {
-      document.getElementById('popupModal').style.display = 'none';
-      document.body.style.overflow = '';
-      document.title = "$ONETAP Inventory";
-    }
-
-    // Ouvre le modal au clic ou entrée/espace
-    document.querySelectorAll('.inventory-slot').forEach(slot => {
-      slot.addEventListener('click', function() {
-        openModal(slot);
-      });
-      slot.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          openModal(slot);
+    // Scroll effect: menu active on section
+    const sections = document.querySelectorAll(".section");
+    const navLinks = document.querySelectorAll(".navbar ul li a");
+    window.addEventListener("scroll", () => {
+      let fromTop = window.scrollY + 80;
+      sections.forEach(section => {
+        if (
+          section.offsetTop <= fromTop &&
+          section.offsetTop + section.offsetHeight > fromTop
+        ) {
+          navLinks.forEach(link => {
+            link.classList.remove("active");
+            if (link.getAttribute("href") === "#" + section.id) {
+              link.classList.add("active");
+            }
+          });
         }
       });
     });
 
-    // Fermer le modal (clic croix, overlay ou touche ESC)
-    document.getElementById('closeModal').onclick = closeModal;
-    document.getElementById('closeModal').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') closeModal();
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function(e) {
+        const target = document.querySelector(this.getAttribute("href"));
+        if (target) {
+          e.preventDefault();
+          window.scrollTo({
+            top: target.offsetTop - 60,
+            behavior: "smooth"
+          });
+        }
+      });
     });
-    window.onclick = function(event) {
-      if (event.target == document.getElementById('popupModal')) {
-        closeModal();
+
+    // Fade-in on scroll (basic)
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll(".section");
+      for (let i = 0; i < reveals.length; i++) {
+        const windowHeight = window.innerHeight;
+        const elementTop = reveals[i].getBoundingClientRect().top;
+        if (elementTop < windowHeight - 100) {
+          reveals[i].classList.add("show");
+        }
       }
-    };
-    window.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && document.getElementById('popupModal').style.display === 'flex') {
-        closeModal();
-      }
-    });
+    }
+    window.addEventListener("scroll", revealOnScroll);
+    window.addEventListener("load", revealOnScroll);
   </script>
 </body>
 </html>
