@@ -41,7 +41,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// Fade-in, slide-in apparition des sections
+// Apparition des sections (pop/fade in pixel)
 function revealOnScroll() {
   const reveals = document.querySelectorAll(".section, .reveal");
   for (let i = 0; i < reveals.length; i++) {
@@ -55,22 +55,22 @@ function revealOnScroll() {
 window.addEventListener("scroll", revealOnScroll);
 window.addEventListener("load", revealOnScroll);
 
-// particles.js config custom
+// particles.js config custom, fond hero
 particlesJS("particles-js", {
   "particles": {
-    "number": { "value": 74, "density": { "enable": true, "value_area": 800 } },
-    "color": { "value": ["#00ffff","#fff799"] },
-    "shape": { "type": "circle" },
-    "opacity": { "value": 0.32, "random": true },
-    "size": { "value": 4, "random": true },
+    "number": { "value": 62, "density": { "enable": true, "value_area": 800 } },
+    "color": { "value": ["#26B6FA","#FF842A","#F8EDC2"] },
+    "shape": { "type": "square" },
+    "opacity": { "value": 0.38, "random": true },
+    "size": { "value": 5, "random": true },
     "line_linked": {
       "enable": true,
-      "distance": 140,
-      "color": "#00ffff",
-      "opacity": 0.14,
-      "width": 1.2
+      "distance": 135,
+      "color": "#26B6FA",
+      "opacity": 0.13,
+      "width": 1.4
     },
-    "move": { "enable": true, "speed": 1.3, "direction": "none", "random": true }
+    "move": { "enable": true, "speed": 1.35, "direction": "none", "random": true }
   },
   "interactivity": {
     "detect_on": "canvas",
@@ -79,9 +79,34 @@ particlesJS("particles-js", {
       "onclick": { "enable": true, "mode": "push" }
     },
     "modes": {
-      "grab": { "distance": 160, "line_linked": { "opacity": 0.37 } },
+      "grab": { "distance": 170, "line_linked": { "opacity": 0.31 } },
       "push": { "particles_nb": 2 }
     }
   },
   "retina_detect": true
+});
+
+// ----------- Pixel burst effect on buttons ----------
+function pixelBurst(el) {
+  for (let i = 0; i < 14; i++) {
+    const px = document.createElement('div');
+    px.className = 'pixel-burst';
+    const angle = Math.random() * 2 * Math.PI;
+    const dist = 40 + Math.random() * 24;
+    px.style.left = '50%';
+    px.style.top = '50%';
+    px.style.background = Math.random() > 0.5 ? '#26B6FA' : '#FF842A';
+    el.appendChild(px);
+    setTimeout(() => {
+      px.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) scale(0.7)`;
+      px.style.opacity = 0;
+    }, 10);
+    setTimeout(() => px.remove(), 550);
+  }
+}
+
+document.querySelectorAll('.btn-animate').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    pixelBurst(this);
+  });
 });
