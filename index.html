@@ -28,17 +28,41 @@
     </ul>
   </nav>
 
-  <!-- HERO PARALLAX + PARTICLES -->
+  <!-- HERO = INVENTAIRE INTERACTIF -->
   <section class="section hero" id="hero">
-    <div id="particles-js"></div>
+    <div id="inventory-bg"></div>
     <div class="hero-content">
-      <div class="parallax-wrap">
-        <img src="logo_onetap.png" alt="$ONETAP Logo" class="hero-logo parallax-item">
-        <div class="hero-bg-glow parallax-item"></div>
+      <h1 class="hero-title glitch">$ONETAP Inventory</h1>
+      <div class="inventory-grid">
+        <div class="inventory-slot" data-target="#about" title="See the Lore">
+          <img src="logo_onetap.png" alt="Lore" class="slot-img">
+          <span class="slot-label">Lore</span>
+        </div>
+        <div class="inventory-slot" data-target="#tokenomics" title="See Tokenomics">
+          <img src="https://img.icons8.com/pastel-glyph/64/00ffff/stack-of-coins--v2.png" alt="Tokenomics" class="slot-img">
+          <span class="slot-label">Tokenomics</span>
+        </div>
+        <div class="inventory-slot" data-target="#whitepaper" title="Whitepaper">
+          <img src="https://img.icons8.com/pastel-glyph/64/00ffff/document--v2.png" alt="Whitepaper" class="slot-img">
+          <span class="slot-label">Whitepaper</span>
+        </div>
+        <div class="inventory-slot" data-target="#dao" title="DAO">
+          <img src="https://img.icons8.com/pastel-glyph/64/00ffff/crowd--v2.png" alt="DAO" class="slot-img">
+          <span class="slot-label">DAO</span>
+        </div>
+        <div class="inventory-slot" data-target="#skins" title="NFT Skins">
+          <img src="https://img.icons8.com/pastel-glyph/64/00ffff/paint-spray.png" alt="NFT Skins" class="slot-img">
+          <span class="slot-label">NFT Skins</span>
+        </div>
+        <div class="inventory-slot" data-target="#airdrop" title="Airdrop">
+          <img src="https://img.icons8.com/pastel-glyph/64/00ffff/parcel--v2.png" alt="Airdrop" class="slot-img">
+          <span class="slot-label">Airdrop</span>
+        </div>
+        <div class="inventory-slot" data-target="#farming" title="Meme Farming">
+          <img src="https://img.icons8.com/pastel-glyph/64/00ffff/shopping-cart--v2.png" alt="Meme Farming" class="slot-img">
+          <span class="slot-label">Farming</span>
+        </div>
       </div>
-      <h1 class="hero-title glitch">$ONETAP</h1>
-      <p class="hero-desc">The legendary one tap meme token.<br>No sprays, just headshots.</p>
-      <a class="btn-primary btn-animate" href="#buy">Buy on Uniswap</a>
     </div>
   </section>
 
@@ -53,7 +77,7 @@
     </div>
   </section>
 
-  <!-- TOKENOMICS corrigé -->
+  <!-- TOKENOMICS -->
   <section class="section" id="tokenomics">
     <div class="container">
       <h2 class="reveal">Tokenomics</h2>
@@ -150,8 +174,6 @@
     </div>
   </footer>
 
-  <!-- particles.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
