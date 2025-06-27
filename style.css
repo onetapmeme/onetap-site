@@ -353,3 +353,15 @@ footer {
   .ticker { font-size: 0.7rem; }
   .footer-links a { margin: 0 0.3rem; }
 }
+
+.pixel-burst {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 2.5px;
+  background: #FF842A;
+  pointer-events: none;
+  transition: transform 0.45s cubic-bezier(.36,.07,.19,.97), opacity 0.44s;
+  z-index: 12;
+  box-shadow: 0 0 8px #F8EDC2aa;
+}
+
