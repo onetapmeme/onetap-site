@@ -1,112 +1,179 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;700&display=swap');
+
 body {
-  margin: 0;
+  background: #10151d;
+  color: #fff;
   font-family: 'Inter', Arial, sans-serif;
-  background: #080d13;
-  color: #e7faff;
+  margin: 0;
   min-height: 100vh;
-  overflow-x: hidden;
-}
-canvas#radar-bg {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-}
-header {
-  text-align: center;
-  margin-top: 4rem;
-  z-index: 2;
   position: relative;
 }
-h1.neon {
+/* Effet scanlines rétro */
+body::before {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 2px,
+    rgba(255,255,255,0.017) 2px 4px
+  );
+  z-index: 1000;
+  mix-blend-mode: overlay;
+}
+
+header {
+  text-align: center;
+  padding: 2rem 0 0.5rem;
+}
+.inventory-title {
   font-family: 'Press Start 2P', 'Inter', Arial, sans-serif;
   color: #00ffff;
-  font-size: 3.5rem;
-  text-shadow: 0 0 15px #0ff, 0 0 25px #0ff, 0 0 40px #0ff99f88;
-  animation: neon-glow 2s infinite alternate;
-}
-@keyframes neon-glow {
-  from { text-shadow: 0 0 15px #0ff; }
-  to   { text-shadow: 0 0 25px #fff, 0 0 80px #0ff; }
-}
-.subtitle {
-  color: #ffc800;
-  font-size: 1.1rem;
+  font-size: 2rem;
+  text-shadow: 0 0 14px #0ff99f, 0 0 24px #00ffff55;
   margin-bottom: 2rem;
-}
-.cta-button {
-  background: #00ffff;
-  color: #000;
-  font-size: 1.1rem;
-  border: none;
-  padding: 1.3rem 2.4rem;
-  border-radius: 12px;
-  box-shadow: 0 0 18px #00ffff77;
+  letter-spacing: 2px;
   cursor: pointer;
-  transition: transform 0.1s, box-shadow 0.1s;
-  z-index: 2;
+  transition: filter 0.3s, text-shadow 0.3s;
 }
-.cta-button:hover {
-  transform: scale(1.06) rotate(-2deg);
-  background: #009faa;
-  color: #fff;
-  box-shadow: 0 0 30px #00ffffbb, 0 0 80px #0ff;
+.inventory-title:hover {
+  filter: hue-rotate(45deg) brightness(1.2);
+  text-shadow: 0 0 24px #fff799, 0 0 48px #00ffffcc;
 }
-.killfeed {
-  font-family: 'Press Start 2P', 'Inter', Arial, sans-serif;
-  color: #ff4444;
-  background: rgba(0,0,0,0.93);
-  padding: 1.2rem 2rem;
-  border-radius: 10px;
-  position: fixed;
-  left: 50%; top: 16%;
-  transform: translateX(-50%);
-  font-size: 1rem;
-  opacity: 0;
-  z-index: 99;
-  pointer-events: none;
-  transition: opacity 0.25s;
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1.2rem;
+  max-width: 740px;
+  margin: 0 auto 2.2rem;
+  padding: 1rem;
 }
-.killfeed.visible {
-  opacity: 1;
-  animation: killfeed-fade 1.3s;
+.inventory-slot {
+  background: #1c232e;
+  border: 2px solid #00ffff77;
+  border-radius: 13px;
+  padding: 1.5rem 0.3rem 1rem 0.3rem;
+  text-align: center;
+  box-shadow: 0 0 8px #0ff2, 0 0 2px #222;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.13s, box-shadow 0.13s, border-color 0.13s;
+  outline: none;
 }
-@keyframes killfeed-fade {
-  0%   { opacity: 0; transform: translateX(-50%) scale(0.9);}
-  12%  { opacity: 1; transform: translateX(-50%) scale(1.04);}
-  85%  { opacity: 1; }
-  100% { opacity: 0; transform: translateX(-50%) scale(1);}
+.inventory-slot:hover {
+  border-color: #fff799;
+  box-shadow: 0 0 20px #00fffacc, 0 0 32px #ffc80055;
+  transform: scale(1.04) rotate(-1.5deg);
+  z-index: 1;
 }
-.section {
-  opacity: 0;
-  transform: translateY(80px);
-  transition: all 1s ease;
-  background: rgba(20,28,40,0.85);
-  margin: 2.7rem auto;
-  padding: 2.2rem 1.2rem;
-  border-radius: 16px;
-  max-width: 640px;
-  box-shadow: 0 0 24px #0ff3, 0 0 10px #122;
+.inventory-slot:focus {
+  outline: 3px solid #fff799;
+  border-color: #fff799;
+  box-shadow: 0 0 32px #fff799cc, 0 0 40px #00fffacc;
 }
-.section.visible {
-  opacity: 1;
-  transform: translateY(0);
+.inventory-slot:active {
+  transform: scale(0.98) rotate(-2deg);
+  filter: brightness(0.93);
 }
-ul {
-  margin: 1.2rem auto;
-  max-width: 340px;
+
+.slot-img {
+  width: 54px;
+  margin-bottom: 0.7rem;
+  image-rendering: pixelated;
 }
-li {
-  padding: 0.35rem 0;
-  font-size: 1.08rem;
+.slot-label {
+  display: block;
+  margin-top: 0.2rem;
+  font-family: 'Press Start 2P', Arial, sans-serif;
+  font-size: 0.8rem;
+  color: #00ffff;
+  letter-spacing: 1px;
+  text-shadow: 0 0 7px #0ff9;
 }
+
 footer {
   text-align: center;
-  padding: 2.3rem 1rem;
-  font-size: 0.95rem;
-  color: #78c7ce;
-  margin-top: 3.5rem;
-  background: rgba(0,0,0,0.50);
+  font-size: 1rem;
+  color: #87f7ff;
+  margin: 2rem 0 1.2rem;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(10,19,27,0.98);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.35s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+.modal-content {
+  background: #161c25;
+  border: 2px solid #00ffffcc;
+  border-radius: 18px;
+  box-shadow: 0 0 20px #00f8, 0 0 12px #202f50;
+  padding: 2.2rem 1.8rem 1.3rem;
+  min-width: 240px;
+  max-width: 92vw;
+  color: #fff;
+  position: relative;
+  text-align: center;
+  animation: popIn 0.33s;
+}
+@keyframes popIn {
+  from { transform: scale(0.8);}
+  to   { transform: scale(1);}
+}
+.modal-close {
+  position: absolute;
+  right: 1.2rem;
+  top: 0.8rem;
+  font-size: 2.2rem;
+  color: #00ffff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.2s, transform 0.1s;
+}
+.modal-close:hover, .modal-close:focus {
+  color: #fff799;
+  transform: scale(1.18);
+  outline: none;
+}
+
+.modal-link {
+  display: inline-block;
+  background: #00ffff;
+  color: #0e1218;
+  margin-top: 1rem;
+  padding: 0.7rem 2rem;
+  border-radius: 10px;
+  font-family: 'Press Start 2P', Arial, sans-serif;
+  font-size: 0.9rem;
+  text-decoration: none;
+  box-shadow: 0 0 8px #00ffff99;
+  transition: background 0.15s, color 0.15s;
+}
+.modal-link:hover, .modal-link:focus {
+  background: #fff799;
+  color: #181a1c;
+  outline: none;
+}
+
+/* Responsive et police sur petits écrans */
+@media (max-width: 700px) {
+  .inventory-title { font-size: 1.1rem; }
+  .slot-img { width: 44px; }
+  .inventory-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+  .modal-content { padding: 1rem 0.6rem; }
+}
+@media (max-width: 400px) {
+  .slot-label, .modal-link { font-size: 0.7rem; }
+  .inventory-title { font-size: 0.8rem; }
 }
