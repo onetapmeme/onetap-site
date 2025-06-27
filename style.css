@@ -1,11 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;700&display=swap');
 
-/* --- Effet scanlines + noise rétro --- */
 body {
   margin: 0;
-  background: #131a23;
+  background: #0A1624;
   color: #fff;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'Press Start 2P', Arial, sans-serif;
   min-height: 100vh;
   scroll-behavior: smooth;
   position: relative;
@@ -19,8 +18,8 @@ body::before {
   background:
     repeating-linear-gradient(
       to bottom,
-      transparent 0 1.5px,
-      rgba(255,255,255,0.025) 2px 4px
+      transparent 0 2px,
+      rgba(255,255,255,0.03) 2px 4px
     ),
     url('https://www.transparenttextures.com/patterns/noise.png');
   z-index: 1000;
@@ -28,16 +27,16 @@ body::before {
   opacity: 0.7;
 }
 
-/* --- Ticker animé --- */
+/* --- Ticker --- */
 .ticker {
   width: 100%;
-  background: #0e1720;
-  color: #00ffff;
+  background: #18192a;
+  color: #FF842A;
   font-family: 'Press Start 2P', Arial, sans-serif;
   font-size: 0.9rem;
   white-space: nowrap;
   overflow: hidden;
-  box-shadow: 0 0 20px #00ffff22;
+  box-shadow: 0 0 16px #FF842A99;
   padding: 0.6rem 0;
   z-index: 300;
   position: fixed;
@@ -47,14 +46,14 @@ body::before {
 .ticker span {
   display: inline-block;
   padding-left: 100%;
-  animation: ticker 25s linear infinite;
+  animation: ticker 23s linear infinite;
 }
 @keyframes ticker {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
 }
 
-/* --- Navbar sticky animé --- */
+/* --- Navbar --- */
 .navbar {
   position: sticky;
   top: 0;
@@ -62,23 +61,24 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #181f29f0;
-  box-shadow: 0 0 20px #00ffff22;
+  background: #101828f0;
+  box-shadow: 0 0 18px #2995D1aa;
   padding: 0 2rem;
   height: 60px;
   transition: background 0.3s;
 }
 .nav-logo {
   font-family: 'Press Start 2P', Arial, sans-serif;
-  color: #00ffff;
+  color: #26B6FA;
   font-size: 1.1rem;
   letter-spacing: 1px;
+  text-shadow: 0 0 10px #26B6FA, 0 0 30px #FF842A66;
   animation: glitch-skew 2.2s infinite linear alternate-reverse;
 }
 @keyframes glitch-skew {
-  0% { text-shadow: 2px 0 #fff799, -2px 0 #00ffff; }
-  20% { text-shadow: -2px 0 #fff799, 2px 0 #00ffff; }
-  100% { text-shadow: 2px 0 #fff799, -2px 0 #00ffff; }
+  0% { text-shadow: 2px 0 #FF842A, -2px 0 #26B6FA; }
+  20% { text-shadow: -2px 0 #FF842A, 2px 0 #26B6FA; }
+  100% { text-shadow: 2px 0 #FF842A, -2px 0 #26B6FA; }
 }
 .navbar ul {
   list-style: none;
@@ -90,7 +90,7 @@ body::before {
   margin: 0 0.8rem;
 }
 .navbar a {
-  color: #baf9ff;
+  color: #F8EDC2;
   text-decoration: none;
   font-family: 'Inter', Arial, sans-serif;
   font-weight: bold;
@@ -100,22 +100,22 @@ body::before {
   transition: color 0.18s, text-shadow 0.2s;
 }
 .navbar a.active, .navbar a:hover {
-  color: #fff799;
-  text-shadow: 0 0 10px #fff799bb, 0 0 22px #00ffff66;
+  color: #FF842A;
+  text-shadow: 0 0 10px #FF842A, 0 0 22px #26B6FA66;
 }
 .navbar a.active::after, .navbar a:hover::after {
   content: "";
   display: block;
   width: 100%;
   height: 2px;
-  background: #fff799;
+  background: #FF842A;
   border-radius: 2px;
   position: absolute;
   bottom: 0; left: 0;
-  box-shadow: 0 0 8px #fff79977;
+  box-shadow: 0 0 8px #FF842A77;
 }
 
-/* --- HERO Parallax --- */
+/* --- HERO --- */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -146,7 +146,7 @@ body::before {
   width: 120px;
   margin-bottom: 1.5rem;
   image-rendering: pixelated;
-  filter: drop-shadow(0 0 16px #0ff) drop-shadow(0 0 48px #fff79944);
+  filter: drop-shadow(0 0 18px #26B6FA) drop-shadow(0 0 38px #FF842A44);
   transition: transform 0.7s cubic-bezier(.36,.07,.19,.97);
 }
 .hero-bg-glow {
@@ -154,7 +154,7 @@ body::before {
   top: 60%; left: 50%;
   transform: translate(-50%,-50%);
   width: 350px; height: 130px;
-  background: radial-gradient(ellipse at center, #00ffff44 0%, transparent 80%);
+  background: radial-gradient(ellipse at center, #26B6FA99 0%, #FA3C0860 100%);
   pointer-events: none;
   filter: blur(22px);
   z-index: 0;
@@ -163,8 +163,8 @@ body::before {
 .hero-title {
   font-family: 'Press Start 2P', Arial, sans-serif;
   font-size: 2.4rem;
-  color: #00ffff;
-  text-shadow: 0 0 22px #0ff, 0 0 44px #00ffff44;
+  color: #26B6FA;
+  text-shadow: 0 0 22px #26B6FA, 0 0 44px #FF842A44;
   margin-bottom: 1.1rem;
   letter-spacing: 3px;
   animation: glitch-fade 2.2s infinite linear alternate-reverse;
@@ -176,43 +176,45 @@ body::before {
 }
 .hero-desc {
   font-size: 1.3rem;
-  color: #fff799;
+  color: #FF842A;
   margin-bottom: 2rem;
 }
+
+/* --- Boutons pixel burst --- */
 .btn-primary, .btn-secondary {
-  background: #00ffff;
-  color: #181a1c;
+  background: linear-gradient(90deg, #26B6FA 40%, #FF842A 100%);
+  color: #0A1624;
   border: none;
   border-radius: 12px;
   padding: 1.1rem 2.4rem;
   font-family: 'Press Start 2P', Arial, sans-serif;
   font-size: 1.1rem;
   text-decoration: none;
-  box-shadow: 0 0 18px #00ffff99;
+  box-shadow: 0 0 18px #FA3C08bb;
   transition: background 0.15s, color 0.15s, transform 0.14s;
   cursor: pointer;
   margin-bottom: 1.4rem;
+  position: relative;
+  overflow: visible;
 }
 .btn-secondary {
-  background: #fff799;
-  color: #181a1c;
-  box-shadow: 0 0 12px #fff79999;
+  background: linear-gradient(90deg, #FF842A 40%, #26B6FA 100%);
+  color: #0A1624;
+  box-shadow: 0 0 12px #FF842A99;
 }
 .btn-animate:hover, .btn-animate:focus {
-  animation: vibrate 0.18s linear infinite;
-  outline: none;
-  transform: scale(1.09) rotate(-2deg);
+  background: linear-gradient(90deg, #FF842A 40%, #26B6FA 100%);
+  color: #fff;
+  box-shadow: 0 0 25px #FF842Aaa, 0 0 30px #F8EDC2aa;
+  animation: pixelburst 0.22s;
 }
-@keyframes vibrate {
-  0% { transform: scale(1.09) rotate(-2deg) translate(0, 0);}
-  20% { transform: scale(1.11) rotate(2deg) translate(2px, -2px);}
-  40% { transform: scale(1.07) rotate(-2deg) translate(-2px, 2px);}
-  60% { transform: scale(1.1) rotate(2deg) translate(2px, 2px);}
-  80% { transform: scale(1.08) rotate(-2deg) translate(-2px, -2px);}
-  100% { transform: scale(1.09) rotate(-2deg) translate(0, 0);}
+@keyframes pixelburst {
+  0% { box-shadow: 0 0 0 #FF842A; }
+  80% { box-shadow: 0 0 30px #FF842A, 0 0 40px #26B6FA; }
+  100% { box-shadow: 0 0 10px #FF842A; }
 }
 
-/* --- Sections et sticky tokenomics --- */
+/* --- Animation pixel pop section --- */
 .section {
   min-height: 88vh;
   padding: 6rem 0 3.5rem 0;
@@ -227,6 +229,12 @@ body::before {
 .section.show {
   opacity: 1;
   transform: translateY(0) scale(1) rotateX(0deg);
+  animation: popPixel 0.7s cubic-bezier(.7,-0.01,.21,1.01);
+}
+@keyframes popPixel {
+  0% { opacity: 0; transform: scale(0.93) rotateX(16deg);}
+  80% { transform: scale(1.11) rotateX(0deg);}
+  100% { opacity: 1; transform: scale(1) rotateX(0deg);}
 }
 .section .container {
   max-width: 800px;
@@ -236,22 +244,24 @@ body::before {
 }
 .section h2 {
   font-family: 'Press Start 2P', Arial, sans-serif;
-  color: #00ffff;
+  color: #26B6FA;
   margin-bottom: 1.2rem;
   letter-spacing: 1.2px;
   font-size: 2.1rem;
-  text-shadow: 0 0 12px #00ffff88;
+  text-shadow: 0 0 12px #26B6FA88, 0 0 14px #FF842A44;
 }
 .section p {
   font-size: 1.1rem;
   color: #fff;
   margin: 0.7rem 0 1.5rem 0;
 }
+
+/* --- Tokenomics --- */
 .sticky-section {
   position: sticky;
   top: 60px;
-  background: #191f29cc;
-  box-shadow: 0 2px 18px #00ffff11;
+  background: #101828e6;
+  box-shadow: 0 2px 18px #26B6FA33;
   border-radius: 1.6rem;
   z-index: 20;
 }
@@ -265,27 +275,29 @@ body::before {
 .tokenomics-num {
   font-family: 'Press Start 2P', Arial, sans-serif;
   font-size: 2.1rem;
-  color: #fff799;
+  color: #FF842A;
   margin-bottom: 0.4rem;
-  text-shadow: 0 0 16px #fff799bb, 0 0 24px #00ffff77;
+  text-shadow: 0 0 16px #FF842Abb, 0 0 24px #26B6FA77;
 }
 .tokenomics-label {
-  color: #00ffff;
+  color: #26B6FA;
   font-size: 1rem;
   letter-spacing: 1.1px;
 }
 
-/* --- Whitepaper, NFT Skins, Footer, etc --- */
+/* --- Whitepaper / liens néon --- */
 .link-neon {
-  color: #00ffff;
+  color: #26B6FA;
   text-decoration: underline;
   font-family: 'Inter', Arial, sans-serif;
   font-weight: bold;
   transition: color 0.18s;
 }
 .link-neon:hover {
-  color: #fff799;
+  color: #FF842A;
 }
+
+/* --- NFT Skins --- */
 .skins-gallery {
   display: flex;
   justify-content: center;
@@ -296,30 +308,30 @@ body::before {
 .skins-gallery img {
   width: 94px;
   border-radius: 18px;
-  box-shadow: 0 0 12px #00ffff99, 0 0 22px #fff79922;
+  box-shadow: 0 0 12px #2995D1aa, 0 0 22px #FF842Aaa;
   background: #1c232e;
   transition: transform 0.21s cubic-bezier(.36,.07,.19,.97);
 }
 .skins-gallery img:hover {
   transform: scale(1.11) rotate(-2deg);
-  box-shadow: 0 0 22px #fff799aa, 0 0 40px #00ffff44;
+  box-shadow: 0 0 22px #FF842A, 0 0 40px #F8EDC2;
 }
 footer {
   text-align: center;
   font-size: 1.1rem;
-  color: #87f7ff;
+  color: #F8EDC2;
   margin: 2rem 0 2.2rem;
   padding-bottom: 2.4rem; /* Place au ticker */
 }
 .footer-links a {
-  color: #00ffff;
+  color: #26B6FA;
   text-decoration: none;
   margin: 0 0.7rem;
   font-weight: bold;
   transition: color 0.15s;
 }
 .footer-links a:hover {
-  color: #fff799;
+  color: #FF842A;
 }
 
 /* --- Responsive --- */
