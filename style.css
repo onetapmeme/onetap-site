@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;700&display=swap');
 
+/* --- Effet scanlines + noise rétro --- */
 body {
   margin: 0;
   background: #131a23;
@@ -10,7 +11,6 @@ body {
   position: relative;
   overflow-x: hidden;
 }
-/* Scanlines + noise effet accentué */
 body::before {
   content: "";
   position: fixed;
@@ -27,7 +27,8 @@ body::before {
   mix-blend-mode: overlay;
   opacity: 0.7;
 }
-/* Ticker */
+
+/* --- Ticker animé --- */
 .ticker {
   width: 100%;
   background: #0e1720;
@@ -53,7 +54,7 @@ body::before {
   100% { transform: translateX(-100%); }
 }
 
-/* NAVBAR STICKY animé */
+/* --- Navbar sticky animé --- */
 .navbar {
   position: sticky;
   top: 0;
@@ -114,7 +115,7 @@ body::before {
   box-shadow: 0 0 8px #fff79977;
 }
 
-/* HERO PARALLAX */
+/* --- HERO Parallax --- */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -159,7 +160,6 @@ body::before {
   z-index: 0;
   transition: transform 0.8s cubic-bezier(.36,.07,.19,.97);
 }
-
 .hero-title {
   font-family: 'Press Start 2P', Arial, sans-serif;
   font-size: 2.4rem;
@@ -212,7 +212,7 @@ body::before {
   100% { transform: scale(1.09) rotate(-2deg) translate(0, 0);}
 }
 
-/* SECTIONS + sticky tokenomics */
+/* --- Sections et sticky tokenomics --- */
 .section {
   min-height: 88vh;
   padding: 6rem 0 3.5rem 0;
@@ -247,8 +247,6 @@ body::before {
   color: #fff;
   margin: 0.7rem 0 1.5rem 0;
 }
-
-/* TOKENOMICS sticky */
 .sticky-section {
   position: sticky;
   top: 60px;
@@ -277,7 +275,7 @@ body::before {
   letter-spacing: 1.1px;
 }
 
-/* WHITEPAPER */
+/* --- Whitepaper, NFT Skins, Footer, etc --- */
 .link-neon {
   color: #00ffff;
   text-decoration: underline;
@@ -288,8 +286,6 @@ body::before {
 .link-neon:hover {
   color: #fff799;
 }
-
-/* NFT SKINS */
 .skins-gallery {
   display: flex;
   justify-content: center;
@@ -302,4 +298,46 @@ body::before {
   border-radius: 18px;
   box-shadow: 0 0 12px #00ffff99, 0 0 22px #fff79922;
   background: #1c232e;
-  transition: transform 0.
+  transition: transform 0.21s cubic-bezier(.36,.07,.19,.97);
+}
+.skins-gallery img:hover {
+  transform: scale(1.11) rotate(-2deg);
+  box-shadow: 0 0 22px #fff799aa, 0 0 40px #00ffff44;
+}
+footer {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #87f7ff;
+  margin: 2rem 0 2.2rem;
+  padding-bottom: 2.4rem; /* Place au ticker */
+}
+.footer-links a {
+  color: #00ffff;
+  text-decoration: none;
+  margin: 0 0.7rem;
+  font-weight: bold;
+  transition: color 0.15s;
+}
+.footer-links a:hover {
+  color: #fff799;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1000px) {
+  .section .container { max-width: 97vw; }
+}
+@media (max-width: 700px) {
+  .navbar { padding: 0 0.5rem; }
+  .nav-logo { font-size: 0.92rem; }
+  .navbar a { font-size: 0.92rem; }
+  .hero-title { font-size: 1.45rem; }
+  .hero-logo { width: 72px; }
+  .section { padding: 3.5rem 0 1.5rem 0; }
+  .skins-gallery img { width: 54px; }
+}
+@media (max-width: 480px) {
+  .navbar ul { flex-wrap: wrap; }
+  .navbar li { margin: 0 0.4rem; }
+  .ticker { font-size: 0.7rem; }
+  .footer-links a { margin: 0 0.3rem; }
+}
