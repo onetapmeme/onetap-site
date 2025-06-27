@@ -1,9 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;700&display=swap');
 
-/* --- BODY --- */
 body {
   margin: 0;
-  background: #0A1624;
+  background: #101828;
   color: #fff;
   font-family: 'Inter', Arial, sans-serif;
   min-height: 100vh;
@@ -12,325 +11,40 @@ body {
   overflow-x: hidden;
 }
 
-/* --- TICKER --- */
-.ticker {
-  width: 100%;
-  background: #18192a;
-  color: #FF842A;
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  overflow: hidden;
-  box-shadow: 0 0 16px #FF842A99;
-  padding: 0.6rem 0;
-  z-index: 300;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-}
-.ticker span {
-  display: inline-block;
-  padding-left: 100%;
-  animation: ticker 23s linear infinite;
-}
-@keyframes ticker {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
-
-/* --- NAVBAR --- */
 .navbar {
-  position: sticky;
-  top: 0;
-  z-index: 99;
+  background: #181d27d0;
+  box-shadow: none;
+  border-bottom: 1px solid #273654;
+  padding: 0 2rem;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #101828f0;
-  box-shadow: 0 0 18px #2995D1aa;
-  padding: 0 2rem;
-  height: 60px;
-  transition: background 0.3s;
+  position: sticky;
+  top: 0;
+  z-index: 99;
 }
 .nav-logo {
   font-family: 'Press Start 2P', Arial, sans-serif;
-  color: #26B6FA;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
+  color: #23B0F9;
   letter-spacing: 1px;
-  text-shadow: 0 0 10px #26B6FA, 0 0 30px #FF842A66;
-  animation: glitch-skew 2.2s infinite linear alternate-reverse;
-}
-@keyframes glitch-skew {
-  0% { text-shadow: 2px 0 #FF842A, -2px 0 #26B6FA; }
-  20% { text-shadow: -2px 0 #FF842A, 2px 0 #26B6FA; }
-  100% { text-shadow: 2px 0 #FF842A, -2px 0 #26B6FA; }
 }
 .navbar ul {
   list-style: none;
   display: flex;
-  margin: 0;
-  padding: 0;
-}
-.navbar li {
-  margin: 0 0.8rem;
+  gap: 1.3rem;
+  margin: 0; padding: 0;
 }
 .navbar a {
   color: #F8EDC2;
   text-decoration: none;
   font-family: 'Inter', Arial, sans-serif;
   font-weight: bold;
-  font-size: 1rem;
-  padding: 8px 0;
-  position: relative;
-  transition: color 0.18s, text-shadow 0.2s;
+  transition: color 0.18s;
 }
-.navbar a.active, .navbar a:hover {
-  color: #FF842A;
-  text-shadow: 0 0 10px #FF842A, 0 0 22px #26B6FA66;
-}
-.navbar a.active::after, .navbar a:hover::after {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 2px;
-  background: #FF842A;
-  border-radius: 2px;
-  position: absolute;
-  bottom: 0; left: 0;
-  box-shadow: 0 0 8px #FF842A77;
-}
+.navbar a:hover { color: #FF842A; }
 
-/* --- HERO INVENTAIRE INTERACTIF --- */
-.section.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-  text-align: center;
-  overflow: hidden;
-  background: none;
-}
-#inventory-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
-  background: repeating-linear-gradient(90deg,#14203b 0 1px,transparent 1px 140px), repeating-linear-gradient(180deg,#14203b 0 1px,transparent 1px 140px);
-  opacity: 0.35;
-  pointer-events: none;
-  animation: inventory-bg-move 10s linear infinite alternate;
-}
-@keyframes inventory-bg-move {
-  0% { background-position: 0 0, 0 0; }
-  100% { background-position: 80px 60px, 60px 140px; }
-}
-.hero-content {
-  position: relative;
-  z-index: 2;
-  padding-top: 2.5rem;
-}
-.hero-title {
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 2.4rem;
-  color: #26B6FA;
-  text-shadow: 0 0 22px #26B6FA, 0 0 44px #FF842A44;
-  margin-bottom: 1.1rem;
-  letter-spacing: 3px;
-  animation: glitch-fade 2.2s infinite linear alternate-reverse;
-}
-@keyframes glitch-fade {
-  0% { opacity: 1; }
-  96% { opacity: 1; }
-  100% { opacity: 0.82; }
-}
-.inventory-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0 0 0;
-  padding: 1.2rem;
-  max-width: 740px;
-  z-index: 2;
-  position: relative;
-  background: rgba(20,32,59,0.16);
-  border-radius: 18px;
-  box-shadow: 0 0 32px #26B6FA44;
-}
-.inventory-slot {
-  background: #181a26cc;
-  border: 2.5px solid #26B6FA99;
-  border-radius: 12px;
-  padding: 1.3rem 0.4rem 1rem 0.4rem;
-  text-align: center;
-  box-shadow: 0 0 8px #0ff4, 0 0 2px #222;
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.13s, box-shadow 0.13s, border-color 0.13s;
-  outline: none;
-}
-.inventory-slot:hover,
-.inventory-slot:focus {
-  border-color: #FF842A;
-  box-shadow: 0 0 22px #FF842Acc, 0 0 22px #26B6FA77;
-  transform: scale(1.06) rotate(-1.5deg);
-  z-index: 10;
-}
-.slot-img {
-  width: 56px;
-  margin-bottom: 0.7rem;
-  image-rendering: pixelated;
-}
-.slot-label {
-  display: block;
-  margin-top: 0.2rem;
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 0.85rem;
-  color: #26B6FA;
-  letter-spacing: 1px;
-  text-shadow: 0 0 7px #0ff8;
-}
-
-/* --- SECTION GENERALE (séparations, margin) --- */
-.section {
-  min-height: 88vh;
-  padding: 6rem 0 3.5rem 0;
-  margin-bottom: 3rem;
-  background: none;
-  position: relative;
-  z-index: 10;
-}
-.section .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  text-align: center;
-}
-.section h2 {
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  color: #26B6FA;
-  margin-bottom: 1.2rem;
-  letter-spacing: 1.2px;
-  font-size: 2.1rem;
-  text-shadow: 0 0 12px #26B6FA88, 0 0 14px #FF842A44;
-}
-.section p {
-  font-size: 1.1rem;
-  color: #fff;
-  margin: 0.7rem 0 1.5rem 0;
-}
-
-/* --- TOKENOMICS --- */
-#tokenomics {
-  background: #101828;
-  box-shadow: 0 2px 18px #26B6FA33, 0 0 0 4px #FF842A33;
-  border-radius: 1.6rem;
-  margin: 2.5rem auto;
-  max-width: 900px;
-}
-.tokenomics-grid {
-  display: flex;
-  justify-content: center;
-  gap: 2.5rem;
-  margin: 2.2rem 0 1.2rem;
-  flex-wrap: wrap;
-}
-.tokenomics-num {
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 2.1rem;
-  color: #FF842A;
-  margin-bottom: 0.4rem;
-  text-shadow: 0 0 16px #FF842Abb, 0 0 24px #26B6FA77;
-}
-.tokenomics-label {
-  color: #26B6FA;
-  font-size: 1rem;
-  letter-spacing: 1.1px;
-}
-.tokenomics-desc {
-  font-size: 1.09rem;
-  color: #F8EDC2;
-  margin-top: 1.8rem;
-}
-
-/* --- NFT SKINS --- */
-.skins-gallery {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1.2rem;
-  flex-wrap: wrap;
-}
-.skins-gallery img {
-  width: 94px;
-  border-radius: 18px;
-  box-shadow: 0 0 12px #2995D1aa, 0 0 22px #FF842Aaa;
-  background: #1c232e;
-  transition: transform 0.21s cubic-bezier(.36,.07,.19,.97);
-}
-.skins-gallery img:hover {
-  transform: scale(1.11) rotate(-2deg);
-  box-shadow: 0 0 22px #FF842A, 0 0 40px #F8EDC2;
-}
-
-/* --- FOOTER --- */
-footer {
-  text-align: center;
-  font-size: 1.1rem;
-  color: #F8EDC2;
-  margin: 2rem 0 2.2rem;
-  padding-bottom: 2.4rem; /* Place au ticker */
-}
-.footer-links a {
-  color: #26B6FA;
-  text-decoration: none;
-  margin: 0 0.7rem;
-  font-weight: bold;
-  transition: color 0.15s;
-}
-.footer-links a:hover {
-  color: #FF842A;
-}
-
-/* --- RESPONSIVE --- */
-@media (max-width: 1000px) {
-  .section .container { max-width: 97vw; }
-  #tokenomics { max-width: 99vw; }
-}
-@media (max-width: 800px) {
-  .inventory-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.1rem; }
-  .slot-img { width: 38px; }
-}
-@media (max-width: 700px) {
-  .navbar { padding: 0 0.5rem; }
-  .nav-logo { font-size: 0.92rem; }
-  .navbar a { font-size: 0.92rem; }
-  .hero-title { font-size: 1.45rem; }
-  .section { padding: 3.5rem 0 1.5rem 0; }
-  .skins-gallery img { width: 54px; }
-  .tokenomics-grid { flex-direction: column; gap: 1.2rem; }
-}
-@media (max-width: 480px) {
-  .navbar ul { flex-wrap: wrap; }
-  .navbar li { margin: 0 0.4rem; }
-  .ticker { font-size: 0.7rem; }
-  .footer-links a { margin: 0 0.3rem; }
-}
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;700&display=swap');
-
-body {
-  margin: 0;
-  background: #101828;
-  color: #fff;
-  font-family: 'Inter', Arial, sans-serif;
-  min-height: 100vh;
-  scroll-behavior: smooth;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* Hero inventaire plus épuré */
 .section.hero {
   min-height: 90vh;
   display: flex;
@@ -365,7 +79,6 @@ body {
   text-shadow: none;
 }
 
-/* INVENTAIRE épuré */
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -422,9 +135,48 @@ body {
   padding: 0;
 }
 
+.section {
+  background: none;
+  margin-bottom: 3.5rem;
+  padding: 5rem 0 2.7rem 0;
+}
+.section .container { max-width: 860px; margin: 0 auto; text-align: center; }
+.section h2 { color: #23B0F9; font-family: 'Press Start 2P', Arial, sans-serif; font-size: 2rem; letter-spacing: 1.2px; margin-bottom: 1.3rem; }
+.section p { font-size: 1.13rem; color: #fff; margin-bottom: 1.4rem; }
+
+#tokenomics { background: #152036; border-radius: 1.7rem; box-shadow: 0 2px 16px #23B0F955; margin: 2.5rem auto; max-width: 940px; }
+.tokenomics-grid { display: flex; justify-content: center; gap: 2.5rem; margin: 2.5rem 0 1.2rem; flex-wrap: wrap; }
+.tokenomics-num { font-size: 2.2rem; color: #FF842A; font-family: 'Press Start 2P', Arial, sans-serif; }
+.tokenomics-label { color: #23B0F9; font-size: 1.07rem; letter-spacing: 1.1px; }
+.tokenomics-desc { color: #F8EDC2; margin-top: 1.8rem; }
+
+.skins-gallery {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+.skins-gallery img {
+  width: 94px;
+  border-radius: 18px;
+  box-shadow: 0 0 12px #2995D1aa, 0 0 22px #FF842Aaa;
+  background: #1c232e;
+  transition: transform 0.21s cubic-bezier(.36,.07,.19,.97);
+}
+.skins-gallery img:hover {
+  transform: scale(1.11) rotate(-2deg);
+  box-shadow: 0 0 22px #FF842A, 0 0 40px #F8EDC2;
+}
+
+footer { text-align: center; font-size: 1.09rem; color: #F8EDC2; margin: 2rem 0 2.2rem; }
+.footer-links a { color: #23B0F9; text-decoration: none; margin: 0 0.7rem; font-weight: bold; transition: color 0.15s; }
+.footer-links a:hover { color: #FF842A; }
+
 /* Responsive */
 @media (max-width: 1100px) {
   .inventory-grid { max-width: 98vw; }
+  .section .container { max-width: 98vw; }
 }
 @media (max-width: 800px) {
   .inventory-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.3rem; padding: 1.2rem; }
@@ -435,32 +187,3 @@ body {
   .hero-title { font-size: 1.3rem; }
   .section { padding: 2.7rem 0 1rem 0; }
 }
-
-/* --- Navbar, ticker, sections, footer : minimal version, tu peux garder tes anciens styles ou simplifier ainsi : */
-.ticker { display: none; }
-.navbar { background: #181d27d0; box-shadow: none; border-bottom: 1px solid #273654; }
-.nav-logo { font-size: 1.12rem; color: #23B0F9; }
-.navbar ul { list-style: none; display: flex; gap: 1.3rem; margin: 0; padding: 0; }
-.navbar a { color: #F8EDC2; text-decoration: none; font-family: 'Inter', Arial, sans-serif; font-weight: bold; }
-.navbar a:hover { color: #FF842A; }
-
-.section {
-  background: none;
-  margin-bottom: 3.5rem;
-  padding: 5rem 0 2.7rem 0;
-}
-.section .container { max-width: 860px; margin: 0 auto; text-align: center; }
-.section h2 { color: #23B0F9; font-family: 'Press Start 2P', Arial, sans-serif; font-size: 2rem; letter-spacing: 1.2px; margin-bottom: 1.3rem; }
-.section p { font-size: 1.13rem; color: #fff; margin-bottom: 1.4rem; }
-
-/* Tokenomics, skins, airdrop, farming restent comme avant mais avec plus de padding et fond opaque si tu veux */
-#tokenomics { background: #152036; border-radius: 1.7rem; box-shadow: 0 2px 16px #23B0F955; margin: 2.5rem auto; max-width: 940px; }
-.tokenomics-grid { display: flex; justify-content: center; gap: 2.5rem; margin: 2.5rem 0 1.2rem; flex-wrap: wrap; }
-.tokenomics-num { font-size: 2.2rem; color: #FF842A; font-family: 'Press Start 2P', Arial, sans-serif; }
-.tokenomics-label { color: #23B0F9; font-size: 1.07rem; letter-spacing: 1.1px; }
-.tokenomics-desc { color: #F8EDC2; margin-top: 1.8rem; }
-
-/* Footer simple */
-footer { text-align: center; font-size: 1.09rem; color: #F8EDC2; margin: 2rem 0 2.2rem; }
-.footer-links a { color: #23B0F9; text-decoration: none; margin: 0 0.7rem; font-weight: bold; transition: color 0.15s; }
-.footer-links a:hover { color: #FF842A; }
