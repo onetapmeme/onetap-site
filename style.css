@@ -256,14 +256,13 @@ body::before {
   margin: 0.7rem 0 1.5rem 0;
 }
 
-/* --- Tokenomics --- */
-.sticky-section {
-  position: sticky;
-  top: 60px;
+/* --- Tokenomics corrigé --- */
+#tokenomics {
   background: #101828e6;
   box-shadow: 0 2px 18px #26B6FA33;
   border-radius: 1.6rem;
-  z-index: 20;
+  margin: 2.5rem auto;
+  max-width: 900px;
 }
 .tokenomics-grid {
   display: flex;
@@ -283,6 +282,11 @@ body::before {
   color: #26B6FA;
   font-size: 1rem;
   letter-spacing: 1.1px;
+}
+.tokenomics-desc {
+  font-size: 1.09rem;
+  color: #F8EDC2;
+  margin-top: 1.8rem;
 }
 
 /* --- Whitepaper / liens néon --- */
@@ -337,6 +341,7 @@ footer {
 /* --- Responsive --- */
 @media (max-width: 1000px) {
   .section .container { max-width: 97vw; }
+  #tokenomics { max-width: 99vw; }
 }
 @media (max-width: 700px) {
   .navbar { padding: 0 0.5rem; }
@@ -346,6 +351,7 @@ footer {
   .hero-logo { width: 72px; }
   .section { padding: 3.5rem 0 1.5rem 0; }
   .skins-gallery img { width: 54px; }
+  .tokenomics-grid { flex-direction: column; gap: 1.2rem; }
 }
 @media (max-width: 480px) {
   .navbar ul { flex-wrap: wrap; }
@@ -354,6 +360,7 @@ footer {
   .footer-links a { margin: 0 0.3rem; }
 }
 
+/* --- Pixel burst (animation sur boutons) --- */
 .pixel-burst {
   position: absolute;
   width: 10px; height: 10px;
@@ -364,4 +371,3 @@ footer {
   z-index: 12;
   box-shadow: 0 0 8px #F8EDC2aa;
 }
-
