@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>$ONETAP</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="radar-bg"></canvas>
+  <header class="hero">
+    <img src="logo_onetap.png" alt="$ONETAP Logo" style="width: 120px; margin-bottom: 1rem;" />
+    <h1 class="neon">$ONETAP</h1>
+    <p class="subtitle">Click once. Headshot forever.</p>
+    <a class="cta-button" href="#buy">Buy on Uniswap</a>
+  </header>
+  <div class="killfeed" id="killfeed"></div>
+  <main>
+    <section class="section" id="lore">
+      <h2>Lore</h2>
+      <p>In the land of memecoins, only one tap is needed. Precision, style, and a single shot to the moon.</p>
+    </section>
+    <section class="section" id="tokenomics">
+      <h2>Tokenomics</h2>
+      <ul>
+        <li>50% Liquidity</li>
+        <li>25% Community Airdrop</li>
+        <li>15% Marketing & Dev</li>
+        <li>10% DAO Vault</li>
+      </ul>
+    </section>
+    <section class="section" id="dao">
+      <h2>DAO & Community</h2>
+      <p>Governance, memes, and upgrades by the holders. One tap, one vote.</p>
+    </section>
+    <section id="buy" class="section">
+      <h2>Buy $ONETAP</h2>
+      <p>Available now on Uniswap.</p>
+      <a class="cta-button" href="#">Buy Now</a>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 $ONETAP. No sprays. Just headshots.</p>
+  </footer>
+  <audio id="gunshot" src="https://assets.mixkit.co/sfx/download/mixkit-fast-small-fire-gun-shot-1661.wav"></audio>
+  <script>
+    const canvas = document.getElementById('radar-bg');
+    const ctx = canvas.getContext('2d');
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    function drawRadar() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.strokeStyle = 'rgba(0,255,255,0.08)';
+      ctx.lineWidth = 1;
+      for(let i=0;i<canvas.width;i+=40){
+        ctx.beginPath();
+        ctx.moveTo(i,0);
+        ctx.lineTo(i,canvas.height);
+        ctx.stroke();
+      }
+      for(let i=0;i<canvas.height;i+=40){
+        ctx.beginPath();
+        ctx.moveTo(0,i);
+        ctx.lineTo(canvas.width,i);
+        ctx.stroke();
+      }
+      let now = Date.now()/800;
+      ctx.save();
+      ctx.translate(canvas.width/2,canvas.height/2);
+      ctx.rotate(now%6.28);
+      let grad=ctx.createRadialGradient(0,0,80,0,0,400);
+      grad.addColorStop(0, "rgba(0,255,255,0.10)");
+      grad.addColorStop(1, "rgba(0,255,255,0)");
+      ctx.fillStyle=grad;
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.arc(0,0,400,0,0.35);
+      ctx.lineTo(0,0);
+      ctx.fill();
+      ctx.restore();
+      requestAnimationFrame(drawRadar);
+    }
+    drawRadar();
+    function showKillfeed(msg = "$ONETAP 🔫 Deagle HEADSHOT 💀 the Market") {
+      const feed = document.getElementById('killfeed');
+      feed.textContent = msg;
+      feed.classList.add('visible');
+      document.getElementById('gunshot').currentTime = 0;
+      document.getElementById('gunshot').play();
+      setTimeout(() => feed.classList.remove('visible'), 1400);
+    }
+    document.getElementById('buyBtn')?.addEventListener('click', () => showKillfeed());
+    document.body.onclick = (e) => {
+      if (!e.target.classList.contains('cta-button')) showKillfeed();
+    };
+  </script>
+</body>
+</html>
