@@ -6,53 +6,70 @@ body {
   color: #fff;
   font-family: 'Inter', Arial, sans-serif;
   min-height: 100vh;
-  scroll-behavior: smooth;
-  position: relative;
   overflow-x: hidden;
 }
-
-.navbar {
-  background: #181d27d0;
-  box-shadow: none;
-  border-bottom: 1px solid #273654;
-  padding: 0 2rem;
-  height: 60px;
+#welcome-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: radial-gradient(ellipse at center, #1e2639 0%, #101828 100%);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 99;
-}
-.nav-logo {
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 1.2rem;
-  color: #23B0F9;
-  letter-spacing: 1px;
-}
-.navbar ul {
-  list-style: none;
-  display: flex;
-  gap: 1.3rem;
-  margin: 0; padding: 0;
-}
-.navbar a {
-  color: #F8EDC2;
-  text-decoration: none;
-  font-family: 'Inter', Arial, sans-serif;
-  font-weight: bold;
-  transition: color 0.18s;
-}
-.navbar a:hover { color: #FF842A; }
-
-.section.hero {
-  min-height: 90vh;
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 1.3s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+.welcome-logo {
+  width: 110px;
+  margin-bottom: 2.3rem;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 14px #23B0F9) drop-shadow(0 0 20px #fff3);
+}
+.welcome-title {
+  font-family: 'Press Start 2P', Arial, sans-serif;
+  color: #23B0F9;
+  font-size: 2.5rem;
+  text-shadow: 0 0 22px #23B0F9, 0 0 44px #FF842A44;
+  margin-bottom: 2.2rem;
+  letter-spacing: 3px;
+  animation: glitch-fade 2s infinite alternate;
+}
+@keyframes glitch-fade {
+  0% { opacity: 1; }
+  100% { opacity: 0.87; }
+}
+.welcome-press {
+  color: #F8EDC2;
+  font-size: 1.2rem;
+  font-family: 'Inter', Arial, sans-serif;
+  background: #181d27d5;
+  padding: 1.2rem 2.3rem;
+  border-radius: 18px;
+  box-shadow: 0 2px 18px #23B0F966;
+  letter-spacing: 1.1px;
+}
+#fade-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #101828;
+  opacity: 0;
+  transition: opacity 1.1s;
+}
+
+.hero-inventory {
+  min-height: 92vh;
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   position: relative;
   text-align: center;
+  padding-top: 5.2rem;
   background: none;
   overflow: hidden;
 }
@@ -62,74 +79,77 @@ body {
   width: 100%; height: 100%;
   z-index: 0;
   background: linear-gradient(135deg, #132035 0%, #16253B 100%);
-  opacity: 0.89;
+  opacity: 0.9;
   pointer-events: none;
+  animation: bg-move 14s linear infinite alternate;
 }
-.hero-content {
-  position: relative;
-  z-index: 2;
-  padding-top: 2.5rem;
+@keyframes bg-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 150px; }
 }
 .hero-title {
   font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 2.6rem;
+  font-size: 2.2rem;
   color: #23B0F9;
   margin-bottom: 2rem;
   letter-spacing: 2px;
-  text-shadow: none;
 }
 
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 2.2rem;
-  margin: 2.7rem 0 0 0;
-  padding: 1.7rem;
-  max-width: 840px;
+  gap: 2.1rem;
+  margin: 1.2rem auto 0 auto;
+  padding: 1.9rem 1rem 2.2rem 1rem;
+  max-width: 950px;
   z-index: 2;
-  background: rgba(25, 35, 53, 0.09);
+  background: rgba(25, 35, 53, 0.10);
   border-radius: 22px;
   box-shadow: 0 4px 28px #0002;
 }
 .inventory-slot {
-  background: #181d27e3;
+  background: #181d27f4;
   border: 2.5px solid #23B0F9cc;
-  border-radius: 14px;
-  padding: 2rem 0.6rem 1.5rem 0.6rem;
+  border-radius: 16px;
+  padding: 2.1rem 0.7rem 1.6rem 0.7rem;
   text-align: center;
   box-shadow: none;
-  position: relative;
   cursor: pointer;
-  transition: transform 0.14s, box-shadow 0.16s, border-color 0.18s;
+  transition: transform 0.14s, box-shadow 0.18s, border-color 0.17s;
   outline: none;
   min-height: 170px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  user-select: none;
+  position: relative;
+}
+.inventory-slot:active {
+  transform: scale(0.96);
 }
 .inventory-slot:hover,
 .inventory-slot:focus {
   border-color: #FF842A;
-  box-shadow: 0 0 0 4px #ff842a2b;
-  transform: scale(1.045);
-  background: #181d27f5;
+  box-shadow: 0 0 0 7px #ff842a26;
+  background: #181d27f9;
+  z-index: 10;
 }
 .slot-img {
-  width: 68px;
-  margin-bottom: 1.2rem;
+  width: 64px;
+  margin-bottom: 1.1rem;
   image-rendering: pixelated;
-  border-radius: 10px;
-  background: #13203521;
-  box-shadow: 0 2px 9px #23B0F920;
+  border-radius: 12px;
+  background: #13203511;
+  box-shadow: 0 2px 10px #23B0F930;
 }
 .slot-label {
   display: block;
   font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 1.12rem;
+  font-size: 1.14rem;
   color: #23B0F9;
-  letter-spacing: 1.3px;
-  margin-top: 0.25rem;
+  letter-spacing: 1.2px;
+  margin-top: 0.2rem;
   text-shadow: none;
   background: none;
   padding: 0;
@@ -137,53 +157,57 @@ body {
 
 .section {
   background: none;
-  margin-bottom: 3.5rem;
+  margin: 0 auto 4.1rem auto;
   padding: 5rem 0 2.7rem 0;
+  max-width: 850px;
+  text-align: center;
+  display: none;
 }
-.section .container { max-width: 860px; margin: 0 auto; text-align: center; }
-.section h2 { color: #23B0F9; font-family: 'Press Start 2P', Arial, sans-serif; font-size: 2rem; letter-spacing: 1.2px; margin-bottom: 1.3rem; }
+.section.active {
+  display: block;
+  animation: sectionFade 0.7s;
+}
+@keyframes sectionFade {
+  from { opacity: 0; transform: translateY(32px);}
+  to   { opacity: 1; transform: translateY(0);}
+}
+.section h2 {
+  color: #23B0F9;
+  font-family: 'Press Start 2P', Arial, sans-serif;
+  font-size: 2rem;
+  letter-spacing: 1.2px;
+  margin-bottom: 1.3rem;
+}
 .section p { font-size: 1.13rem; color: #fff; margin-bottom: 1.4rem; }
 
-#tokenomics { background: #152036; border-radius: 1.7rem; box-shadow: 0 2px 16px #23B0F955; margin: 2.5rem auto; max-width: 940px; }
-.tokenomics-grid { display: flex; justify-content: center; gap: 2.5rem; margin: 2.5rem 0 1.2rem; flex-wrap: wrap; }
-.tokenomics-num { font-size: 2.2rem; color: #FF842A; font-family: 'Press Start 2P', Arial, sans-serif; }
-.tokenomics-label { color: #23B0F9; font-size: 1.07rem; letter-spacing: 1.1px; }
-.tokenomics-desc { color: #F8EDC2; margin-top: 1.8rem; }
-
-.skins-gallery {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-bottom: 1.2rem;
-  flex-wrap: wrap;
+footer {
+  text-align: center;
+  font-size: 1.07rem;
+  color: #F8EDC2;
+  margin: 2rem 0 2.2rem;
 }
-.skins-gallery img {
-  width: 94px;
-  border-radius: 18px;
-  box-shadow: 0 0 12px #2995D1aa, 0 0 22px #FF842Aaa;
-  background: #1c232e;
-  transition: transform 0.21s cubic-bezier(.36,.07,.19,.97);
+.footer-links a {
+  color: #23B0F9;
+  text-decoration: none;
+  margin: 0 0.7rem;
+  font-weight: bold;
+  transition: color 0.15s;
 }
-.skins-gallery img:hover {
-  transform: scale(1.11) rotate(-2deg);
-  box-shadow: 0 0 22px #FF842A, 0 0 40px #F8EDC2;
-}
-
-footer { text-align: center; font-size: 1.09rem; color: #F8EDC2; margin: 2rem 0 2.2rem; }
-.footer-links a { color: #23B0F9; text-decoration: none; margin: 0 0.7rem; font-weight: bold; transition: color 0.15s; }
 .footer-links a:hover { color: #FF842A; }
 
 /* Responsive */
 @media (max-width: 1100px) {
-  .inventory-grid { max-width: 98vw; }
-  .section .container { max-width: 98vw; }
+  .inventory-grid { max-width: 99vw; }
+  .section { max-width: 99vw; }
 }
 @media (max-width: 800px) {
-  .inventory-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.3rem; padding: 1.2rem; }
-  .slot-img { width: 45px; }
+  .inventory-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; padding: 1.2rem; }
+  .slot-img { width: 40px; }
   .slot-label { font-size: 0.9rem; }
+  .hero-title { font-size: 1.2rem; }
+  .welcome-title { font-size: 1.2rem; }
 }
-@media (max-width: 700px) {
-  .hero-title { font-size: 1.3rem; }
-  .section { padding: 2.7rem 0 1rem 0; }
+@media (max-width: 650px) {
+  .hero-inventory { padding-top: 2.2rem; }
+  .section { padding: 2.4rem 0 1.2rem 0; }
 }
