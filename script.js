@@ -9,14 +9,21 @@ function dropLogo() {
 }
 
 function launchTransition() {
+  // Pluie de logos pendant la transition
   for (let i=0; i<22; i++) setTimeout(dropLogo, 120*i+Math.random()*80);
+  // Transition smooth (fade accueil → fade inventaire)
   setTimeout(() => {
-    document.getElementById('welcome-screen').style.display = 'none';
-    document.getElementById('main-inventory').style.display = 'flex';
+    document.getElementById('welcome-screen').style.opacity = 0;
+    setTimeout(() => {
+      document.getElementById('welcome-screen').style.display = 'none';
+      const inv = document.getElementById('main-inventory');
+      inv.style.display = 'flex';
+      setTimeout(() => inv.style.opacity = 1, 50);
+    }, 700);
   }, 1200);
 }
 
-// Détecte si c'est mobile ou non
+// Détecte mobile ou PC pour lancer le bon GIF
 function isMobile() {
   return window.matchMedia("(max-width: 700px)").matches;
 }
