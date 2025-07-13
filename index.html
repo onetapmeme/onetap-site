@@ -7,24 +7,23 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Accueil GIF responsive -->
   <div id="welcome-screen">
     <picture id="gif-welcome">
-      <source srcset="assets/tap2enter_mobile.gif" media="(max-width: 700px)">
-      <img src="assets/tap2enter_pc.gif" alt="Tap2Enter $ONETAP" id="main-welcome-gif">
+      <source srcset="assets/tap2enter_mobile_static.png" media="(max-width: 700px)">
+      <img 
+        id="main-welcome-gif"
+        src="assets/tap2enter_pc_static.png"
+        alt="Tap2Enter $ONETAP"
+        draggable="false"
+      >
     </picture>
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
   </div>
-
-  <!-- INVENTAIRE PRINCIPAL -->
   <section class="hero-inventory" id="main-inventory" style="display:none;">
     <h1 class="hero-title">$ONETAP Inventory</h1>
     <div style="color:white;text-align:center;padding:3rem 0;">[Ton inventaire ici]</div>
   </section>
-
-  <!-- Logos qui tombent pour la transition -->
   <div id="falling-logos"></div>
-
   <script src="script.js"></script>
 </body>
 </html>
