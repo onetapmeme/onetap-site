@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  background: #101828;
+  font-family: 'Inter', Arial, sans-serif;
+}
+#welcome-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #1e2639;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#main-welcome-img, #headshot-gif {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  display: block;
+  margin: auto;
+  border-radius: 14px;
+  box-shadow: 0 0 30px #000a;
+}
+@media (max-width: 700px) {
+  #main-welcome-img, #headshot-gif {
+    max-width: 99vw;
+  }
+}
+.hero-inventory {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  text-align: center;
+  padding-top: 5.2rem;
+  background: none;
+  color: white;
+}
+.hero-title {
+  font-size: 2rem;
+  color: #23B0F9;
+  margin: 2rem 0;
+}
