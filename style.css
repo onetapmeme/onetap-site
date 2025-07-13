@@ -1,71 +1,67 @@
-body {
+body, html {
   margin: 0;
-  background: #101828;
-  font-family: 'Inter', Arial, sans-serif;
-  overflow-x: hidden;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #081c35;
+  overflow: hidden;
 }
 #welcome-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  background: #1e2639;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  background: #081c35;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  transition: opacity 0.7s;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 10;
 }
-#main-welcome-gif {
-  width: 100%;
-  max-width: 640px;
-  height: auto;
+#gif-welcome, #gif-welcome img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  max-width: 100vw;
+  max-height: 100vh;
   display: block;
   margin: auto;
-  border-radius: 14px;
-  box-shadow: 0 0 30px #000a;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
 }
-@media (max-width: 700px) {
-  #main-welcome-gif {
-    max-width: 99vw;
-  }
-}
-.hero-inventory {
-  min-height: 80vh;
+#main-inventory {
+  min-height: 100vh;
+  background: #16233a;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  position: relative;
-  text-align: center;
-  padding-top: 5.2rem;
-  background: none;
-  color: white;
-  opacity: 0;
-  transform: translateY(60px);
-  transition: opacity 1s, transform 1s;
+  justify-content: center;
 }
-.hero-title {
-  font-size: 2rem;
-  color: #23B0F9;
-  margin: 2rem 0;
-}
-/* Logos qui tombent */
 #falling-logos {
   pointer-events: none;
   position: fixed;
-  left: 0; top: 0; width: 100vw; height: 100vh;
-  z-index: 9999;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 1000;
 }
 .falling-logo {
   position: absolute;
   top: -60px;
-  width: 52px;
   pointer-events: none;
-  opacity: 0.88;
-  animation: fall-logo 1.8s cubic-bezier(.34,.92,.59,.99) forwards;
+  animation: fall 2s linear forwards;
+  opacity: 0.9;
 }
-@keyframes fall-logo {
-  0% { transform: translateY(-60px) rotate(-10deg) scale(1); }
-  70% { opacity: 1; }
-  100% { transform: translateY(96vh) rotate(20deg) scale(1.15); opacity: 0.1; }
+@keyframes fall {
+  0% { transform: translateY(-60px) rotate(-20deg);}
+  90% { opacity: 0.95;}
+  100% { transform: translateY(100vh) rotate(30deg); opacity: 0; }
+}
+/* Mobile fullscreen, object-fit: cover */
+@media (max-width: 700px) {
+  #gif-welcome, #gif-welcome img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+  }
 }
