@@ -1,46 +1,57 @@
-body {
-  margin: 0;
-  background: #101828;
-  font-family: 'Inter', Arial, sans-serif;
+const welcomeScreen = document.getElementById('welcome-screen');
+const mainWelcomeGif = document.getElementById('main-welcome-gif');
+const headshotSound = document.getElementById('headshot-sound');
+const mainInventory = document.getElementById('main-inventory');
+const fallingLogos = document.getElementById('falling-logos');
+
+// Paramètre : durée de ton gif en ms (ex : 1800 ms)
+const GIF_DURATION = 1800; // Mets ici la durée exacte de ton gif
+
+function dropLogo() {
+  const logo = document.createElement('img');
+  logo.src = "assets/tap2enter_pc.gif"; // tu peux mettre un mini-logo dédié si tu veux
+  logo.className = "falling-logo";
+  logo.style.left = `${Math.random()*90+2}vw`;
+  logo.style.width = `${36+Math.random()*26}px`;
+  fallingLogos.appendChild(logo);
+  setTimeout(()=>logo.remove(), 2100);
 }
-#welcome-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  background: #1e2639;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+
+function startFallingLogos() {
+  let count = 0;
+  const interval = setInterval(() => {
+    dropLogo();
+    count++;
+    if(count > 12) clearInterval(interval);
+  }, 120);
 }
-#main-welcome-img, #headshot-gif {
-  width: 100%;
-  max-width: 640px;
-  height: auto;
-  display: block;
-  margin: auto;
-  border-radius: 14px;
-  box-shadow: 0 0 30px #000a;
+
+function transitionToSite() {
+  // Effet slide-in du contenu
+  mainInventory.style.display = 'flex';
+  setTimeout(() => {
+    mainInventory.style.opacity = 1;
+    mainInventory.style.transform = 'translateY(0)';
+  }, 50);
+  welcomeScreen.style.opacity = 0;
+  setTimeout(()=>{ welcomeScreen.style.display='none'; }, 700);
 }
-@media (max-width: 700px) {
-  #main-welcome-img, #headshot-gif {
-    max-width: 99vw;
+
+function playWelcome() {
+  if (headshotSound) {
+    headshotSound.currentTime = 0;
+    headshotSound.play();
   }
+  // Lancer les logos qui tombent
+  startFallingLogos();
+  // Transition après la durée du gif
+  setTimeout(() => {
+    transitionToSite();
+  }, GIF_DURATION);
 }
-.hero-inventory {
-  min-height: 80vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  position: relative;
-  text-align: center;
-  padding-top: 5.2rem;
-  background: none;
-  color: white;
-}
-.hero-title {
-  font-size: 2rem;
-  color: #23B0F9;
-  margin: 2rem 0;
-}
+
+// Clic ou entrée : lance la séquence
+welcomeScreen.addEventListener('click', playWelcome);
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') playWelcome();
+});
