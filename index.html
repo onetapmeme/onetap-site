@@ -3,27 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>$ONETAP – Meme Token Inventory</title>
+  <title>$ONETAP – Meme Token Roulette</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Écran Accueil TAP TO ENTER -->
   <div id="welcome-screen">
     <picture id="gif-welcome">
       <source srcset="assets/tap2enter_mobile_static.png" media="(max-width: 700px)">
-      <img 
-        id="main-welcome-gif"
-        src="assets/tap2enter_pc_static.png"
-        alt="Tap2Enter $ONETAP"
-        draggable="false"
-      >
+      <img id="main-welcome-gif" src="assets/tap2enter_pc_static.png" alt="Tap2Enter $ONETAP" draggable="false">
     </picture>
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
   </div>
-  <section class="hero-inventory" id="main-inventory" style="display:none;">
-    <h1 class="hero-title">$ONETAP Inventory</h1>
-    <div style="color:white;text-align:center;padding:3rem 0;">[Ton inventaire ici]</div>
-  </section>
-  <div id="falling-logos"></div>
+
+  <!-- Écran Roulette -->
+  <div id="roulette-screen" style="display:none;">
+    <div class="roulette-wrap">
+      <div id="roulette-cases"></div>
+      <div class="roulette-marker"></div>
+    </div>
+  </div>
+
+  <!-- Drop rare -->
+  <div id="drop-screen" style="display:none;">
+    <div class="drop-bg"></div>
+    <img src="assets/onetap_gold.png" class="drop-logo" alt="Rare Drop" />
+    <div class="drop-banner">RARE!</div>
+  </div>
+
+  <!-- Sons roulette/drop -->
+  <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto" loop></audio>
+  <audio id="drop-sound" src="assets/drop_rare.wav" preload="auto"></audio>
+
   <script src="script.js"></script>
 </body>
 </html>
