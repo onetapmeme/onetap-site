@@ -2,37 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>$ONETAP – Meme Token Inventory</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Accueil -->
   <div id="welcome-screen">
-    <!-- Ici tu peux remettre ton animation Tap2Enter, puis sur clic tu affiches la roulette. -->
-    <div id="tap2enter" onclick="showRoulette()">
-      <picture>
-        <source srcset="assets/tap2enter_mobile_static.png" media="(max-width: 700px)">
-        <img src="assets/tap2enter_pc_static.png" alt="Tap2Enter $ONETAP" id="main-welcome-img" draggable="false"/>
-      </picture>
-      <div class="tap2enter-txt">TAP TO ENTER</div>
-    </div>
+    <img id="welcome-img"
+      src="assets/tap2enter_pc_static.png"
+      alt="Tap2Enter"
+      draggable="false"
+    />
+    <button id="tap-to-enter">TAP TO ENTER</button>
+    <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
+    <audio id="music-welcome" src="assets/music_welcome.mp3" loop preload="auto"></audio>
   </div>
 
-  <div id="roulette-container" style="display:none;">
-    <div class="roulette-wrapper">
-      <div class="roulette-row" id="roulette-row">
-        <!-- Cases générées par JS -->
-      </div>
-      <div class="roulette-indicator"></div>
-    </div>
-    <audio id="roulette-audio" src="assets/roulette_sound.wav"></audio>
-    <audio id="droprare-audio" src="assets/drop_rare.wav"></audio>
+  <!-- Roulette -->
+  <div id="roulette-screen" style="display:none;">
+    <div id="roulette-container"></div>
+    <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto"></audio>
+    <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
+    <audio id="music-main" src="assets/music_main.mp3" loop preload="auto"></audio>
   </div>
 
-  <div id="drop-popup" style="display:none;">
-    <div class="drop-glow"></div>
-    <img src="assets/onetap_gold.png" class="drop-gold" alt="GOLD DROP" />
-    <div class="drop-title">RARE $ONETAP DROP!</div>
+  <!-- Main Inventory -->
+  <div id="main-inventory" style="display:none;">
+    <h1>$ONETAP Inventory</h1>
+    <img src="assets/onetap_gold.png" alt="Rare drop" style="width:180px;"/>
+    <!-- ... contenu principal ici ... -->
   </div>
 
   <script src="script.js"></script>
