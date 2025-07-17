@@ -6,18 +6,29 @@
   <meta name="theme-color" content="#090d1a">
   <title>$ONETAP – Meme Token Inventory</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </head>
 <body>
-  <!-- Accueil : Image uniquement -->
+  <!-- Fond animé -->
+  <div id="particles-js"></div>
+  
+  <!-- Accueil -->
   <div id="welcome-screen" class="fade-in">
     <img id="tap2enter-img"
       src="assets/tap2enter_pc_static.png"
       alt="Tap2Enter"
       draggable="false"
     />
+    <div id="press-anykey">Tap/Click anywhere to enter</div>
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
     <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
     <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
+  </div>
+
+  <!-- Loader -->
+  <div id="loader-screen" style="display:none;">
+    <div class="spinner"></div>
+    <div class="loader-text">Loading inventory...</div>
   </div>
 
   <!-- Roulette -->
@@ -27,10 +38,21 @@
     <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
   </div>
 
-  <!-- Inventaire Principal -->
+  <!-- Inventaire Principal / Drop -->
   <section id="main-inventory" style="display:none;">
     <h1>$ONETAP Inventory</h1>
     <img src="assets/onetap_gold.png" alt="Drop Gold" class="gold-drop"/>
+    <div class="labels">
+      <span class="label label-fair">Fair Launch</span>
+      <span class="label label-locked">Liquidity Locked</span>
+    </div>
+    <div class="share-buttons">
+      <button onclick="shareX()">Share on X</button>
+      <button onclick="shareTG()">Share on Telegram</button>
+    </div>
+    <div class="partners">
+      <span>Partners: <img src="assets/partner_dummy.png" alt="Coming soon" height="28"/></span>
+    </div>
   </section>
 
   <!-- Ticker Hype -->
