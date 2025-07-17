@@ -1,16 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;700&display=swap');
+
 body, html {
   margin: 0; padding: 0;
   width: 100vw; height: 100vh;
   background: #090d1a;
   overflow: hidden;
-  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
 }
 
 body::before {
   content: "";
   position: fixed; left:0; top:0; width:100vw; height:100vh;
   background: url('assets/onetap_logo.png') center center no-repeat;
-  background-size: 85vw auto;
+  background-size: 90vw auto;
   opacity: 0.025; z-index: 0; pointer-events: none;
 }
 
@@ -25,7 +27,20 @@ body::before {
 @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
 @keyframes fadeOut { from { opacity:1 } to { opacity:0 } }
 
-/* Accueil */
+.ticker {
+  position: fixed;
+  bottom: 0; left: 0; width: 100vw;
+  background: #181e23ef;
+  color: #ffe066;
+  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
+  font-size: .93rem;
+  padding: 9px 0;
+  text-align: center;
+  letter-spacing: 1.2px;
+  z-index: 200;
+  box-shadow: 0 0 8px #fff70033;
+}
+
 #welcome-screen {
   width: 100vw; height: 100vh;
   display: flex;
@@ -36,7 +51,6 @@ body::before {
   top: 0; left: 0;
   z-index: 11;
 }
-
 #tap2enter-img {
   max-width: 98vw;
   max-height: 92vh;
@@ -52,8 +66,6 @@ body::before {
   filter: drop-shadow(0 0 30px #000c);
   transition: filter .3s, transform .3s;
 }
-
-/* Press any key/tap */
 #press-anykey {
   position: absolute;
   bottom: 7vh;
@@ -61,7 +73,7 @@ body::before {
   text-align: center;
   font-family: 'Press Start 2P', monospace, Arial, sans-serif;
   color: #ffe066cc;
-  font-size: 1.12rem;
+  font-size: 1.08rem;
   letter-spacing: 1.7px;
   text-shadow: 0 0 11px #222c, 0 0 5px #fff70044;
   animation: fadeIn 1s, blinkText 1.3s infinite alternate;
@@ -70,7 +82,6 @@ body::before {
 }
 @keyframes blinkText { 0%{opacity:1;}100%{opacity:.53;} }
 
-/* Loader spinner */
 #loader-screen {
   width: 100vw; height: 100vh;
   background: #090d1aee;
@@ -93,7 +104,6 @@ body::before {
   text-align: center;
   margin-top: .3rem;
 }
-
 .roulette-blur {
   filter: blur(1.5px) brightness(1.11);
   transition: filter 0.24s;
@@ -177,27 +187,6 @@ body::before {
              shake 0.22s cubic-bezier(.38,.44,.61,.8) 2;
 }
 
-/* Gold 3D & shine effect */
-@keyframes goldDrop {
-  0% { transform: scale(0.6) rotate(-10deg); opacity: 0.5;}
-  65% { transform: scale(1.11) rotate(2deg); opacity: 1;}
-  80% { transform: scale(0.97) rotate(-3deg);}
-  100% { transform: scale(1) rotate(0deg);}
-}
-@keyframes glowPulse {
-  0% { box-shadow: 0 0 30px 10px gold, 0 0 60px 18px #fff70033;}
-  100% { box-shadow: 0 0 120px 40px gold, 0 0 240px 48px #fff70099;}
-}
-@keyframes shake {
-  0% { transform: rotate(0);}
-  20% { transform: rotate(-2deg);}
-  40% { transform: rotate(2deg);}
-  60% { transform: rotate(-2deg);}
-  80% { transform: rotate(2deg);}
-  100% { transform: rotate(0);}
-}
-
-/* Labels & Share */
 .labels {
   margin-top: 1.7rem;
   margin-bottom: .4rem;
@@ -240,27 +229,41 @@ body::before {
   font-size: 1.02rem;
   text-shadow: 0 0 5px #222b;
 }
-
-.ticker {
-  position: fixed;
-  bottom: 0; left: 0; width: 100vw;
-  background: #222f;
-  color: #ffe066;
-  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
-  font-size: .9rem;
-  padding: 9px 0;
-  text-align: center;
-  letter-spacing: 1.2px;
-  z-index: 200;
-  box-shadow: 0 0 8px #fff70033;
+.roadmap {
+  margin-top: 2.3rem;
+  color: #ffe066bb;
+  font-family: 'Press Start 2P', monospace;
+  font-size: .98rem;
+  text-shadow: 0 0 5px #222b;
 }
-
+footer {
+  position: fixed; bottom: 0; left: 0;
+  width: 100vw;
+  background: #181e23f9;
+  color: #ffe066cc;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: .96rem;
+  text-align: center;
+  z-index: 90;
+  padding: 6px 0;
+}
+.footer-logo {
+  width: 22px; vertical-align: middle; margin-right: 8px; opacity: .8;
+}
+.footer-links a {
+  color: #63e7ef;
+  margin: 0 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color .14s;
+}
+.footer-links a:hover { color: #ffe066; }
 @media (max-width: 700px) {
   #tap2enter-img { max-width: 98vw; max-height: 70vh; }
   .spinner { width: 42px; height: 42px; border-width: 5px; }
   .loader-text { font-size: .85rem; }
   #roulette-container { min-width: 98vw; min-height: 27vw; gap: 1.5vw; padding: 2vw; }
   .roulette-case { width: 16vw; height: 18vw; max-width: 85px; max-height: 95px; }
-  .labels, .partners, .share-buttons { font-size: 0.87rem; }
+  .labels, .partners, .share-buttons, .roadmap { font-size: 0.85rem; }
   .gold-drop { max-width: 85vw; }
 }
