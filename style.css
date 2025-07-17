@@ -1,69 +1,109 @@
 body, html {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #081c35;
+  margin: 0; padding: 0; width: 100vw; height: 100vh; background: #101d2b;
+  font-family: 'Press Start 2P', Arial, sans-serif;
   overflow: hidden;
 }
+
+/* === Écran accueil tap2enter === */
 #welcome-screen {
-  width: 100vw;
-  height: 100vh;
-  background: #081c35;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0; left: 0;
-  z-index: 10;
-  transition: opacity 0.7s;
-}
-#gif-welcome, #gif-welcome img {
-  width: 100vw;
-  height: 100vh;
-  object-fit: contain;
-  max-width: 100vw;
-  max-height: 100vh;
-  display: block;
-  margin: auto;
-  background: transparent;
-  cursor: pointer;
-  user-select: none;
-}
-#main-inventory {
-  min-height: 100vh;
-  background: #16233a;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 1s;
-}
-#falling-logos {
-  pointer-events: none;
-  position: fixed;
-  top: 0; left: 0;
   width: 100vw; height: 100vh;
-  z-index: 1000;
+  background: #081c35;
+  display: flex; align-items: center; justify-content: center;
+  position: fixed; top: 0; left: 0; z-index: 10;
+  transition: opacity .7s;
 }
-.falling-logo {
-  position: absolute;
-  top: -60px;
+#main-welcome-gif, .gif-welcome img {
+  width: 100vw; height: 100vh;
+  object-fit: cover;
+  max-width: 100vw; max-height: 100vh;
+  display: block; margin: auto; background: transparent;
+  cursor: pointer; user-select: none;
+}
+
+#falling-logos { pointer-events: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000; }
+.falling-logo { position: absolute; top: -60px; animation: fallLogo 1.9s linear forwards; pointer-events: none; opacity: 0.92; }
+@keyframes fallLogo { from { top: -60px; opacity: 1; } to { top: 92vh; opacity: 0; } }
+
+/* === Roulette === */
+.roulette-wrap {
+  width: 100vw; height: 260px;
+  display: flex; align-items: center; justify-content: center;
+  position: absolute; top: 28vh; left: 0; z-index: 10;
+}
+#roulette-cases {
+  display: flex; gap: 16px; position: relative; width: 670px; overflow: hidden; height: 138px;
+  background: #1a2530; border-radius: 22px; border: 3px solid #ffc84d99;
+  box-shadow: 0 0 36px #ffc84d77;
+}
+.roulette-case {
+  width: 110px; height: 110px; border-radius: 14px;
+  background: #fff;
+  margin: 0 3px; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 9px #fff6, 0 0 12px #ffc84d22;
+  border: 2px solid #fff5;
+  image-rendering: pixelated;
+}
+.roulette-case img { width: 82px; height: 82px; }
+.roulette-case.gold {
+  background: linear-gradient(90deg,#ffe070 10%,#f4a91f 100%);
+  box-shadow: 0 0 34px #ffd700, 0 0 22px #fff8;
+  border: 2.5px solid #ffd700;
+}
+.roulette-case.gold img { width: 90px; height: 90px; }
+
+.roulette-marker {
+  position: absolute; top: -27px; left: 50%; transform: translateX(-50%);
+  width: 68px; height: 38px;
+  background: url('https://files.catbox.moe/c4bq71.png') no-repeat center/contain;
+  z-index: 20;
+  filter: drop-shadow(0 0 10px #ffd700);
   pointer-events: none;
-  animation: fall 2s linear forwards;
-  opacity: 0.9;
+  opacity: 1;
 }
-@keyframes fall {
-  0% { transform: translateY(-60px) rotate(-20deg);}
-  90% { opacity: 0.95;}
-  100% { transform: translateY(100vh) rotate(30deg); opacity: 0; }
+
+#drop-screen {
+  position: fixed; inset: 0; background: rgba(20,13,2,0.96);
+  z-index: 9999; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; animation: fadeIn 0.6s;
 }
-/* Mobile fullscreen, object-fit: cover */
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+.drop-bg {
+  position: absolute; inset: 0; background: radial-gradient(circle, #ffe88877 0%, #000 100%);
+  z-index: 1; filter: blur(13px);
+}
+.drop-logo {
+  width: 210px; z-index: 2; margin-bottom: 1.2rem; animation: dropPop 1.1s cubic-bezier(.21,2,.11,1.01);
+  filter: drop-shadow(0 0 28px #ffe888) drop-shadow(0 0 70px #ffd700);
+}
+@keyframes dropPop {
+  0% { transform: scale(0.1) rotateY(80deg); opacity: 0; filter: blur(14px);}
+  80% { transform: scale(1.12) rotateY(-10deg); opacity: 1;}
+  100% { transform: scale(1) rotateY(0deg); opacity: 1; filter: none;}
+}
+.drop-banner {
+  font-size: 1.8rem; font-family: 'Press Start 2P', Arial, sans-serif;
+  color: #fffbe8; background: linear-gradient(90deg, #ffe888 60%, #ffd700 100%);
+  border-radius: 11px; padding: 0.8rem 2.2rem;
+  box-shadow: 0 0 22px #ffd700, 0 0 14px #fff8;
+  border: 2px solid #ffd700;
+  letter-spacing: 4px; z-index: 2;
+  text-shadow: 0 0 12px #ffd700, 0 0 19px #fff999;
+  animation: bannerPop 1.2s cubic-bezier(.2,2.2,.2,1.1) forwards, blinkGold 0.33s 5;
+}
+@keyframes bannerPop {
+  0% { transform: scale(0.2) rotate(-8deg); opacity: 0;}
+  70% { transform: scale(1.13) rotate(4deg); opacity:1;}
+  100% { transform: scale(1) rotate(0deg);}
+}
+@keyframes blinkGold {
+  0%,100% {filter: brightness(1.2);}
+  50% {filter: brightness(1);}
+}
+
 @media (max-width: 700px) {
-  #gif-welcome, #gif-welcome img {
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-  }
+  .roulette-wrap { top: 10vh; }
+  #roulette-cases { width: 98vw; height: 90px; }
+  .roulette-case, .roulette-case.gold { width: 60px; height: 60px;}
+  .roulette-case img, .roulette-case.gold img { width: 45px; height: 45px;}
+  .drop-logo { width: 115px;}
 }
