@@ -3,32 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="theme-color" content="#090d1a">
   <title>$ONETAP – Meme Token Inventory</title>
+  <meta name="description" content="The most legendary Counter-Strike inspired memecoin. No sprays, just headshots. Fair launch, DAO, NFT skins and more.">
+  <meta property="og:title" content="$ONETAP – Meme Token Inventory">
+  <meta property="og:description" content="CS2 Inventory meets web3. Drop, flex, win.">
+  <meta property="og:image" content="assets/og-onetap.png">
+  <meta property="og:url" content="https://onetapmeme.github.io/onetap-site/">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 </head>
 <body>
-  <!-- Fond animé -->
   <div id="particles-js"></div>
-  
-  <!-- Accueil -->
-  <div id="welcome-screen" class="fade-in">
+  <!-- Ticker actu -->
+  <div class="ticker">$ONETAP ATH  🚀 | LP Locked  |  New airdrop in 24h  |  No sprays, just headshots.  |  Join the OGs on Telegram</div>
+
+  <!-- Welcome / Loader -->
+  <div id="welcome-screen">
     <img id="tap2enter-img"
       src="assets/tap2enter_pc_static.png"
       alt="Tap2Enter"
       draggable="false"
     />
-    <div id="press-anykey">Tap/Click anywhere to enter</div>
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
     <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
-    <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
+    <div id="press-anykey">PRESS ANY KEY</div>
   </div>
-
-  <!-- Loader -->
   <div id="loader-screen" style="display:none;">
     <div class="spinner"></div>
-    <div class="loader-text">Loading inventory...</div>
+    <div class="loader-text">Preparing your drop...</div>
   </div>
 
   <!-- Roulette -->
@@ -38,27 +40,72 @@
     <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
   </div>
 
-  <!-- Inventaire Principal / Drop -->
+  <!-- Main inventory -->
   <section id="main-inventory" style="display:none;">
+    <div class="labels">
+      <span class="label">Fair Launch</span>
+      <span class="label label-locked">LP Locked</span>
+      <span class="label">100% Community</span>
+    </div>
     <h1>$ONETAP Inventory</h1>
     <img src="assets/onetap_gold.png" alt="Drop Gold" class="gold-drop"/>
-    <div class="labels">
-      <span class="label label-fair">Fair Launch</span>
-      <span class="label label-locked">Liquidity Locked</span>
-    </div>
     <div class="share-buttons">
       <button onclick="shareX()">Share on X</button>
       <button onclick="shareTG()">Share on Telegram</button>
     </div>
-    <div class="partners">
-      <span>Partners: <img src="assets/partner_dummy.png" alt="Coming soon" height="28"/></span>
+    <div class="partners">Partners: <span style="opacity:0.6;">(Coming soon)</span></div>
+    <div class="roadmap">
+      <div>2024 Q3 - Launch</div>
+      <div>2024 Q4 - DAO / NFT Skins</div>
+      <div>2025 Q1 - Meme Farming</div>
     </div>
   </section>
 
-  <!-- Ticker Hype -->
-  <div class="ticker">
-    $ONETAP trending now | No sprays, just headshots | WAGMI | Launch on BASE 🚀
-  </div>
+  <!-- About / Lore -->
+  <section id="about-section" style="display:none;">
+    <div class="about-content">
+      <h2>The Lore</h2>
+      <p>
+        Forged in eco rounds, $ONETAP is the meme token for real aimers.<br>
+        <b>Precision, hype, and a single bullet to the moon.</b><br>
+        Fair launch. No presale. Zero sprays, only headshots.
+      </p>
+      <button onclick="showSection('main-inventory')">Back</button>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq-section" style="display:none;">
+    <div class="faq-content">
+      <h2>FAQ</h2>
+      <div class="faq">
+        <div class="q">What is $ONETAP?</div>
+        <div class="a">A community meme token inspired by Counter-Strike’s most legendary move.</div>
+        <div class="q">Is the liquidity locked?</div>
+        <div class="a">Yes, all LP is locked and visible on BaseScan.</div>
+        <div class="q">Is there a DAO?</div>
+        <div class="a">Yes. The DAO will control future upgrades and airdrops.</div>
+      </div>
+      <button onclick="showSection('main-inventory')">Back</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <span>
+        <img src="assets/favicon.png" class="footer-logo" alt="logo" />
+        &copy; 2024 $ONETAP. No sprays, just headshots.
+      </span>
+      <span class="footer-links">
+        <a href="#" onclick="showSection('about-section')">About</a>
+        <a href="#" onclick="showSection('faq-section')">FAQ</a>
+        <a href="https://t.me/onetapmeme" target="_blank">Telegram</a>
+        <a href="https://x.com/onetapmeme" target="_blank">X/Twitter</a>
+        <a href="https://basescan.org/address/TON_CONTRACT_ADDRESS" target="_blank">Contract</a>
+      </span>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
