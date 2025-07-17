@@ -4,57 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>$ONETAP – Meme Token Inventory</title>
-  <meta name="description" content="The most legendary Counter-Strike inspired memecoin. No sprays, just headshots. Fair launch, DAO, NFT skins and more.">
-  <meta property="og:title" content="$ONETAP – Meme Token Inventory">
-  <meta property="og:description" content="CS2 Inventory meets web3. Drop, flex, win.">
-  <meta property="og:image" content="assets/og-onetap.png">
-  <meta property="og:url" content="https://onetapmeme.github.io/onetap-site/">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Fond animé si tu veux (optionnel) -->
-  <div id="particles-js"></div>
-  
-  <!-- Welcome / Tap2Enter -->
+  <!-- Accueil -->
   <div id="welcome-screen">
     <img id="tap2enter-img"
       src="assets/tap2enter_pc_static.png"
       alt="Tap2Enter"
       draggable="false"
     />
-    <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
-    <div id="press-anykey">PRESS ANY KEY</div>
-  </div>
-
-  <!-- Loader -->
-  <div id="loader-screen" style="display:none;">
-    <div class="spinner"></div>
-    <div class="loader-text">Loading your drop...</div>
+    <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
+    <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
+    <audio id="epic-music" src="assets/music_epic.wav" preload="auto"></audio>
   </div>
 
   <!-- Roulette -->
   <div id="roulette-screen" style="display:none;">
     <div id="roulette-container"></div>
-    <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
     <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto"></audio>
     <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
   </div>
 
-  <!-- Drop animation -->
-  <div id="drop-animation" style="display:none;">
-    <img id="gold-memecoin" src="assets/onetap_gold.png" alt="$ONETAP" />
-    <div class="drop-glow"></div>
-    <audio id="music-epic" src="assets/music_epic.wav" preload="auto"></audio>
-  </div>
-
-  <!-- Inventaire Principal -->
+  <!-- Inventaire Drop Gold -->
   <section id="main-inventory" style="display:none;">
-    <h1>$ONETAP Inventory</h1>
     <img src="assets/onetap_gold.png" alt="Drop Gold" class="gold-drop"/>
   </section>
-  
+
+  <!-- Zone du drop final (memecoin) générée dynamiquement -->
+
   <script src="script.js"></script>
 </body>
 </html>
