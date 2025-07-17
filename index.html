@@ -7,32 +7,37 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Accueil -->
+  <!-- Audio -->
+  <audio id="music-welcome" src="assets/music_welcome.wav" loop></audio>
+  <audio id="music-main" src="assets/music_main.wav" loop></audio>
+  <audio id="roulette-sound" src="assets/roulette_sound.wav"></audio>
+  <audio id="drop-rare-sound" src="assets/drop_rare.wav"></audio>
+
+  <!-- Welcome/Tap2Enter -->
   <div id="welcome-screen">
-    <img id="welcome-img"
-      src="assets/tap2enter_pc_static.png"
-      alt="Tap2Enter"
-      draggable="false"
-    />
-    <button id="tap-to-enter">TAP TO ENTER</button>
-    <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
-    <audio id="music-welcome" src="assets/music_welcome.mp3" loop preload="auto"></audio>
+    <img id="tap2enter-img" src="assets/tap2enter_pc_static.png" alt="Tap2Enter">
+    <div id="tap2enter-text">TAP TO ENTER</div>
   </div>
 
   <!-- Roulette -->
   <div id="roulette-screen" style="display:none;">
-    <div id="roulette-container"></div>
-    <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto"></audio>
-    <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
-    <audio id="music-main" src="assets/music_main.mp3" loop preload="auto"></audio>
+    <div class="roulette-bg">
+      <div id="roulette-strip"></div>
+    </div>
   </div>
 
-  <!-- Main Inventory -->
-  <div id="main-inventory" style="display:none;">
-    <h1>$ONETAP Inventory</h1>
-    <img src="assets/onetap_gold.png" alt="Rare drop" style="width:180px;"/>
-    <!-- ... contenu principal ici ... -->
+  <!-- Drop animation -->
+  <div id="drop-screen" style="display:none;">
+    <img id="drop-img" src="assets/onetap_gold.png" alt="Rare Drop!">
+    <div id="drop-text">GOLDEN DROP UNLOCKED!</div>
   </div>
+
+  <!-- Main inventory -->
+  <main id="main-inventory" style="display:none;">
+    <h1>$ONETAP Inventory</h1>
+    <img src="assets/onetap_gold.png" alt="Gold Skin" class="main-item">
+    <!-- Ajoute ici tes sections futures -->
+  </main>
 
   <script src="script.js"></script>
 </body>
