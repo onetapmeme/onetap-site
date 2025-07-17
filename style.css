@@ -1,90 +1,37 @@
-body, html {
-  margin: 0; padding: 0;
-  width: 100vw; height: 100vh;
-  background: #090d1a; /* FOND PLUS DARK */
-  overflow: hidden;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>$ONETAP – Meme Token Inventory</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Accueil : Image uniquement, pas de texte -->
+  <div id="welcome-screen">
+    <img id="tap2enter-img"
+      src="assets/tap2enter_pc_static.png"
+      alt="Tap2Enter"
+      draggable="false"
+    />
+    <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
+    <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
+    <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
+  </div>
 
-#welcome-screen, #roulette-screen, #main-inventory {
-  width: 100vw; height: 100vh;
-  position: fixed; top: 0; left: 0;
-  display: flex;
-  align-items: center; justify-content: center;
-  background: #090d1a;
-  z-index: 10;
-}
+  <!-- Roulette -->
+  <div id="roulette-screen" style="display:none;">
+    <div id="roulette-container"></div>
+    <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto"></audio>
+    <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
+  </div>
 
-#tap2enter-img {
-  max-width: 98vw;
-  max-height: 92vh;
-  object-fit: contain;
-  transform: scale(1.13);
-  filter: drop-shadow(0 0 30px #000c);
-  background: transparent;
-  user-select: none;
-  pointer-events: auto;
-}
+  <!-- Inventaire Principal -->
+  <section id="main-inventory" style="display:none;">
+    <h1>$ONETAP Inventory</h1>
+    <img src="assets/onetap_gold.png" alt="Drop Gold" class="gold-drop"/>
+  </section>
 
-#roulette-container {
-  background: rgba(0,0,0,0.10);
-  border-radius: 32px;
-  box-shadow: 0 0 40px 10px #ffe066, 0 0 0 4px #ffe06688;
-  padding: 2vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 70vw;
-  min-height: 13vw;
-  gap: 1vw;
-  position: relative;
-}
-
-.roulette-case {
-  width: 7vw;
-  height: 10vw;
-  max-width: 100px;
-  max-height: 120px;
-  border-radius: 12px;
-  background: #111;
-  margin: 0 0.5vw;
-  box-shadow: 0 0 10px #ffe06666;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 3px solid #ffe06699;
-  transition: box-shadow 0.3s;
-  cursor: pointer;
-}
-.roulette-case.gold {
-  border: 3px solid gold;
-  box-shadow: 0 0 18px 6px gold, 0 0 0 4px #ffe06699;
-  background: #fff8e1;
-  animation: goldGlow 1s infinite alternate;
-}
-@keyframes goldGlow {
-  from { box-shadow: 0 0 18px 6px gold, 0 0 0 4px #ffe06699;}
-  to { box-shadow: 0 0 44px 16px gold, 0 0 0 10px #ffe06633;}
-}
-
-.roulette-case img {
-  width: 80%; height: auto;
-  display: block;
-}
-
-@media (max-width: 700px) {
-  #tap2enter-img {
-    max-width: 98vw;
-    max-height: 70vh;
-  }
-  #roulette-container {
-    min-width: 98vw;
-    min-height: 27vw;
-    gap: 1.5vw;
-    padding: 2vw;
-  }
-  .roulette-case {
-    width: 16vw; height: 18vw;
-    max-width: 85px; max-height: 95px;
-  }
-}
+  <script src="script.js"></script>
+</body>
+</html>
