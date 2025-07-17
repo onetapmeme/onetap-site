@@ -13,100 +13,48 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Fond animé si tu veux (optionnel) -->
   <div id="particles-js"></div>
-  <!-- Ticker actu -->
-  <div class="ticker">$ONETAP ATH  🚀 | LP Locked  |  New airdrop in 24h  |  No sprays, just headshots.  |  Join the OGs on Telegram</div>
-
-  <!-- Welcome / Loader -->
+  
+  <!-- Welcome / Tap2Enter -->
   <div id="welcome-screen">
     <img id="tap2enter-img"
       src="assets/tap2enter_pc_static.png"
       alt="Tap2Enter"
       draggable="false"
     />
-    <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
     <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
+    <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
     <div id="press-anykey">PRESS ANY KEY</div>
   </div>
+
+  <!-- Loader -->
   <div id="loader-screen" style="display:none;">
     <div class="spinner"></div>
-    <div class="loader-text">Preparing your drop...</div>
+    <div class="loader-text">Loading your drop...</div>
   </div>
 
   <!-- Roulette -->
   <div id="roulette-screen" style="display:none;">
     <div id="roulette-container"></div>
+    <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
     <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto"></audio>
     <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
   </div>
 
-  <!-- Main inventory -->
+  <!-- Drop animation -->
+  <div id="drop-animation" style="display:none;">
+    <img id="gold-memecoin" src="assets/onetap_gold.png" alt="$ONETAP" />
+    <div class="drop-glow"></div>
+    <audio id="music-epic" src="assets/music_epic.wav" preload="auto"></audio>
+  </div>
+
+  <!-- Inventaire Principal -->
   <section id="main-inventory" style="display:none;">
-    <div class="labels">
-      <span class="label">Fair Launch</span>
-      <span class="label label-locked">LP Locked</span>
-      <span class="label">100% Community</span>
-    </div>
     <h1>$ONETAP Inventory</h1>
     <img src="assets/onetap_gold.png" alt="Drop Gold" class="gold-drop"/>
-    <div class="share-buttons">
-      <button onclick="shareX()">Share on X</button>
-      <button onclick="shareTG()">Share on Telegram</button>
-    </div>
-    <div class="partners">Partners: <span style="opacity:0.6;">(Coming soon)</span></div>
-    <div class="roadmap">
-      <div>2024 Q3 - Launch</div>
-      <div>2024 Q4 - DAO / NFT Skins</div>
-      <div>2025 Q1 - Meme Farming</div>
-    </div>
   </section>
-
-  <!-- About / Lore -->
-  <section id="about-section" style="display:none;">
-    <div class="about-content">
-      <h2>The Lore</h2>
-      <p>
-        Forged in eco rounds, $ONETAP is the meme token for real aimers.<br>
-        <b>Precision, hype, and a single bullet to the moon.</b><br>
-        Fair launch. No presale. Zero sprays, only headshots.
-      </p>
-      <button onclick="showSection('main-inventory')">Back</button>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq-section" style="display:none;">
-    <div class="faq-content">
-      <h2>FAQ</h2>
-      <div class="faq">
-        <div class="q">What is $ONETAP?</div>
-        <div class="a">A community meme token inspired by Counter-Strike’s most legendary move.</div>
-        <div class="q">Is the liquidity locked?</div>
-        <div class="a">Yes, all LP is locked and visible on BaseScan.</div>
-        <div class="q">Is there a DAO?</div>
-        <div class="a">Yes. The DAO will control future upgrades and airdrops.</div>
-      </div>
-      <button onclick="showSection('main-inventory')">Back</button>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-content">
-      <span>
-        <img src="assets/favicon.png" class="footer-logo" alt="logo" />
-        &copy; 2024 $ONETAP. No sprays, just headshots.
-      </span>
-      <span class="footer-links">
-        <a href="#" onclick="showSection('about-section')">About</a>
-        <a href="#" onclick="showSection('faq-section')">FAQ</a>
-        <a href="https://t.me/onetapmeme" target="_blank">Telegram</a>
-        <a href="https://x.com/onetapmeme" target="_blank">X/Twitter</a>
-        <a href="https://basescan.org/address/TON_CONTRACT_ADDRESS" target="_blank">Contract</a>
-      </span>
-    </div>
-  </footer>
-
+  
   <script src="script.js"></script>
 </body>
 </html>
