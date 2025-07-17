@@ -1,87 +1,96 @@
-const NB_SLOTS = 9;
-const SPIN_DURATION = 7000;
-const BLANK_IMG = "assets/blank_case.png"; // Ton PNG case blanche pixelisé ici
-const GOLD_IMG = "assets/onetap_gold.png";
+// Fichiers utilisés :
+const IS_MOBILE = window.matchMedia("(max-width:700px)").matches;
+const tap2enterImg = document.getElementById('tap2enter-img');
+tap2enterImg.src = IS_MOBILE ? "assets/tap2enter_mobile_static.png" : "assets/tap2enter_pc_static.png";
 
-// --- Accueil TAP2ENTER ---
-const welcomeScreen = document.getElementById("welcome-screen");
-const welcomeImg = document.getElementById("welcome-img");
-const tapBtn = document.getElementById("tap-to-enter");
-const headshotSound = document.getElementById("headshot-sound");
-const musicWelcome = document.getElementById("music-welcome");
-musicWelcome.volume = 0.28;
-musicWelcome.play();
+const welcomeScreen = document.getElementById('welcome-screen');
+const rouletteScreen = document.getElementById('roulette-screen');
+const dropScreen = document.getElementById('drop-screen');
+const mainInventory = document.getElementById('main-inventory');
 
-// Détecte mobile
-function isMobile() {
-  return window.matchMedia("(max-width: 700px)").matches;
+const audioIntro = document.getElementById('music-welcome');
+const audioMain = document.getElementById('music-main');
+const audioRoulette = document.getElementById('roulette-sound');
+const audioDropRare = document.getElementById('drop-rare-sound');
+
+// Jouer la musique d'accueil après une interaction user (obligé sur navigateur)
+let introLaunched = false;
+function playIntroMusicOnce() {
+  if (!introLaunched) {
+    audioIntro.volume = 0.4;
+    audioIntro.play();
+    introLaunched = true;
+  }
 }
 
-tapBtn.onclick = function() {
-  // Remplace l'image statique par le GIF tir/headshot
-  welcomeImg.src = isMobile() ? "assets/tap2enter_mobile.gif" : "assets/tap2enter_pc.gif";
-  headshotSound.play();
+// Tap2Enter au clic partout sur l'écran (plus de bouton)
+welcomeScreen.addEventListener('click', function(){
+  playIntroMusicOnce();
+  launchRoulette();
+});
 
-  setTimeout(() => {
-    welcomeScreen.style.display = "none";
-    launchRoulette();
-    musicWelcome.pause();
-  }, 1400); // Durée du GIF headshot
-};
-
-// --- Roulette ---
-const rouletteScreen = document.getElementById("roulette-screen");
-const rouletteContainer = document.getElementById("roulette-container");
-const rouletteSound = document.getElementById("roulette-sound");
-const dropRareSound = document.getElementById("drop-rare-sound");
-const musicMain = document.getElementById("music-main");
-musicMain.volume = 0.19;
-
+// Animation roulette
 function launchRoulette() {
-  rouletteScreen.style.display = "flex";
-  rouletteSound.currentTime = 0;
-  rouletteSound.play();
+  welcomeScreen.style.opacity = 0;
+  setTimeout(()=>{ welcomeScreen.style.display = 'none'; }, 800);
 
-  // Prépare les cases
-  rouletteContainer.innerHTML = "";
-  let slots = [];
-  for (let i=0; i<NB_SLOTS; i++) {
-    const slot = document.createElement("div");
-    slot.className = "roulette-slot";
-    const img = document.createElement("img");
-    img.src = BLANK_IMG;
-    slot.appendChild(img);
-    rouletteContainer.appendChild(slot);
-    slots.push(slot);
+  rouletteScreen.style.display = 'flex';
+
+  // Set up visuels
+  const BLANK = "assets/case_blank.png";
+  const GOLD = "assets/onetap_gold.png";
+  const NB_CASES = 12, GOLD_IDX = 8;
+  let current = [];
+  for(let i=0;i<NB_CASES;i++) current.push(BLANK);
+
+  // Génère visuel initial
+  const strip = document.getElementById('roulette-strip');
+  strip.innerHTML = '';
+  for(let i=0;i<NB_CASES;i++) {
+    const img = document.createElement('img');
+    img.src = BLANK;
+    img.alt = 'Case';
+    strip.appendChild(img);
   }
 
-  // Animation spin : toujours blanc pendant la durée
-  let anim = setInterval(() => {
-    for (let i=0; i<NB_SLOTS; i++) {
-      slots[i].firstChild.src = BLANK_IMG;
-    }
-  }, 60);
+  // Roue animée
+  let tick = 0, tMax = 90;
+  audioIntro.pause();
+  audioRoulette.currentTime = 0;
+  audioRoulette.volume = 0.6;
+  audioRoulette.play();
 
-  // Stop roulette, affiche la gold AU MILIEU seulement à la fin
-  setTimeout(() => {
-    clearInterval(anim);
-    rouletteSound.pause();
-    for (let i=0; i<NB_SLOTS; i++) {
-      slots[i].firstChild.src = BLANK_IMG;
+  let anim = setInterval(()=>{
+    // Remplit toutes les cases en blanc SAUF la dernière (après 2.2s)
+    for(let i=0;i<NB_CASES;i++) {
+      strip.children[i].src = BLANK;
     }
-    slots[Math.floor(NB_SLOTS/2)].firstChild.src = GOLD_IMG; // Case centrale en gold
-    dropRareSound.currentTime = 0;
-    dropRareSound.play();
-    setTimeout(() => {
-      rouletteScreen.style.display = "none";
-      showInventory();
-      musicMain.play();
-    }, 2200);
-  }, SPIN_DURATION);
+    if (tick > tMax-5) { // 5 derniers ticks = gold apparait
+      strip.children[GOLD_IDX].src = GOLD;
+    }
+    tick++;
+    if (tick >= tMax) {
+      clearInterval(anim);
+      audioRoulette.pause();
+      showDrop();
+    }
+  }, 38);
 }
 
-// --- INVENTAIRE ---
-function showInventory() {
-  document.getElementById("main-inventory").style.display = "flex";
-  // Personnalise ici l’affichage principal de ton site.
+// Drop animation gold rare
+function showDrop() {
+  rouletteScreen.style.display = 'none';
+  dropScreen.style.display = 'flex';
+
+  audioDropRare.currentTime = 0;
+  audioDropRare.volume = 1;
+  audioDropRare.play();
+
+  setTimeout(()=>{
+    dropScreen.style.display = 'none';
+    audioMain.currentTime = 0;
+    audioMain.volume = 0.55;
+    audioMain.play();
+    mainInventory.style.display = 'flex';
+  }, 3400); // 3.4s pour profiter du drop gold
 }
