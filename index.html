@@ -7,37 +7,29 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ACCUEIL -->
+  <!-- Accueil : Image uniquement, pas de texte -->
   <div id="welcome-screen">
-    <picture id="gif-welcome">
-      <source srcset="assets/tap2enter_mobile_static.png" media="(max-width: 700px)">
-      <img src="assets/tap2enter_pc_static.png" alt="Tap2Enter $ONETAP" id="main-welcome-gif" draggable="false" />
-    </picture>
-    <audio id="welcome-music" src="assets/music_welcome.wav" preload="auto" loop></audio>
+    <img id="tap2enter-img"
+      src="assets/tap2enter_pc_static.png"
+      alt="Tap2Enter"
+      draggable="false"
+    />
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
+    <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
+    <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
   </div>
 
-  <!-- ROULETTE -->
-  <div id="roulette-screen" style="display: none;">
-    <audio id="roulette-music" src="assets/music_main.wav" preload="auto" loop></audio>
+  <!-- Roulette -->
+  <div id="roulette-screen" style="display:none;">
+    <div id="roulette-container"></div>
     <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto"></audio>
-    <div id="roulette-container">
-      <div id="roulette-strip"></div>
-      <div id="roulette-glow"></div>
-    </div>
-  </div>
-
-  <!-- DROP RARE -->
-  <div id="drop-screen" style="display: none;">
-    <img src="assets/onetap_gold.png" alt="Golden Drop" id="gold-drop-img">
-    <div id="gold-drop-text">GOLDEN DROP UNLOCKED!</div>
     <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
   </div>
 
-  <!-- INVENTAIRE PRINCIPAL -->
-  <section id="main-inventory" style="display: none;">
+  <!-- Inventaire Principal -->
+  <section id="main-inventory" style="display:none;">
     <h1>$ONETAP Inventory</h1>
-    <img src="assets/onetap_gold.png" alt="My Drop" style="max-width:200px;">
+    <img src="assets/onetap_gold.png" alt="Drop Gold" class="gold-drop"/>
   </section>
 
   <script src="script.js"></script>
