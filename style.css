@@ -14,18 +14,10 @@ body::before {
   opacity: 0.025; z-index: 0; pointer-events: none;
 }
 
-.ticker {
-  position: fixed;
-  bottom: 0; left: 0; width: 100vw;
-  background: #222f;
-  color: #ffe066;
-  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
-  font-size: .9rem;
-  padding: 9px 0;
-  text-align: center;
-  letter-spacing: 1.2px;
-  z-index: 200;
-  box-shadow: 0 0 8px #fff70033;
+#particles-js {
+  position: fixed; width:100vw; height:100vh;
+  left:0; top:0; z-index:0;
+  pointer-events: none;
 }
 
 /* Fade transitions */
@@ -34,7 +26,7 @@ body::before {
 @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
 @keyframes fadeOut { from { opacity:1 } to { opacity:0 } }
 
-/* Écran d'accueil */
+/* Accueil */
 #welcome-screen {
   width: 100vw; height: 100vh;
   display: flex;
@@ -43,7 +35,7 @@ body::before {
   background: #090d1a;
   position: fixed;
   top: 0; left: 0;
-  z-index: 10;
+  z-index: 11;
 }
 
 #tap2enter-img {
@@ -62,6 +54,52 @@ body::before {
   transition: filter .3s, transform .3s;
 }
 
+/* Press any key/tap */
+#press-anykey {
+  position: absolute;
+  bottom: 7vh;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
+  color: #ffe066cc;
+  font-size: 1.12rem;
+  letter-spacing: 1.7px;
+  text-shadow: 0 0 11px #222c, 0 0 5px #fff70044;
+  animation: fadeIn 1s, blinkText 1.3s infinite alternate;
+  pointer-events: none;
+  user-select: none;
+}
+@keyframes blinkText { 0%{opacity:1;}100%{opacity:.53;} }
+
+/* Loader spinner */
+#loader-screen {
+  width: 100vw; height: 100vh;
+  background: #090d1aee;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: fixed; left:0; top:0; z-index: 25;
+}
+.spinner {
+  width: 60px; height: 60px; border: 7px solid #ffe066aa;
+  border-top: 7px solid #090d1a;
+  border-radius: 50%; animation: spin 1.3s linear infinite;
+  margin-bottom: 1.3rem;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.loader-text {
+  color: #ffe066;
+  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1.2px;
+  text-align: center;
+  margin-top: .3rem;
+}
+
+.roulette-blur {
+  filter: blur(3.5px) brightness(1.09);
+  transition: filter 0.3s;
+}
+
 #roulette-screen {
   width: 100vw;
   height: 100vh;
@@ -73,8 +111,6 @@ body::before {
   top: 0; left: 0;
   z-index: 20;
 }
-
-/* Roulette visuelle */
 #roulette-container {
   background: rgba(0,0,0,0.10);
   border-radius: 32px;
@@ -88,7 +124,6 @@ body::before {
   gap: 1vw;
   position: relative;
 }
-
 .roulette-case {
   width: 7vw;
   height: 10vw;
@@ -106,12 +141,10 @@ body::before {
   position: relative;
   transition: box-shadow 0.3s, border 0.3s;
 }
-
 .roulette-case img {
   width: 80%; height: auto;
   display: block;
 }
-
 .roulette-case.gold {
   border: 3px solid gold;
   box-shadow: 0 0 18px 6px gold, 0 0 0 4px #ffe06699;
@@ -135,7 +168,6 @@ body::before {
   opacity: 0;
   animation: fadeIn 0.8s forwards;
 }
-
 .gold-drop {
   margin-top: 2rem;
   max-width: 350px;
@@ -166,19 +198,68 @@ body::before {
   100% { transform: rotate(0);}
 }
 
+/* Labels & Share */
+.labels {
+  margin-top: 1.7rem;
+  margin-bottom: .4rem;
+}
+.label {
+  background: #ffe066;
+  color: #111;
+  font-family: 'Press Start 2P', monospace;
+  font-size: .87rem;
+  border-radius: 5px;
+  padding: 3px 9px;
+  margin: 0 8px;
+  box-shadow: 0 0 5px #ffe06699;
+}
+.label-locked { background: #63e7ef; color: #181e1f; }
+.share-buttons {
+  margin: 1.2rem 0 .7rem 0;
+}
+.share-buttons button {
+  font-family: 'Press Start 2P', monospace;
+  font-size: .97rem;
+  background: #ffe066;
+  color: #111;
+  border: none;
+  border-radius: 8px;
+  margin: 0 9px;
+  padding: 10px 18px;
+  box-shadow: 0 0 6px #ffe06699;
+  cursor: pointer;
+  transition: background .17s;
+}
+.share-buttons button:hover {
+  background: #63e7ef;
+  color: #181e1f;
+}
+.partners {
+  margin-top: 1.7rem;
+  color: #ffe066cc;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.02rem;
+  text-shadow: 0 0 5px #222b;
+}
+
+.ticker {
+  position: fixed;
+  bottom: 0; left: 0; width: 100vw;
+  background: #222f;
+  color: #ffe066;
+  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
+  font-size: .9rem;
+  padding: 9px 0;
+  text-align: center;
+  letter-spacing: 1.2px;
+  z-index: 200;
+  box-shadow: 0 0 8px #fff70033;
+}
+
 @media (max-width: 700px) {
-  #tap2enter-img {
-    max-width: 98vw;
-    max-height: 70vh;
-  }
-  #roulette-container {
-    min-width: 98vw;
-    min-height: 27vw;
-    gap: 1.5vw;
-    padding: 2vw;
-  }
-  .roulette-case {
-    width: 16vw; height: 18vw;
-    max-width: 85px; max-height: 95px;
-  }
+  #tap2enter-img { max-width: 98vw; max-height: 70vh; }
+  .spinner { width: 42px; height: 42px; border-width: 5px; }
+  #press-anykey { font-size: .95rem; }
+  #roulette-container { min-width: 98vw; min-height: 27vw; gap: 1.5vw; padding: 2vw; }
+  .roulette-case { width: 16vw; height: 18vw; max-width: 85px; max-height: 95px; }
 }
