@@ -1,146 +1,96 @@
 body, html {
-  margin: 0; padding: 0;
-  width: 100vw; height: 100vh;
-  background: radial-gradient(circle at 55% 44%, #0a1624 60%, #082044 100%);
-  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #08246a;
+  width: 100vw;
+  height: 100vh;
   font-family: 'Press Start 2P', Arial, sans-serif;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
-/* Accueil Tap2Enter */
 #welcome-screen {
-  width: 100vw; height: 100vh;
-  display: flex; align-items: center; justify-content: center;
-  background: radial-gradient(circle at 60% 40%, #092143 70%, #18192a 100%);
-  position: fixed; left: 0; top: 0; z-index: 20;
-  transition: opacity .6s;
-}
-
-#tap2enter {
-  cursor: pointer;
-  text-align: center;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-}
-#main-welcome-img {
-  max-width: 97vw; max-height: 66vh; width: auto; height: auto;
-  image-rendering: pixelated;
-  margin-bottom: 2.5rem;
-}
-.tap2enter-txt {
-  color: #FFD700;
-  font-size: 2.6rem;
-  text-shadow: 2px 2px 10px #000, 0 0 30px #FFD70099;
-  letter-spacing: 2px;
-  margin-top: -1.6rem;
-  font-family: inherit;
-}
-@media (max-width: 600px) {
-  .tap2enter-txt { font-size: 1.4rem; }
-  #main-welcome-img { max-height: 35vh; }
-}
-
-/* Roulette */
-#roulette-container {
-  width: 100vw; height: 100vh;
-  background: radial-gradient(circle at 40% 66%, #142142 60%, #000 100%);
-  position: fixed; left: 0; top: 0; z-index: 30;
-  display: flex; align-items: center; justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
   flex-direction: column;
-}
-.roulette-wrapper {
-  background: rgba(255,255,255,0.06);
-  border-radius: 24px;
-  box-shadow: 0 0 40px #FFD70099, 0 0 0 7px #FFD70040 inset;
-  overflow: hidden;
-  padding: 18px 18px 22px 18px;
-  min-width: 340px;
-  position: relative;
-  margin: 0 auto;
-}
-.roulette-row {
-  display: flex; align-items: center; justify-content: flex-start;
-  transition: transform 6.5s cubic-bezier(.21,1.11,.68,1);
-  will-change: transform;
-}
-.roulette-case {
-  width: 88px; height: 112px;
-  background: #fff8;
-  border-radius: 13px;
-  margin: 0 6px;
-  box-shadow: 0 0 7px #FFD70033;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-  border: 2px solid #e7ca7b55;
-  position: relative;
-}
-.roulette-case img {
-  width: 75px; height: 75px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 7px #fff9);
-}
-.roulette-indicator {
-  position: absolute;
-  left: 50%; top: 0;
-  transform: translateX(-50%);
-  width: 6px; height: 115px;
-  background: linear-gradient(0deg,#FFD700cc,#FFD70040,#FFD700cc);
-  box-shadow: 0 0 24px #FFD700cc, 0 0 4px #fff;
+  justify-content: center;
+  align-items: center;
+  background: #08246a;
+  position: fixed;
   z-index: 10;
-  border-radius: 5px;
-  pointer-events: none;
 }
 
+#welcome-img {
+  width: 90vw;
+  max-width: 980px;
+  height: auto;
+  margin-bottom: 30px;
+  user-select: none;
+  box-shadow: 0 0 40px #0008;
+}
+
+#tap-to-enter {
+  font-size: 1.6rem;
+  margin-top: 22px;
+  padding: 20px 60px;
+  background: #f4d900;
+  border: none;
+  border-radius: 12px;
+  color: #111;
+  font-family: 'Press Start 2P', Arial, sans-serif;
+  box-shadow: 0 0 24px #f4d90088;
+  cursor: pointer;
+  letter-spacing: 2px;
+  animation: blink 1.3s infinite alternate;
+}
+@keyframes blink { to { opacity: 0.5; } }
+
+#roulette-screen {
+  width: 100vw;
+  height: 100vh;
+  background: #08246a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 9;
+}
+
+#roulette-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(20,20,20,0.17);
+  border-radius: 25px;
+  box-shadow: 0 0 55px 12px #ffe577, 0 0 0px 6px #fff80044 inset;
+  padding: 36px 70px;
+  position: relative;
+}
+
+.roulette-slot {
+  width: 96px;
+  height: 116px;
+  border-radius: 12px;
+  background: #fff9;
+  box-shadow: 0 0 6px #fff2, 0 0 22px #ffd90045;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #ffe577;
+  transition: box-shadow 0.3s;
+}
+.roulette-slot img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+/* Responsive Mobile */
 @media (max-width: 900px) {
-  .roulette-case { width: 57px; height: 69px; }
-  .roulette-case img { width: 45px; height: 45px; }
-  .roulette-wrapper { min-width: 210px; padding: 8px 8px 13px 8px; }
-  .roulette-indicator { height: 69px; }
-}
-
-#drop-popup {
-  position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.88);
-  z-index: 60;
-  display: flex; align-items: center; justify-content: center; flex-direction: column;
-  animation: fadein .6s;
-}
-@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
-.drop-glow {
-  width: 340px; height: 340px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FFD700 0%, #FFD70044 60%, #0000 80%);
-  position: absolute; z-index: 1;
-  left: 50%; top: 52%;
-  transform: translate(-50%,-50%);
-  filter: blur(2px);
-  animation: dropglow 2.3s cubic-bezier(.43,.02,.57,.97) infinite alternate;
-}
-@keyframes dropglow {
-  0% { opacity: 0.7; filter: blur(2px);}
-  100% { opacity: 1; filter: blur(8px);}
-}
-.drop-gold {
-  width: 210px; height: auto; z-index: 2; position: relative;
-  filter: drop-shadow(0 0 20px #FFD70099) drop-shadow(0 0 55px #FFD70033);
-  animation: bounce 0.8s cubic-bezier(.43,.02,.57,.97);
-}
-@keyframes bounce {
-  0% { transform: scale(0.6);}
-  45% { transform: scale(1.2);}
-  90% { transform: scale(0.93);}
-  100% { transform: scale(1);}
-}
-.drop-title {
-  font-size: 2.2rem;
-  color: #FFD700;
-  text-align: center;
-  margin-top: 34vh;
-  text-shadow: 0 0 20px #fff, 0 0 70px #FFD700;
-  font-family: inherit;
-}
-@media (max-width: 600px) {
-  .drop-glow { width: 160px; height: 160px;}
-  .drop-gold { width: 88px;}
-  .drop-title { font-size: 1.1rem; margin-top: 12vh;}
+  #welcome-img { width: 98vw; max-width: 98vw; }
+  .roulette-slot { width: 60px; height: 74px; }
+  #roulette-container { padding: 13px 6vw; }
 }
