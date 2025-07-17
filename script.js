@@ -1,21 +1,3 @@
-// PARTICLES.JS INIT (si utilisé)
-window.addEventListener('DOMContentLoaded', () => {
-  if (window.particlesJS) {
-    particlesJS('particles-js', {
-      particles: {
-        number: { value: 72 },
-        color: { value: "#ffe066" },
-        shape: { type: "circle" },
-        opacity: { value: 0.18 },
-        size: { value: 3.5, random: true },
-        move: { enable: true, speed: 1.2, direction: "none", out_mode: "out" }
-      },
-      interactivity: { detect_on: "canvas", events: { onclick: { enable: false } } },
-      retina_detect: true
-    });
-  }
-});
-
 function isMobile() {
   return window.matchMedia("(max-width: 700px)").matches;
 }
@@ -33,90 +15,73 @@ const pressAnyKey = document.getElementById("press-anykey");
 const loader = document.getElementById("loader-screen");
 
 let tapHandled = false;
-
 function showStaticTapImg() {
   tapImg.src = isMobile() ? STATIC_IMG_MOBILE : STATIC_IMG_PC;
 }
 showStaticTapImg();
 window.addEventListener("resize", showStaticTapImg);
-
 function launchWelcomeMusic() {
   if (musicWelcome && musicWelcome.paused) {
-    musicWelcome.volume = 0.22;
+    musicWelcome.volume = 0.24;
     musicWelcome.currentTime = 0;
     musicWelcome.play().catch(()=>{});
   }
 }
 window.addEventListener("load", launchWelcomeMusic);
 
-function hidePressAnyKey() { if(pressAnyKey) pressAnyKey.style.display = "none"; }
-tapImg.addEventListener("click", () => { handleTap(); hidePressAnyKey(); });
-tapImg.addEventListener("touchstart", () => { handleTap(); hidePressAnyKey(); });
-welcome.addEventListener("click", () => { handleTap(); hidePressAnyKey(); });
-welcome.addEventListener("touchstart", () => { handleTap(); hidePressAnyKey(); });
-document.addEventListener("keydown", () => { handleTap(); hidePressAnyKey(); });
+tapImg.addEventListener("click", handleTap);
+tapImg.addEventListener("touchstart", handleTap);
+welcome.addEventListener("click", handleTap);
+welcome.addEventListener("touchstart", handleTap);
+document.addEventListener("keydown", handleTap);
 
 function handleTap() {
   if (tapHandled) return;
   tapHandled = true;
+  pressAnyKey.style.display = "none";
   tapImg.src = isMobile() ? GIF_IMG_MOBILE : GIF_IMG_PC;
   headshotSound.currentTime = 0;
   headshotSound.play();
   musicWelcome.pause(); musicWelcome.currentTime = 0;
   setTimeout(() => {
-    welcome.classList.remove("fade-in");
-    welcome.classList.add("fade-out");
-    setTimeout(() => {
-      welcome.style.display = "none";
-      showLoader();
-    }, 750);
-  }, 1100);
+    welcome.style.display = "none";
+    showLoader();
+  }, 1200);
 }
 function showLoader() {
   loader.style.display = "flex";
-  loader.classList.add("fade-in");
   setTimeout(() => {
-    loader.classList.remove("fade-in");
-    loader.classList.add("fade-out");
-    setTimeout(() => {
-      loader.style.display = "none";
-      startRoulette();
-    }, 1000);
-  }, 1350);
+    loader.style.display = "none";
+    startRoulette();
+  }, 1100);
 }
 
-// === ROULETTE ===
+// Roulette
 const rouletteScreen = document.getElementById("roulette-screen");
 const rouletteContainer = document.getElementById("roulette-container");
 const rouletteSound = document.getElementById("roulette-sound");
 const dropRareSound = document.getElementById("drop-rare-sound");
+const musicEpic = document.getElementById("music-epic");
 
 const caseBlank = "assets/case_blank.png";
 const caseGold = "assets/onetap_gold.png";
-const NB_CASES_VISIBLE = 8;
-const NB_CASES_TOTAL = 34;
+const NB_CASES_VISIBLE = 9; // Pour que la gold tombe bien au centre !
+const NB_CASES_TOTAL = 37;
 const DURATION = 7000;
 
 function startRoulette() {
   rouletteScreen.style.display = "flex";
-  rouletteScreen.classList.add("fade-in");
   rouletteContainer.innerHTML = "";
-
-  // Musique Main
   if (musicMain) {
     musicMain.volume = 0.33;
     musicMain.currentTime = 0;
     musicMain.play().catch(()=>{});
   }
-
-  // Roulette
+  // --- Roulette setup ---
   const casesPool = [];
   for (let i = 0; i < NB_CASES_TOTAL - 1; i++) casesPool.push(caseBlank);
   casesPool.push(caseGold);
-
-  function renderCases(pos, isBlur) {
-    if(isBlur) rouletteContainer.classList.add("roulette-blur");
-    else rouletteContainer.classList.remove("roulette-blur");
+  function renderCases(pos) {
     rouletteContainer.innerHTML = "";
     for (let i = 0; i < NB_CASES_VISIBLE; i++) {
       let idx = (pos + i) % casesPool.length;
@@ -129,17 +94,12 @@ function startRoulette() {
       rouletteContainer.appendChild(caseDiv);
     }
   }
-
   let totalScroll = casesPool.length * 10;
   let finalPos = (casesPool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
-
-  // Son roulette : commence direct
   rouletteSound.currentTime = 0;
-  rouletteSound.volume = 0.85;
+  rouletteSound.volume = 0.9;
   rouletteSound.play();
-
   let t0 = Date.now();
-
   function animate() {
     let elapsed = Date.now() - t0;
     let progress = Math.min(elapsed / DURATION, 1);
@@ -148,51 +108,41 @@ function startRoulette() {
       : 1 - Math.pow(1 - progress, 2.35);
     let pos = Math.floor(totalScroll * ease);
     let currentPos = (pos + finalPos) % casesPool.length;
-    let isBlur = (progress < 0.94);
-    renderCases(currentPos, isBlur);
-
+    renderCases(currentPos);
     if (progress < 1) {
-      // Fade out du son roulette à la fin
       if(progress > 0.97 && !rouletteSound.paused) {
-        rouletteSound.volume *= 0.92;
-        if(rouletteSound.volume < 0.05) rouletteSound.pause();
+        rouletteSound.volume *= 0.85;
+        if(rouletteSound.volume < 0.03) rouletteSound.pause();
       }
       requestAnimationFrame(animate);
     } else {
       rouletteSound.pause();
-      setTimeout(() => {
-        dropRareSound.currentTime = 0;
-        dropRareSound.volume = 0.95;
-        dropRareSound.play();
-        rouletteScreen.classList.remove("fade-in");
-        rouletteScreen.classList.add("fade-out");
-        setTimeout(showDrop, 900);
-      }, 750);
+      musicMain.pause();
+      dropRareSound.currentTime = 0;
+      dropRareSound.play();
+      setTimeout(showEpicDrop, 900);
     }
   }
   animate();
 }
 
-// === INVENTAIRE & Drop ===
-const mainInventory = document.getElementById("main-inventory");
-function showDrop() {
+// --- DROP ANIMATION ---
+const dropAnimation = document.getElementById("drop-animation");
+const goldMemecoin = document.getElementById("gold-memecoin");
+function showEpicDrop() {
   rouletteScreen.style.display = "none";
+  dropAnimation.style.display = "flex";
+  musicEpic.volume = 0.36;
+  musicEpic.currentTime = 0;
+  musicEpic.play().catch(()=>{});
+  setTimeout(() => {
+    dropAnimation.style.display = "none";
+    showInventory();
+  }, 2700); // Laisse l’animation un bon moment
+}
+
+// INVENTAIRE
+const mainInventory = document.getElementById("main-inventory");
+function showInventory() {
   mainInventory.style.display = "flex";
-  mainInventory.classList.add("fade-in");
 }
-
-// SHARE BUTTONS
-window.shareX = function() {
-  window.open('https://x.com/intent/tweet?text=I+just+got+a+legendary+drop+on+$ONETAP!+%23ONETAP+%23memecoin','_blank');
-}
-window.shareTG = function() {
-  window.open('https://t.me/share/url?url=https://onetapmeme.github.io/onetap-site/&text=I+just+got+a+legendary+drop+on+$ONETAP!','_blank');
-}
-
-// NAVIGATION SECTIONS
-window.showSection = function(id) {
-  document.querySelectorAll('section').forEach(s=>s.style.display='none');
-  document.getElementById(id).style.display = 'flex';
-};
-
-// MUTE BUTTON (à ajouter si besoin)
