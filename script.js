@@ -1,4 +1,4 @@
-// PARTICLES.JS INIT
+// PARTICLES.JS INIT (si utilisé)
 window.addEventListener('DOMContentLoaded', () => {
   if (window.particlesJS) {
     particlesJS('particles-js', {
@@ -19,7 +19,6 @@ window.addEventListener('DOMContentLoaded', () => {
 function isMobile() {
   return window.matchMedia("(max-width: 700px)").matches;
 }
-
 const STATIC_IMG_PC = "assets/tap2enter_pc_static.png";
 const STATIC_IMG_MOBILE = "assets/tap2enter_mobile_static.png";
 const GIF_IMG_PC = "assets/tap2enter_pc.gif";
@@ -31,6 +30,7 @@ const headshotSound = document.getElementById("headshot-sound");
 const musicWelcome = document.getElementById("music-welcome");
 const musicMain = document.getElementById("music-main");
 const pressAnyKey = document.getElementById("press-anykey");
+const loader = document.getElementById("loader-screen");
 
 let tapHandled = false;
 
@@ -41,18 +41,15 @@ showStaticTapImg();
 window.addEventListener("resize", showStaticTapImg);
 
 function launchWelcomeMusic() {
-  if (musicWelcome.paused) {
-    musicWelcome.volume = 0.23;
+  if (musicWelcome && musicWelcome.paused) {
+    musicWelcome.volume = 0.22;
     musicWelcome.currentTime = 0;
     musicWelcome.play().catch(()=>{});
   }
 }
-// Musique d'accueil : démarre direct au chargement
 window.addEventListener("load", launchWelcomeMusic);
 
-function hidePressAnyKey() {
-  if(pressAnyKey) pressAnyKey.style.display = "none";
-}
+function hidePressAnyKey() { if(pressAnyKey) pressAnyKey.style.display = "none"; }
 tapImg.addEventListener("click", () => { handleTap(); hidePressAnyKey(); });
 tapImg.addEventListener("touchstart", () => { handleTap(); hidePressAnyKey(); });
 welcome.addEventListener("click", () => { handleTap(); hidePressAnyKey(); });
@@ -62,15 +59,10 @@ document.addEventListener("keydown", () => { handleTap(); hidePressAnyKey(); });
 function handleTap() {
   if (tapHandled) return;
   tapHandled = true;
-
   tapImg.src = isMobile() ? GIF_IMG_MOBILE : GIF_IMG_PC;
   headshotSound.currentTime = 0;
   headshotSound.play();
-
-  // Arrêt immédiat de la musique d'accueil
-  musicWelcome.pause();
-  musicWelcome.currentTime = 0;
-
+  musicWelcome.pause(); musicWelcome.currentTime = 0;
   setTimeout(() => {
     welcome.classList.remove("fade-in");
     welcome.classList.add("fade-out");
@@ -80,9 +72,6 @@ function handleTap() {
     }, 750);
   }, 1100);
 }
-
-// === Loader avant la roulette ===
-const loader = document.getElementById("loader-screen");
 function showLoader() {
   loader.style.display = "flex";
   loader.classList.add("fade-in");
@@ -92,8 +81,8 @@ function showLoader() {
     setTimeout(() => {
       loader.style.display = "none";
       startRoulette();
-    }, 600);
-  }, 1200);
+    }, 1000);
+  }, 1350);
 }
 
 // === ROULETTE ===
@@ -106,18 +95,21 @@ const caseBlank = "assets/case_blank.png";
 const caseGold = "assets/onetap_gold.png";
 const NB_CASES_VISIBLE = 8;
 const NB_CASES_TOTAL = 34;
-const DURATION = 7000; // DUREE EXACTE
+const DURATION = 7000;
 
 function startRoulette() {
   rouletteScreen.style.display = "flex";
   rouletteScreen.classList.add("fade-in");
   rouletteContainer.innerHTML = "";
 
-  // MUSIQUE MAIN DÉBUTE
-  musicMain.volume = 0.33;
-  musicMain.currentTime = 0;
-  musicMain.play().catch(()=>{});
+  // Musique Main
+  if (musicMain) {
+    musicMain.volume = 0.33;
+    musicMain.currentTime = 0;
+    musicMain.play().catch(()=>{});
+  }
 
+  // Roulette
   const casesPool = [];
   for (let i = 0; i < NB_CASES_TOTAL - 1; i++) casesPool.push(caseBlank);
   casesPool.push(caseGold);
@@ -141,6 +133,7 @@ function startRoulette() {
   let totalScroll = casesPool.length * 10;
   let finalPos = (casesPool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
 
+  // Son roulette : commence direct
   rouletteSound.currentTime = 0;
   rouletteSound.volume = 0.85;
   rouletteSound.play();
@@ -150,7 +143,6 @@ function startRoulette() {
   function animate() {
     let elapsed = Date.now() - t0;
     let progress = Math.min(elapsed / DURATION, 1);
-    // Dynamique : accélère puis ralentit
     let ease = progress < 0.87
       ? Math.pow(progress, 0.62)
       : 1 - Math.pow(1 - progress, 2.35);
@@ -160,10 +152,10 @@ function startRoulette() {
     renderCases(currentPos, isBlur);
 
     if (progress < 1) {
-      // Fade out du son roulette à la toute fin
+      // Fade out du son roulette à la fin
       if(progress > 0.97 && !rouletteSound.paused) {
-        rouletteSound.volume *= 0.94;
-        if(rouletteSound.volume < 0.06) rouletteSound.pause();
+        rouletteSound.volume *= 0.92;
+        if(rouletteSound.volume < 0.05) rouletteSound.pause();
       }
       requestAnimationFrame(animate);
     } else {
@@ -174,8 +166,8 @@ function startRoulette() {
         dropRareSound.play();
         rouletteScreen.classList.remove("fade-in");
         rouletteScreen.classList.add("fade-out");
-        setTimeout(showDrop, 850);
-      }, 720);
+        setTimeout(showDrop, 900);
+      }, 750);
     }
   }
   animate();
@@ -187,13 +179,20 @@ function showDrop() {
   rouletteScreen.style.display = "none";
   mainInventory.style.display = "flex";
   mainInventory.classList.add("fade-in");
-  // La musique main continue
 }
 
-// SHARE BUTTONS dummy
+// SHARE BUTTONS
 window.shareX = function() {
   window.open('https://x.com/intent/tweet?text=I+just+got+a+legendary+drop+on+$ONETAP!+%23ONETAP+%23memecoin','_blank');
 }
 window.shareTG = function() {
   window.open('https://t.me/share/url?url=https://onetapmeme.github.io/onetap-site/&text=I+just+got+a+legendary+drop+on+$ONETAP!','_blank');
 }
+
+// NAVIGATION SECTIONS
+window.showSection = function(id) {
+  document.querySelectorAll('section').forEach(s=>s.style.display='none');
+  document.getElementById(id).style.display = 'flex';
+};
+
+// MUTE BUTTON (à ajouter si besoin)
