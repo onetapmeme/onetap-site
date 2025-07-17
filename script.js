@@ -15,12 +15,20 @@ const musicMain = document.getElementById("music-main");
 
 let tapHandled = false;
 
+// Responsive image (PC/mobile)
 function showStaticTapImg() {
   tapImg.src = isMobile() ? STATIC_IMG_MOBILE : STATIC_IMG_PC;
 }
 showStaticTapImg();
-musicWelcome.volume = 0.7;
-musicWelcome.play().catch(()=>{});
+window.addEventListener("resize", showStaticTapImg);
+
+// Musique d'accueil : autoplay seulement après 1er clic/tap (fix mobile)
+document.addEventListener('click', () => {
+  if (musicWelcome.paused) {
+    musicWelcome.volume = 0.3;
+    musicWelcome.play().catch(()=>{});
+  }
+}, { once: true });
 
 tapImg.addEventListener("click", handleTap);
 tapImg.addEventListener("touchstart", handleTap);
@@ -34,14 +42,20 @@ function handleTap() {
   tapImg.src = isMobile() ? GIF_IMG_MOBILE : GIF_IMG_PC;
   headshotSound.currentTime = 0;
   headshotSound.play();
-  setTimeout(() => musicWelcome.pause(), 500);
+
   setTimeout(() => {
-    welcome.style.display = "none";
-    startRoulette();
-  }, 1200);
+    welcome.classList.remove("fade-in");
+    welcome.classList.add("fade-out");
+    setTimeout(() => {
+      welcome.style.display = "none";
+      startRoulette();
+      musicWelcome.pause();
+      musicWelcome.currentTime = 0;
+    }, 750);
+  }, 1100);
 }
 
-// Roulette
+// --- ROULETTE ---
 const rouletteScreen = document.getElementById("roulette-screen");
 const rouletteContainer = document.getElementById("roulette-container");
 const rouletteSound = document.getElementById("roulette-sound");
@@ -51,18 +65,16 @@ const caseBlank = "assets/case_blank.png";
 const caseGold = "assets/onetap_gold.png";
 const NB_CASES_VISIBLE = 8;
 const NB_CASES_TOTAL = 34;
-const DURATION = 6000;
+const DURATION = 5200;
 
 function startRoulette() {
   rouletteScreen.style.display = "flex";
+  rouletteScreen.classList.add("fade-in");
   rouletteContainer.innerHTML = "";
 
   const casesPool = [];
   for (let i = 0; i < NB_CASES_TOTAL - 1; i++) casesPool.push(caseBlank);
   casesPool.push(caseGold);
-
-  let scrollPos = 0;
-  let rolling = true;
 
   function renderCases(pos) {
     rouletteContainer.innerHTML = "";
@@ -78,10 +90,11 @@ function startRoulette() {
     }
   }
 
-  let totalScroll = casesPool.length * 8;
+  let totalScroll = casesPool.length * 7.7;
   let finalPos = (casesPool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
 
   rouletteSound.currentTime = 0;
+  rouletteSound.volume = 0.6;
   rouletteSound.play();
 
   let t0 = Date.now();
@@ -89,9 +102,8 @@ function startRoulette() {
   function animate() {
     let elapsed = Date.now() - t0;
     let progress = Math.min(elapsed / DURATION, 1);
-    let ease = 1 - Math.pow(1 - progress, 2);
+    let ease = 1 - Math.pow(1 - progress, 2.3);
     let pos = Math.floor(totalScroll * ease);
-    scrollPos = pos;
     let currentPos = (pos + finalPos) % casesPool.length;
     renderCases(currentPos);
 
@@ -99,18 +111,25 @@ function startRoulette() {
       requestAnimationFrame(animate);
     } else {
       rouletteSound.pause();
-      dropRareSound.currentTime = 0;
-      dropRareSound.play();
-      setTimeout(showDrop, 900);
+      setTimeout(() => {
+        dropRareSound.currentTime = 0;
+        dropRareSound.volume = 0.9;
+        dropRareSound.play();
+        rouletteScreen.classList.remove("fade-in");
+        rouletteScreen.classList.add("fade-out");
+        setTimeout(showDrop, 850);
+      }, 700);
     }
   }
   animate();
 }
 
+// --- INVENTAIRE ---
 const mainInventory = document.getElementById("main-inventory");
 function showDrop() {
   rouletteScreen.style.display = "none";
   mainInventory.style.display = "flex";
-  musicMain.volume = 0.6;
+  mainInventory.classList.add("fade-in");
+  musicMain.volume = 0.4;
   musicMain.play().catch(()=>{});
 }
