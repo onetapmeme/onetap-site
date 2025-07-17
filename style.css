@@ -1,9 +1,38 @@
 body, html {
   margin: 0; padding: 0;
   width: 100vw; height: 100vh;
-  background: #090d1a; /* FOND PLUS DARK */
+  background: #090d1a;
   overflow: hidden;
+  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
 }
+
+body::before {
+  content: "";
+  position: fixed; left:0; top:0; width:100vw; height:100vh;
+  background: url('assets/onetap_logo.png') center center no-repeat;
+  background-size: 85vw auto;
+  opacity: 0.025; z-index: 0; pointer-events: none;
+}
+
+.ticker {
+  position: fixed;
+  bottom: 0; left: 0; width: 100vw;
+  background: #222f;
+  color: #ffe066;
+  font-family: 'Press Start 2P', monospace, Arial, sans-serif;
+  font-size: .9rem;
+  padding: 9px 0;
+  text-align: center;
+  letter-spacing: 1.2px;
+  z-index: 200;
+  box-shadow: 0 0 8px #fff70033;
+}
+
+/* Fade transitions */
+.fade-in { animation: fadeIn 0.8s cubic-bezier(.3,0,.3,1) forwards; }
+.fade-out { animation: fadeOut 0.7s cubic-bezier(.3,0,.3,1) forwards; }
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+@keyframes fadeOut { from { opacity:1 } to { opacity:0 } }
 
 /* Écran d'accueil */
 #welcome-screen {
@@ -28,9 +57,9 @@ body, html {
   background: transparent;
   user-select: none;
   pointer-events: auto;
-  /* Agrandissement visuel */
   transform: scale(1.13);
   filter: drop-shadow(0 0 30px #000c);
+  transition: filter .3s, transform .3s;
 }
 
 #roulette-screen {
@@ -45,8 +74,7 @@ body, html {
   z-index: 20;
 }
 
-/* ... (Roulette, inventaire, responsive inchangés depuis la version précédente) ... */
-
+/* Roulette visuelle */
 #roulette-container {
   background: rgba(0,0,0,0.10);
   border-radius: 32px;
@@ -76,7 +104,7 @@ body, html {
   overflow: hidden;
   border: 3px solid #ffe06699;
   position: relative;
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s, border 0.3s;
 }
 
 .roulette-case img {
@@ -89,6 +117,13 @@ body, html {
   box-shadow: 0 0 18px 6px gold, 0 0 0 4px #ffe06699;
   background: #fff8e1;
 }
+.roulette-case.gold img {
+  animation: goldDrop .9s cubic-bezier(.18,.67,.64,1.17) forwards,
+             glowPulse 1.4s infinite alternate,
+             shake 0.22s cubic-bezier(.38,.44,.61,.8) 2;
+  box-shadow: 0 0 44px 14px gold, 0 0 120px 28px #fff70066;
+  border-radius: 14px;
+}
 
 #main-inventory {
   width: 100vw; height: 100vh;
@@ -97,6 +132,8 @@ body, html {
   background: #090d1a;
   position: fixed; top: 0; left: 0;
   z-index: 30;
+  opacity: 0;
+  animation: fadeIn 0.8s forwards;
 }
 
 .gold-drop {
@@ -104,6 +141,29 @@ body, html {
   max-width: 350px;
   width: 80vw;
   filter: drop-shadow(0 0 30px gold);
+  animation: goldDrop .9s cubic-bezier(.18,.67,.64,1.17) forwards,
+             glowPulse 1.4s infinite alternate,
+             shake 0.22s cubic-bezier(.38,.44,.61,.8) 2;
+}
+
+/* Gold 3D & shine effect */
+@keyframes goldDrop {
+  0% { transform: scale(0.6) rotate(-10deg); opacity: 0.5;}
+  65% { transform: scale(1.11) rotate(2deg); opacity: 1;}
+  80% { transform: scale(0.97) rotate(-3deg);}
+  100% { transform: scale(1) rotate(0deg);}
+}
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 30px 10px gold, 0 0 60px 18px #fff70033;}
+  100% { box-shadow: 0 0 120px 40px gold, 0 0 240px 48px #fff70099;}
+}
+@keyframes shake {
+  0% { transform: rotate(0);}
+  20% { transform: rotate(-2deg);}
+  40% { transform: rotate(2deg);}
+  60% { transform: rotate(-2deg);}
+  80% { transform: rotate(2deg);}
+  100% { transform: rotate(0);}
 }
 
 @media (max-width: 700px) {
