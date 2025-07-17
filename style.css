@@ -20,7 +20,6 @@ body::before {
   pointer-events: none;
 }
 
-/* Fade transitions */
 .fade-in { animation: fadeIn 0.8s cubic-bezier(.3,0,.3,1) forwards; }
 .fade-out { animation: fadeOut 0.7s cubic-bezier(.3,0,.3,1) forwards; }
 @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
@@ -96,8 +95,8 @@ body::before {
 }
 
 .roulette-blur {
-  filter: blur(3.5px) brightness(1.09);
-  transition: filter 0.3s;
+  filter: blur(1.5px) brightness(1.11);
+  transition: filter 0.24s;
 }
 
 #roulette-screen {
@@ -259,7 +258,9 @@ body::before {
 @media (max-width: 700px) {
   #tap2enter-img { max-width: 98vw; max-height: 70vh; }
   .spinner { width: 42px; height: 42px; border-width: 5px; }
-  #press-anykey { font-size: .95rem; }
+  .loader-text { font-size: .85rem; }
   #roulette-container { min-width: 98vw; min-height: 27vw; gap: 1.5vw; padding: 2vw; }
   .roulette-case { width: 16vw; height: 18vw; max-width: 85px; max-height: 95px; }
+  .labels, .partners, .share-buttons { font-size: 0.87rem; }
+  .gold-drop { max-width: 85vw; }
 }
