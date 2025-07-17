@@ -1,148 +1,90 @@
 body, html {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #052050 linear-gradient(135deg, #052050 70%, #204080 100%);
+  margin: 0; padding: 0;
+  width: 100vw; height: 100vh;
+  background: #090d1a; /* FOND PLUS DARK */
   overflow: hidden;
 }
 
-#welcome-screen {
-  width: 100vw;
-  height: 100vh;
-  background: transparent;
+#welcome-screen, #roulette-screen, #main-inventory {
+  width: 100vw; height: 100vh;
+  position: fixed; top: 0; left: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  align-items: center; justify-content: center;
+  background: #090d1a;
   z-index: 10;
-  position: fixed;
-  top: 0; left: 0;
-  transition: opacity 0.7s;
 }
 
-#gif-welcome img {
-  width: 48vw;
-  max-width: 650px;
-  min-width: 260px;
-  height: auto;
-  display: block;
+#tap2enter-img {
+  max-width: 98vw;
+  max-height: 92vh;
+  object-fit: contain;
+  transform: scale(1.13);
+  filter: drop-shadow(0 0 30px #000c);
   background: transparent;
-  margin: 0 auto;
-  cursor: pointer;
   user-select: none;
-  border-radius: 18px;
-  box-shadow: 0 6px 56px 0 #000a;
-}
-
-#roulette-screen {
-  width: 100vw;
-  height: 100vh;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: fixed;
-  top: 0; left: 0;
-  z-index: 11;
+  pointer-events: auto;
 }
 
 #roulette-container {
+  background: rgba(0,0,0,0.10);
+  border-radius: 32px;
+  box-shadow: 0 0 40px 10px #ffe066, 0 0 0 4px #ffe06688;
+  padding: 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70vw;
+  min-height: 13vw;
+  gap: 1vw;
   position: relative;
-  width: 70vw;
-  max-width: 950px;
-  min-width: 320px;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-#roulette-strip {
-  position: absolute;
-  width: 100%;
-  height: 120px;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  z-index: 2;
-  left: 0; top: 15px;
-  transition: none;
-}
-
-#roulette-strip img {
-  width: 96px; height: 120px;
+.roulette-case {
+  width: 7vw;
+  height: 10vw;
+  max-width: 100px;
+  max-height: 120px;
   border-radius: 12px;
-  box-shadow: 0 0 18px 2px #0007;
-  border: 2px solid #eee3;
-  background: #fcfc;
-  object-fit: contain;
-}
-
-#roulette-glow {
-  position: absolute;
-  width: 100%;
-  height: 120px;
-  pointer-events: none;
-  box-shadow: 0 0 55px 15px gold, 0 0 4px 2px #ffd700;
-  border-radius: 18px;
-  z-index: 3;
-  left: 0; top: 15px;
-  border: 4px solid #ffe57f55;
-}
-
-#drop-screen {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: transparent;
+  background: #111;
+  margin: 0 0.5vw;
+  box-shadow: 0 0 10px #ffe06666;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 20;
+  overflow: hidden;
+  border: 3px solid #ffe06699;
+  transition: box-shadow 0.3s;
+  cursor: pointer;
+}
+.roulette-case.gold {
+  border: 3px solid gold;
+  box-shadow: 0 0 18px 6px gold, 0 0 0 4px #ffe06699;
+  background: #fff8e1;
+  animation: goldGlow 1s infinite alternate;
+}
+@keyframes goldGlow {
+  from { box-shadow: 0 0 18px 6px gold, 0 0 0 4px #ffe06699;}
+  to { box-shadow: 0 0 44px 16px gold, 0 0 0 10px #ffe06633;}
 }
 
-#gold-drop-img {
-  width: 270px; height: auto;
-  box-shadow: 0 0 60px 18px #ffe57f99;
-  border-radius: 24px;
-  background: #fff0;
+.roulette-case img {
+  width: 80%; height: auto;
+  display: block;
 }
 
-#gold-drop-text {
-  margin-top: 30px;
-  font-size: 2.7rem;
-  font-family: 'Consolas', 'monospace', monospace;
-  font-weight: bold;
-  color: #ffe66a;
-  text-shadow: 0 0 6px #000c, 0 0 16px #ffe57f99;
-  letter-spacing: 0.07em;
-  animation: glow-text 1.4s infinite alternate;
-  text-align: center;
-}
-
-@keyframes glow-text {
-  0%   { text-shadow: 0 0 4px #000b, 0 0 24px #ffe57f77;}
-  100% { text-shadow: 0 0 20px #000c, 0 0 40px #fffbd0;}
-}
-
-#main-inventory {
-  min-height: 100vh;
-  background: #133263;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 60px;
-}
-
-h1 {
-  font-family: 'Consolas', 'monospace', monospace;
-  color: #2bdfff;
-  font-size: 2.5rem;
-  margin-bottom: 24px;
+@media (max-width: 700px) {
+  #tap2enter-img {
+    max-width: 98vw;
+    max-height: 70vh;
+  }
+  #roulette-container {
+    min-width: 98vw;
+    min-height: 27vw;
+    gap: 1.5vw;
+    padding: 2vw;
+  }
+  .roulette-case {
+    width: 16vw; height: 18vw;
+    max-width: 85px; max-height: 95px;
+  }
 }
