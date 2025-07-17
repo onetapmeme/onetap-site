@@ -7,37 +7,30 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Audio -->
-  <audio id="music-welcome" src="assets/music_welcome.wav" loop></audio>
-  <audio id="music-main" src="assets/music_main.wav" loop></audio>
-  <audio id="roulette-sound" src="assets/roulette_sound.wav"></audio>
-  <audio id="drop-rare-sound" src="assets/drop_rare.wav"></audio>
-
-  <!-- Welcome/Tap2Enter -->
+  <!-- Accueil : Image uniquement, pas de texte -->
   <div id="welcome-screen">
-    <img id="tap2enter-img" src="assets/tap2enter_pc_static.png" alt="Tap2Enter">
-    <div id="tap2enter-text">TAP TO ENTER</div>
+    <img id="tap2enter-img"
+      src="assets/tap2enter_pc_static.png"
+      alt="Tap2Enter"
+      draggable="false"
+    />
+    <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
+    <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
+    <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
   </div>
 
   <!-- Roulette -->
   <div id="roulette-screen" style="display:none;">
-    <div class="roulette-bg">
-      <div id="roulette-strip"></div>
-    </div>
+    <div id="roulette-container"></div>
+    <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto"></audio>
+    <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
   </div>
 
-  <!-- Drop animation -->
-  <div id="drop-screen" style="display:none;">
-    <img id="drop-img" src="assets/onetap_gold.png" alt="Rare Drop!">
-    <div id="drop-text">GOLDEN DROP UNLOCKED!</div>
-  </div>
-
-  <!-- Main inventory -->
-  <main id="main-inventory" style="display:none;">
+  <!-- Inventaire Principal -->
+  <section id="main-inventory" style="display:none;">
     <h1>$ONETAP Inventory</h1>
-    <img src="assets/onetap_gold.png" alt="Gold Skin" class="main-item">
-    <!-- Ajoute ici tes sections futures -->
-  </main>
+    <img src="assets/onetap_gold.png" alt="Drop Gold" class="gold-drop"/>
+  </section>
 
   <script src="script.js"></script>
 </body>
