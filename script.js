@@ -47,10 +47,8 @@ function launchWelcomeMusic() {
     musicWelcome.play().catch(()=>{});
   }
 }
-// Musique d'accueil : autoplay après 1er clic/tap (fix mobile)
-['click', 'touchstart', 'keydown'].forEach(ev => {
-  document.addEventListener(ev, launchWelcomeMusic, { once: true });
-});
+// Musique d'accueil : démarre direct au chargement
+window.addEventListener("load", launchWelcomeMusic);
 
 function hidePressAnyKey() {
   if(pressAnyKey) pressAnyKey.style.display = "none";
@@ -69,14 +67,16 @@ function handleTap() {
   headshotSound.currentTime = 0;
   headshotSound.play();
 
+  // Arrêt immédiat de la musique d'accueil
+  musicWelcome.pause();
+  musicWelcome.currentTime = 0;
+
   setTimeout(() => {
     welcome.classList.remove("fade-in");
     welcome.classList.add("fade-out");
     setTimeout(() => {
       welcome.style.display = "none";
       showLoader();
-      musicWelcome.pause();
-      musicWelcome.currentTime = 0;
     }, 750);
   }, 1100);
 }
@@ -106,12 +106,17 @@ const caseBlank = "assets/case_blank.png";
 const caseGold = "assets/onetap_gold.png";
 const NB_CASES_VISIBLE = 8;
 const NB_CASES_TOTAL = 34;
-const DURATION = 5500;
+const DURATION = 7000; // DUREE EXACTE
 
 function startRoulette() {
   rouletteScreen.style.display = "flex";
   rouletteScreen.classList.add("fade-in");
   rouletteContainer.innerHTML = "";
+
+  // MUSIQUE MAIN DÉBUTE
+  musicMain.volume = 0.33;
+  musicMain.currentTime = 0;
+  musicMain.play().catch(()=>{});
 
   const casesPool = [];
   for (let i = 0; i < NB_CASES_TOTAL - 1; i++) casesPool.push(caseBlank);
@@ -133,11 +138,11 @@ function startRoulette() {
     }
   }
 
-  let totalScroll = casesPool.length * 8.3;
+  let totalScroll = casesPool.length * 10;
   let finalPos = (casesPool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
 
   rouletteSound.currentTime = 0;
-  rouletteSound.volume = 0.6;
+  rouletteSound.volume = 0.85;
   rouletteSound.play();
 
   let t0 = Date.now();
@@ -145,17 +150,20 @@ function startRoulette() {
   function animate() {
     let elapsed = Date.now() - t0;
     let progress = Math.min(elapsed / DURATION, 1);
-    let ease = 1 - Math.pow(1 - progress, 2.3);
+    // Dynamique : accélère puis ralentit
+    let ease = progress < 0.87
+      ? Math.pow(progress, 0.62)
+      : 1 - Math.pow(1 - progress, 2.35);
     let pos = Math.floor(totalScroll * ease);
     let currentPos = (pos + finalPos) % casesPool.length;
-    let isBlur = (progress < 0.93);
+    let isBlur = (progress < 0.94);
     renderCases(currentPos, isBlur);
 
     if (progress < 1) {
-      // Pour synchroniser la fin du son et de l'anim
-      if(progress > 0.94 && !rouletteSound.paused) {
-        rouletteSound.volume *= 0.97;
-        if(rouletteSound.volume < 0.1) rouletteSound.pause();
+      // Fade out du son roulette à la toute fin
+      if(progress > 0.97 && !rouletteSound.paused) {
+        rouletteSound.volume *= 0.94;
+        if(rouletteSound.volume < 0.06) rouletteSound.pause();
       }
       requestAnimationFrame(animate);
     } else {
@@ -179,11 +187,10 @@ function showDrop() {
   rouletteScreen.style.display = "none";
   mainInventory.style.display = "flex";
   mainInventory.classList.add("fade-in");
-  musicMain.volume = 0.34;
-  musicMain.play().catch(()=>{});
+  // La musique main continue
 }
 
-// SHARE BUTTONS dummy (à remplacer par vrais liens socials)
+// SHARE BUTTONS dummy
 window.shareX = function() {
   window.open('https://x.com/intent/tweet?text=I+just+got+a+legendary+drop+on+$ONETAP!+%23ONETAP+%23memecoin','_blank');
 }
