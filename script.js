@@ -50,10 +50,8 @@ const dropRareSound = document.getElementById("drop-rare-sound");
 const caseBlank = "assets/case_blank.png";
 const caseGold = "assets/onetap_gold.png";
 const NB_CASES_VISIBLE = 8;
-const NB_CASES_TOTAL = 40; // Pour plus de scroll, augmente ce nombre
+const NB_CASES_TOTAL = 34;
 const DURATION = 6000;
-
-let rareClickable = false;
 
 function startRoulette() {
   rouletteScreen.style.display = "flex";
@@ -66,28 +64,21 @@ function startRoulette() {
   let scrollPos = 0;
   let rolling = true;
 
-  function renderCases(pos, stopped = false) {
+  function renderCases(pos) {
     rouletteContainer.innerHTML = "";
     for (let i = 0; i < NB_CASES_VISIBLE; i++) {
       let idx = (pos + i) % casesPool.length;
-      let isGold = (stopped && i === Math.floor(NB_CASES_VISIBLE/2));
+      let isGold = (idx === casesPool.length - 1 && i === Math.floor(NB_CASES_VISIBLE/2));
       let caseDiv = document.createElement("div");
       caseDiv.className = "roulette-case" + (isGold ? " gold" : "");
       let img = document.createElement("img");
-      img.src = (isGold ? caseGold : casesPool[idx]);
+      img.src = casesPool[idx];
       caseDiv.appendChild(img);
-
-      // Permet de cliquer sur la gold uniquement quand arrêtée et centrée
-      if (isGold && rareClickable) {
-        caseDiv.addEventListener("click", showDrop);
-        caseDiv.addEventListener("touchstart", showDrop);
-      }
-
       rouletteContainer.appendChild(caseDiv);
     }
   }
 
-  // Calculs pour arrêter la gold pile au centre
+  let totalScroll = casesPool.length * 8;
   let finalPos = (casesPool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
 
   rouletteSound.currentTime = 0;
@@ -99,7 +90,8 @@ function startRoulette() {
     let elapsed = Date.now() - t0;
     let progress = Math.min(elapsed / DURATION, 1);
     let ease = 1 - Math.pow(1 - progress, 2);
-    let pos = Math.floor(casesPool.length * 8 * ease);
+    let pos = Math.floor(totalScroll * ease);
+    scrollPos = pos;
     let currentPos = (pos + finalPos) % casesPool.length;
     renderCases(currentPos);
 
@@ -109,8 +101,7 @@ function startRoulette() {
       rouletteSound.pause();
       dropRareSound.currentTime = 0;
       dropRareSound.play();
-      rareClickable = true;
-      renderCases(finalPos, true); // Stop, gold au centre et clickable
+      setTimeout(showDrop, 900);
     }
   }
   animate();
