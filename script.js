@@ -1,54 +1,21 @@
-// ---------- INIT ----------
+// --------- Welcome Music & Canvas Anim ----------
 const musicWelcome = document.getElementById('music-welcome');
 const musicMain = document.getElementById('music-main');
 const musicEpic = document.getElementById('music-epic');
-const muteBtn = document.getElementById('mute-btn');
-const muteIco = document.getElementById('mute-ico');
-const replayBtn = document.getElementById('replay-btn');
-const allAudios = [
-  musicWelcome, musicMain, musicEpic,
-  document.getElementById('roulette-sound'),
-  document.getElementById('drop-rare-sound'),
-  document.getElementById('headshot-sound')
-];
-let muted = false;
-
-// Mute/Unmute
-muteBtn.addEventListener('click', () => {
-  muted = !muted;
-  allAudios.forEach(a => { if(a) a.muted = muted; });
-  muteIco.textContent = muted ? "🔈" : "🔊";
-  muteBtn.style.opacity = muted ? 0.33 : 0.58;
-});
-
-// Responsive: toujours visible
-function keepButtonsVisible() {
-  muteBtn.style.display = "flex";
-  if (document.getElementById('main-inventory').style.display === "flex") {
-    replayBtn.style.display = "flex";
-  } else {
-    replayBtn.style.display = "none";
-  }
-}
-window.addEventListener('resize', keepButtonsVisible);
-setInterval(keepButtonsVisible, 1000);
-
-// Welcome + fond animé
 window.addEventListener('DOMContentLoaded', () => {
   musicWelcome.volume = 0.7;
-  musicWelcome.loop = true;
   musicWelcome.play().catch(()=>{});
   initParticles();
-  keepButtonsVisible();
 });
 
-// TAP ANYWHERE accueil
+// Tap anywhere to begin
 const welcome = document.getElementById('welcome-screen');
 let tapHandled = false;
 function handleTap() {
   if (tapHandled) return;
   tapHandled = true;
-  if (window.navigator.vibrate) window.navigator.vibrate(55);
+  // Haptique mobile
+  if (window.navigator.vibrate) window.navigator.vibrate(60);
   document.getElementById('press-anywhere-text').style.opacity = 0;
   document.getElementById('headshot-sound').play();
   setTimeout(() => {
@@ -67,14 +34,13 @@ function handleTap() {
 welcome.addEventListener("click", handleTap);
 welcome.addEventListener("touchstart", handleTap);
 
-// ----------- ROULETTE -----------
+// ----------- Roulette -----------
 const NB_CASES_VISIBLE = 9;
 const NB_CASES_TOTAL = 38;
 const SPIN_DURATION = 7000;
 
 function startRoulette() {
   musicMain.volume = 0.58;
-  musicMain.currentTime = 0;
   musicMain.play().catch(()=>{});
   document.getElementById('roulette-screen').style.display = "flex";
   let rouletteContainer = document.getElementById("roulette-container");
@@ -116,6 +82,7 @@ function startRoulette() {
     let ease = 1 - Math.pow(1 - progress, 2.2);
     let pos = Math.floor(totalScroll * ease);
     let currentPos = (pos + finalPos) % casesPool.length;
+    // Blur sur la première partie du spin
     renderCases(currentPos, progress < 0.8);
 
     if (progress < 1) {
@@ -130,16 +97,16 @@ function startRoulette() {
   animate();
 }
 
-// -------- GOLD DROP ----------- 
+// -------- GOLD DROP -----------
 function showGoldDrop() {
   document.getElementById('roulette-screen').style.display = "none";
   let goldDropScreen = document.getElementById('gold-drop-screen');
   goldDropScreen.style.display = "flex";
   launchConfetti();
   setTimeout(() => {
-    if (window.navigator.vibrate) window.navigator.vibrate(70);
-    goldDropScreen.addEventListener("click", showOnetapDrop, {once:true});
-    goldDropScreen.addEventListener("touchstart", showOnetapDrop, {once:true});
+    if (window.navigator.vibrate) window.navigator.vibrate(60);
+    goldDropScreen.addEventListener("click", showOnetapDrop, { once: true });
+    goldDropScreen.addEventListener("touchstart", showOnetapDrop, { once: true });
     let txt = document.createElement("span");
     txt.innerText = "Tap to continue";
     txt.style.cssText = "color:#fff;font-size:1rem;opacity:0.7;margin-top:2vw;animation:pulseText 1s infinite alternate;";
@@ -147,25 +114,27 @@ function showGoldDrop() {
   }, 1000);
 }
 
-// -------- FINAL DROP $ONETAP ----------- 
+// -------- FINAL DROP $ONETAP -----------
 function showOnetapDrop() {
   let goldDropScreen = document.getElementById('gold-drop-screen');
   goldDropScreen.style.opacity = 0;
   setTimeout(() => {
     goldDropScreen.style.display = "none";
     document.getElementById('onetap-drop-screen').style.display = "flex";
-    // Musique épique : boucle propre, jamais en double
+    // Musique épique propre et en boucle
     if (musicMain) musicMain.pause();
     if (musicEpic) {
+      musicEpic.pause();
       musicEpic.currentTime = 0;
       musicEpic.loop = true;
+      musicEpic.volume = 0.7;
       musicEpic.play().catch(()=>{});
     }
-    if (window.navigator.vibrate) window.navigator.vibrate(80);
+    if (window.navigator.vibrate) window.navigator.vibrate(70);
     setTimeout(() => {
       document.getElementById('share-btn').style.display = "inline-block";
-      document.getElementById('onetap-drop-screen').addEventListener("click", showMainInventory, {once:true});
-      document.getElementById('onetap-drop-screen').addEventListener("touchstart", showMainInventory, {once:true});
+      document.getElementById('onetap-drop-screen').addEventListener("click", showMainInventory, { once: true });
+      document.getElementById('onetap-drop-screen').addEventListener("touchstart", showMainInventory, { once: true });
     }, 2000);
   }, 650);
 }
@@ -175,8 +144,6 @@ function showMainInventory() {
   document.getElementById('onetap-drop-screen').style.display = "none";
   document.getElementById('main-inventory').style.display = "flex";
   if (window.navigator.vibrate) window.navigator.vibrate(50);
-  // Affiche le bouton replay
-  replayBtn.style.display = "flex";
 }
 
 // ---------- Confetti Animation (Gold Drop) ----------
@@ -241,13 +208,63 @@ function initParticles() {
   });
 }
 
-// ---------- REPLAY ANIMATION ----------
+// ----- Gestion bouton Mute/Unmute -----
+const allAudios = [
+  musicWelcome, musicMain, musicEpic,
+  document.getElementById('roulette-sound'),
+  document.getElementById('drop-rare-sound'),
+  document.getElementById('headshot-sound')
+];
+let muted = false;
+const muteBtn = document.getElementById('mute-btn');
+const icoUnmuted = document.getElementById('ico-unmuted');
+const icoMuted = document.getElementById('ico-muted');
+muteBtn.addEventListener('click', () => {
+  muted = !muted;
+  allAudios.forEach(a => { if(a) a.muted = muted; });
+  // Switch icônes SVG
+  if (muted) {
+    icoUnmuted.style.display = 'none';
+    icoMuted.style.display = '';
+  } else {
+    icoUnmuted.style.display = '';
+    icoMuted.style.display = 'none';
+  }
+  muteBtn.style.opacity = muted ? 0.33 : 0.62;
+});
+
+// ----- Affichage bouton Replay sur inventaire seulement -----
+const replayBtn = document.getElementById('replay-btn');
+function showReplayBtn() {
+  replayBtn.style.display = "flex";
+}
+function hideReplayBtn() {
+  replayBtn.style.display = "none";
+}
+const mainInventory = document.getElementById('main-inventory');
+mainInventory.addEventListener('mouseenter', showReplayBtn);
+mainInventory.addEventListener('mousemove', showReplayBtn);
+mainInventory.addEventListener('mouseleave', hideReplayBtn);
+mainInventory.addEventListener('touchstart', showReplayBtn);
+
+// ----- Fonction de Replay Animation -----
 replayBtn.addEventListener('click', () => {
-  if (window.navigator.vibrate) window.navigator.vibrate(38);
-  // Cache inventaire, stop sons, relance anim
-  document.getElementById('main-inventory').style.display = "none";
-  if (musicEpic) { musicEpic.pause(); musicEpic.currentTime = 0; }
-  if (musicMain) { musicMain.pause(); musicMain.currentTime = 0; }
+  // Haptique
+  if (window.navigator.vibrate) window.navigator.vibrate(32);
+  // Cache inventaire et relance toute l’anim depuis la roulette
+  mainInventory.style.display = "none";
+  // Reset musiques
+  musicEpic.pause();
+  musicEpic.currentTime = 0;
+  musicMain.pause();
+  musicMain.currentTime = 0;
+  // Optionnel : reset roulette
   startRoulette();
   replayBtn.style.display = "none";
 });
+
+// Affiche le bouton Replay après 2s sur inventaire (pour mobile)
+setTimeout(() => {
+  if (mainInventory.style.display === "flex")
+    replayBtn.style.display = "flex";
+}, 2500);
