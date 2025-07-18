@@ -14,20 +14,10 @@
       alt="Tap2Enter"
       draggable="false"
     />
-    <span id="press-anywhere-text">Tap anywhere to begin</span>
-    <!-- Watermark Logo -->
-    <img id="watermark-logo" src="assets/onetap_logo.png" alt="Watermark"/>
-    <!-- Fond animé (Canvas) -->
-    <canvas id="background-canvas"></canvas>
+    <div class="tap-anywhere-text">Tap anywhere to begin</div>
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
     <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
     <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
-  </div>
-
-  <!-- Loader -->
-  <div id="loader" style="display:none;">
-    <div class="spinner"></div>
-    <div class="loading-text">Loading…</div>
   </div>
 
   <!-- Roulette -->
@@ -37,31 +27,17 @@
     <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
   </div>
 
-  <!-- Animation Gold Drop -->
+  <!-- GOLD DROP ANIMATION -->
   <div id="gold-drop-screen" style="display:none;">
-    <div class="gold-animation-wrapper">
-      <div class="gold-flash"></div>
-      <img id="gold-drop-img" src="assets/onetap_gold.png" alt="Gold Drop" />
-      <div class="confetti"></div>
-    </div>
-    <span id="gold-drop-text">GOLDEN DROP UNLOCKED!</span>
-  </div>
-
-  <!-- Animation $ONETAP Final Drop -->
-  <div id="onetap-drop-screen" style="display:none;">
-    <div class="onetap-animation-wrapper">
-      <img id="onetap-logo-img" src="assets/onetap_logo.png" alt="$ONETAP Logo" />
-    </div>
-    <span id="onetap-drop-text">$ONETAP ACQUIRED!</span>
-    <button id="share-btn" style="display:none;">Share my Golden Drop</button>
+    <img id="gold-drop-img" class="gold-drop-img" src="assets/onetap_gold.png" alt="Golden Drop">
+    <div class="golden-drop-text">GOLDEN DROP UNLOCKED!</div>
+    <div class="continue-text">Tap to continue</div>
   </div>
 
   <!-- Inventaire Principal -->
   <section id="main-inventory" style="display:none;">
     <h1>$ONETAP Inventory</h1>
     <img src="assets/onetap_logo.png" alt="Drop OneTap" class="onetap-inventory-drop"/>
-    <!-- Example ticker/label -->
-    <div class="ticker">Fair Launch • Liquidity Locked • $ONETAP just hit a new ATH!</div>
   </section>
 
   <script src="script.js"></script>
