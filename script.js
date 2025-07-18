@@ -233,3 +233,11 @@ muteBtn.addEventListener('click', () => {
   muteBtn.style.opacity = muted ? 0.33 : 0.62;
 });
 
+// ----- Particules -----
+#background-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
