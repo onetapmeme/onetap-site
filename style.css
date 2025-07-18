@@ -296,3 +296,28 @@ body, html {
   #main-inventory h1 { font-size: 1.22rem;}
   .onetap-inventory-drop { width: 33vw; }
 }
+/* Bouton replay/mute */
+#mute-btn, #replay-btn {
+  position: fixed;
+  bottom: 18px;
+  z-index: 99;
+  width: 42px; height: 42px;
+  background: rgba(22,22,22,0.73);
+  border: 1.5px solid #ffe066a0;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px #ffe06644;
+  color: gold;
+  cursor: pointer;
+  opacity: 0.58;
+  transition: opacity .18s;
+  display: flex; align-items: center; justify-content: center;
+}
+#mute-btn { right: 18px; }
+#replay-btn { left: 18px; display: none; }
+
+#mute-btn:hover, #replay-btn:hover { opacity: 0.85; }
+@media (max-width: 700px) {
+  #mute-btn, #replay-btn { width: 38px; height: 38px; bottom: 10px; }
+  #mute-btn { right: 10px;}
+  #replay-btn { left: 10px;}
+}
