@@ -1,78 +1,70 @@
-function isMobile() {
-  return window.matchMedia("(max-width: 700px)").matches;
-}
+// --------- Welcome Music & Canvas Anim ----------
+const musicWelcome = document.getElementById('music-welcome');
+const musicMain = document.getElementById('music-main');
+window.addEventListener('DOMContentLoaded', () => {
+  musicWelcome.volume = 0.7;
+  musicWelcome.play().catch(()=>{});
+  // Fond animé simple (particules)
+  initParticles();
+});
 
-const STATIC_IMG_PC = "assets/tap2enter_pc_static.png";
-const STATIC_IMG_MOBILE = "assets/tap2enter_mobile_static.png";
-const GIF_IMG_PC = "assets/tap2enter_pc.gif";
-const GIF_IMG_MOBILE = "assets/tap2enter_mobile.gif";
-
-const welcome = document.getElementById("welcome-screen");
-const tapImg = document.getElementById("tap2enter-img");
-const headshotSound = document.getElementById("headshot-sound");
-const musicWelcome = document.getElementById("music-welcome");
-const musicMain = document.getElementById("music-main");
-const epicMusic = document.getElementById("epic-music");
-
+// Tap anywhere to begin
+const welcome = document.getElementById('welcome-screen');
 let tapHandled = false;
-
-// Dès le chargement, lance la musique welcome
-musicWelcome.volume = 0.65;
-musicWelcome.play().catch(()=>{});
-
-function showStaticTapImg() {
-  tapImg.src = isMobile() ? STATIC_IMG_MOBILE : STATIC_IMG_PC;
-}
-showStaticTapImg();
-
-tapImg.addEventListener("click", handleTap);
-tapImg.addEventListener("touchstart", handleTap);
-welcome.addEventListener("click", handleTap);
-welcome.addEventListener("touchstart", handleTap);
-
 function handleTap() {
   if (tapHandled) return;
   tapHandled = true;
-
-  tapImg.src = isMobile() ? GIF_IMG_MOBILE : GIF_IMG_PC;
-  headshotSound.currentTime = 0;
-  headshotSound.play();
-  setTimeout(() => musicWelcome.pause(), 500);
+  document.getElementById('press-anywhere-text').style.opacity = 0;
+  document.getElementById('headshot-sound').play();
   setTimeout(() => {
-    welcome.style.display = "none";
-    startRoulette();
-  }, 1300);
+    musicWelcome.pause();
+    welcome.style.opacity = 0;
+    setTimeout(() => {
+      welcome.style.display = "none";
+      document.getElementById('loader').style.display = "flex";
+      setTimeout(() => {
+        document.getElementById('loader').style.display = "none";
+        startRoulette();
+      }, 1200); // loader delay
+    }, 750);
+  }, 850);
 }
+welcome.addEventListener("click", handleTap);
+welcome.addEventListener("touchstart", handleTap);
 
-// Roulette
-const rouletteScreen = document.getElementById("roulette-screen");
-const rouletteContainer = document.getElementById("roulette-container");
-const rouletteSound = document.getElementById("roulette-sound");
-const dropRareSound = document.getElementById("drop-rare-sound");
-
-const caseBlank = "assets/case_blank.png";
-const caseGold = "assets/onetap_gold.png";
-const NB_CASES_VISIBLE = 9;
-const NB_CASES_TOTAL = 37;
-const ROULETTE_DURATION = 7000;
+// ----------- Roulette -----------
+// --- CONFIG ---
+const NB_CASES_VISIBLE = 9; // Central gold
+const NB_CASES_TOTAL = 38;
+const SPIN_DURATION = 7000; // 7s
 
 function startRoulette() {
-  rouletteScreen.style.display = "flex";
-  rouletteContainer.innerHTML = "";
-  musicMain.volume = 0.42;
-  musicMain.currentTime = 0;
+  musicMain.volume = 0.58;
   musicMain.play().catch(()=>{});
+  document.getElementById('roulette-screen').style.display = "flex";
+  let rouletteContainer = document.getElementById("roulette-container");
+  let rouletteSound = document.getElementById("roulette-sound");
+  let dropRareSound = document.getElementById("drop-rare-sound");
 
-  const casesPool = [];
-  for (let i = 0; i < NB_CASES_TOTAL - 1; i++) casesPool.push(caseBlank);
-  casesPool.push(caseGold);
+  // Build pool
+  let casesPool = [];
+  for (let i = 0; i < NB_CASES_TOTAL - 1; i++) casesPool.push("assets/case_blank.png");
+  casesPool.push("assets/onetap_gold.png");
 
   let scrollPos = 0;
+  let totalScroll = casesPool.length * 8;
+  let finalPos = (casesPool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
+
+  rouletteSound.currentTime = 0;
+  rouletteSound.volume = 0.40;
+  rouletteSound.play();
+
+  let t0 = Date.now();
 
   function renderCases(pos, blur=false) {
     rouletteContainer.innerHTML = "";
-    if (blur) rouletteContainer.classList.add("roulette-blur");
-    else rouletteContainer.classList.remove("roulette-blur");
+    if (blur) rouletteContainer.classList.add("blurred");
+    else rouletteContainer.classList.remove("blurred");
     for (let i = 0; i < NB_CASES_VISIBLE; i++) {
       let idx = (pos + i) % casesPool.length;
       let isGold = (idx === casesPool.length - 1 && i === Math.floor(NB_CASES_VISIBLE/2));
@@ -85,24 +77,14 @@ function startRoulette() {
     }
   }
 
-  let totalScroll = casesPool.length * 8;
-  let finalPos = (casesPool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
-
-  rouletteSound.currentTime = 0;
-  rouletteSound.volume = 0.35;
-  rouletteSound.play();
-
-  let t0 = Date.now();
-
   function animate() {
     let elapsed = Date.now() - t0;
-    let progress = Math.min(elapsed / ROULETTE_DURATION, 1);
+    let progress = Math.min(elapsed / SPIN_DURATION, 1);
     let ease = 1 - Math.pow(1 - progress, 2.2);
     let pos = Math.floor(totalScroll * ease);
-    scrollPos = pos;
     let currentPos = (pos + finalPos) % casesPool.length;
-    // Blur sur la première partie du spin, puis net à la fin
-    renderCases(currentPos, progress < 0.80);
+    // Blur sur la première partie du spin
+    renderCases(currentPos, progress < 0.8);
 
     if (progress < 1) {
       requestAnimationFrame(animate);
@@ -110,43 +92,119 @@ function startRoulette() {
       rouletteSound.pause();
       dropRareSound.currentTime = 0;
       dropRareSound.play();
-      setTimeout(showDrop, 1100);
+      setTimeout(showGoldDrop, 1200);
     }
   }
   animate();
 }
 
-const mainInventory = document.getElementById("main-inventory");
-function showDrop() {
-  rouletteScreen.style.display = "none";
-  // Affiche la case gold drop avec animation
-  mainInventory.style.display = "flex";
-  const goldImg = document.querySelector(".gold-drop");
-  goldImg.classList.add("gold-flash-anim");
+// -------- GOLD DROP -----------
+function showGoldDrop() {
+  document.getElementById('roulette-screen').style.display = "none";
+  let goldDropScreen = document.getElementById('gold-drop-screen');
+  goldDropScreen.style.display = "flex";
+  launchConfetti();
+  // Effet flash
+  let goldImg = document.getElementById('gold-drop-img');
+  goldImg.classList.add("gold-flash");
   setTimeout(() => {
-    goldImg.classList.remove("gold-flash-anim");
-    mainInventory.style.opacity = 0;
-    setTimeout(() => {
-      mainInventory.style.display = "none";
-      showRealDrop();
-    }, 600);
-  }, 2200);
+    goldDropScreen.addEventListener("click", showOnetapDrop);
+    goldDropScreen.addEventListener("touchstart", showOnetapDrop);
+    // Texte "Tap to continue"
+    let txt = document.createElement("span");
+    txt.innerText = "Tap to continue";
+    txt.style.cssText = "color:#fff;font-size:1rem;opacity:0.7;margin-top:2vw;animation:pulseText 1s infinite alternate;";
+    goldDropScreen.appendChild(txt);
+  }, 1000);
 }
 
-// Drop final ultra animé
-function showRealDrop() {
-  // Stop musique main, play epic music
-  musicMain.pause();
-  epicMusic.currentTime = 0;
-  epicMusic.volume = 0.55;
-  epicMusic.play().catch(()=>{});
+// -------- FINAL DROP $ONETAP -----------
+function showOnetapDrop() {
+  let goldDropScreen = document.getElementById('gold-drop-screen');
+  goldDropScreen.style.opacity = 0;
+  setTimeout(() => {
+    goldDropScreen.style.display = "none";
+    document.getElementById('onetap-drop-screen').style.display = "flex";
+    // Musique épique
+    musicMain.pause();
+    let epic = document.createElement("audio");
+    epic.src = "assets/music_epic.wav";
+    epic.volume = 0.66;
+    epic.play().catch(()=>{});
+    // Affiche bouton share après anim
+    setTimeout(() => {
+      document.getElementById('share-btn').style.display = "inline-block";
+      // Click = passer à inventaire principal
+      document.getElementById('onetap-drop-screen').addEventListener("click", showMainInventory);
+      document.getElementById('onetap-drop-screen').addEventListener("touchstart", showMainInventory);
+    }, 2000);
+  }, 650);
+}
 
-  const dropOverlay = document.createElement('div');
-  dropOverlay.id = "final-drop";
-  dropOverlay.innerHTML = `
-    <img src="assets/onetap_logo.png" alt="$ONETAP Token" class="real-drop-anim" />
-    <h1 class="drop-titre">$ONETAP Token Unlocked!</h1>
-    <!-- Boutons partage ou autres éléments peuvent être ajoutés ici -->
-  `;
-  document.body.appendChild(dropOverlay);
+// --------- INVENTORY FINAL ---------
+function showMainInventory() {
+  document.getElementById('onetap-drop-screen').style.display = "none";
+  document.getElementById('main-inventory').style.display = "flex";
+}
+
+// ---------- Confetti Animation (Gold Drop) ----------
+function launchConfetti() {
+  let container = document.querySelector('.confetti');
+  if (!container) return;
+  container.innerHTML = "";
+  for (let i = 0; i < 26; i++) {
+    let conf = document.createElement('div');
+    conf.className = "confetti-piece";
+    conf.style.cssText =
+      `position:absolute;width:11px;height:15px;
+      left:${Math.random()*98}%;top:${Math.random()*44+20}%;
+      background:${['gold','#ffe066','#fff','#f6c62b','#ead044'][Math.floor(Math.random()*5)]};
+      opacity:${0.75+Math.random()*0.23};transform:rotate(${Math.random()*360}deg) scale(${0.7+Math.random()*0.4});
+      border-radius:2px;z-index:7;`;
+    container.appendChild(conf);
+  }
+  setTimeout(()=>{ if(container)container.innerHTML=""; },2000);
+}
+
+// --------- Animated Canvas Background (Particles) ---------
+function initParticles() {
+  const canvas = document.getElementById('background-canvas');
+  const ctx = canvas.getContext('2d');
+  let W = window.innerWidth, H = window.innerHeight;
+  canvas.width = W; canvas.height = H;
+
+  let particles = [];
+  for(let i=0;i<38;i++) {
+    let r = 1+Math.random()*2;
+    let col = Math.random()<0.6 ? "#ffe066aa":"#fff6";
+    particles.push({
+      x: Math.random()*W,
+      y: Math.random()*H,
+      r,
+      col,
+      dx: -0.3 + Math.random()*0.6,
+      dy: 0.2 + Math.random()*0.5
+    });
+  }
+  function animate() {
+    ctx.clearRect(0,0,W,H);
+    for(let p of particles) {
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,2*Math.PI);
+      ctx.fillStyle = p.col;
+      ctx.globalAlpha = 0.65;
+      ctx.fill();
+      p.x += p.dx; p.y += p.dy;
+      if(p.y>H) p.y=0;
+      if(p.x>W) p.x=0;
+      if(p.x<0) p.x=W;
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+  window.addEventListener('resize',()=>{
+    W=window.innerWidth; H=window.innerHeight;
+    canvas.width=W; canvas.height=H;
+  });
 }
