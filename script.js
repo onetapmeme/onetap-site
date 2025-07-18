@@ -14,7 +14,6 @@ let tapHandled = false;
 function handleTap() {
   if (tapHandled) return;
   tapHandled = true;
-  // Haptique mobile
   if (window.navigator.vibrate) window.navigator.vibrate(60);
   document.getElementById('press-anywhere-text').style.opacity = 0;
   document.getElementById('headshot-sound').play();
@@ -82,7 +81,6 @@ function startRoulette() {
     let ease = 1 - Math.pow(1 - progress, 2.2);
     let pos = Math.floor(totalScroll * ease);
     let currentPos = (pos + finalPos) % casesPool.length;
-    // Blur sur la première partie du spin
     renderCases(currentPos, progress < 0.8);
 
     if (progress < 1) {
@@ -222,7 +220,6 @@ const icoMuted = document.getElementById('ico-muted');
 muteBtn.addEventListener('click', () => {
   muted = !muted;
   allAudios.forEach(a => { if(a) a.muted = muted; });
-  // Switch icônes SVG
   if (muted) {
     icoUnmuted.style.display = 'none';
     icoMuted.style.display = '';
@@ -232,12 +229,3 @@ muteBtn.addEventListener('click', () => {
   }
   muteBtn.style.opacity = muted ? 0.33 : 0.62;
 });
-
-// ----- Particules -----
-#background-canvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-}
