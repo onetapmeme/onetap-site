@@ -1,6 +1,7 @@
 // --------- Welcome Music & Canvas Anim ----------
 const musicWelcome = document.getElementById('music-welcome');
 const musicMain = document.getElementById('music-main');
+const musicEpic = document.getElementById('music-epic'); // <-- epic music
 window.addEventListener('DOMContentLoaded', () => {
   musicWelcome.volume = 0.7;
   musicWelcome.play().catch(()=>{});
@@ -13,6 +14,8 @@ let tapHandled = false;
 function handleTap() {
   if (tapHandled) return;
   tapHandled = true;
+  // Haptique mobile
+  if (window.navigator.vibrate) window.navigator.vibrate(60);
   document.getElementById('press-anywhere-text').style.opacity = 0;
   document.getElementById('headshot-sound').play();
   setTimeout(() => {
@@ -32,6 +35,7 @@ welcome.addEventListener("click", handleTap);
 welcome.addEventListener("touchstart", handleTap);
 
 // ----------- Roulette -----------
+// (config)
 const NB_CASES_VISIBLE = 9;
 const NB_CASES_TOTAL = 38;
 const SPIN_DURATION = 7000;
@@ -44,7 +48,6 @@ function startRoulette() {
   let rouletteSound = document.getElementById("roulette-sound");
   let dropRareSound = document.getElementById("drop-rare-sound");
 
-  // Build pool
   let casesPool = [];
   for (let i = 0; i < NB_CASES_TOTAL - 1; i++) casesPool.push("assets/case_blank.png");
   casesPool.push("assets/onetap_gold.png");
@@ -95,17 +98,17 @@ function startRoulette() {
   animate();
 }
 
-// -------- GOLD DROP -----------
+// -------- GOLD DROP ----------- 
 function showGoldDrop() {
   document.getElementById('roulette-screen').style.display = "none";
   let goldDropScreen = document.getElementById('gold-drop-screen');
   goldDropScreen.style.display = "flex";
   launchConfetti();
-  // Effet flash déjà en CSS
   setTimeout(() => {
+    // Haptique mobile
+    if (window.navigator.vibrate) window.navigator.vibrate(60);
     goldDropScreen.addEventListener("click", showOnetapDrop);
     goldDropScreen.addEventListener("touchstart", showOnetapDrop);
-    // Texte "Tap to continue"
     let txt = document.createElement("span");
     txt.innerText = "Tap to continue";
     txt.style.cssText = "color:#fff;font-size:1rem;opacity:0.7;margin-top:2vw;animation:pulseText 1s infinite alternate;";
@@ -113,23 +116,24 @@ function showGoldDrop() {
   }, 1000);
 }
 
-// -------- FINAL DROP $ONETAP -----------
+// -------- FINAL DROP $ONETAP ----------- 
 function showOnetapDrop() {
   let goldDropScreen = document.getElementById('gold-drop-screen');
   goldDropScreen.style.opacity = 0;
   setTimeout(() => {
     goldDropScreen.style.display = "none";
     document.getElementById('onetap-drop-screen').style.display = "flex";
-    // Musique épique (remplace par ton asset)
-    musicMain.pause();
-    let epic = document.createElement("audio");
-    epic.src = "assets/music_epic.wav";
-    epic.volume = 0.66;
-    epic.play().catch(()=>{});
-    // Affiche bouton share après anim
+    // Musique épique : propre, jamais en double
+    if (musicMain) musicMain.pause();
+    if (musicEpic && musicEpic.paused) {
+      musicEpic.currentTime = 0;
+      musicEpic.volume = 0.7;
+      musicEpic.play().catch(()=>{});
+    }
+    // Haptique mobile
+    if (window.navigator.vibrate) window.navigator.vibrate(70);
     setTimeout(() => {
       document.getElementById('share-btn').style.display = "inline-block";
-      // Click = passer à inventaire principal
       document.getElementById('onetap-drop-screen').addEventListener("click", showMainInventory);
       document.getElementById('onetap-drop-screen').addEventListener("touchstart", showMainInventory);
     }, 2000);
@@ -140,6 +144,8 @@ function showOnetapDrop() {
 function showMainInventory() {
   document.getElementById('onetap-drop-screen').style.display = "none";
   document.getElementById('main-inventory').style.display = "flex";
+  // Haptique
+  if (window.navigator.vibrate) window.navigator.vibrate(50);
 }
 
 // ---------- Confetti Animation (Gold Drop) ----------
