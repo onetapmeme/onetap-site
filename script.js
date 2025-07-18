@@ -209,3 +209,55 @@ function initParticles() {
     canvas.width=W; canvas.height=H;
   });
 }
+// ----- Gestion bouton Mute/Unmute -----
+const allAudios = [
+  document.getElementById('music-welcome'),
+  document.getElementById('music-main'),
+  document.getElementById('music-epic'),
+  document.getElementById('roulette-sound'),
+  document.getElementById('drop-rare-sound'),
+  document.getElementById('headshot-sound')
+];
+let muted = false;
+const muteBtn = document.getElementById('mute-btn');
+const muteIco = document.getElementById('mute-ico');
+muteBtn.addEventListener('click', () => {
+  muted = !muted;
+  for (let a of allAudios) if(a) a.muted = muted;
+  muteIco.textContent = muted ? "🔈" : "🔊";
+  muteBtn.style.opacity = muted ? 0.33 : 0.62;
+});
+
+// ----- Affichage bouton Replay sur inventaire seulement -----
+const replayBtn = document.getElementById('replay-btn');
+function showReplayBtn() {
+  replayBtn.style.display = "flex";
+}
+function hideReplayBtn() {
+  replayBtn.style.display = "none";
+}
+document.getElementById('main-inventory').addEventListener('mouseenter', showReplayBtn);
+document.getElementById('main-inventory').addEventListener('mousemove', showReplayBtn);
+document.getElementById('main-inventory').addEventListener('mouseleave', hideReplayBtn);
+
+// ----- Fonction de Replay Animation -----
+replayBtn.addEventListener('click', () => {
+  // Haptique
+  if (window.navigator.vibrate) window.navigator.vibrate(32);
+  // Cache inventaire et relance toute l’anim depuis la roulette
+  document.getElementById('main-inventory').style.display = "none";
+  // Re-initialise tous les sons (déjà mutés si mute)
+  if (musicEpic) musicEpic.pause();
+  if (musicMain) musicMain.pause();
+  if (musicWelcome) musicWelcome.pause();
+  // Optionnel : reset roulette (pour la refaire)
+  startRoulette();
+  replayBtn.style.display = "none";
+});
+
+// Option : affiche aussi le bouton Replay après quelques secondes sur inventaire
+setTimeout(() => {
+  if (document.getElementById('main-inventory').style.display === "flex")
+    replayBtn.style.display = "flex";
+}, 2500);
+
