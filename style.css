@@ -1,9 +1,9 @@
 body, html {
   margin: 0; padding: 0;
   width: 100vw; height: 100vh;
-  background: #090d1a; /* Fond dark */
+  background: #090d1a;
   overflow: hidden;
-  font-family: 'PixelOperator', 'Arial', monospace;
+  font-family: 'Segoe UI', 'Verdana', Arial, sans-serif;
 }
 
 #welcome-screen {
@@ -12,47 +12,52 @@ body, html {
   align-items: center;
   justify-content: center;
   background: #090d1a;
-  position: fixed; top: 0; left: 0;
+  position: fixed;
+  top: 0; left: 0;
   z-index: 10;
   flex-direction: column;
+  transition: opacity 0.6s;
 }
 
 #tap2enter-img {
   max-width: 98vw;
-  max-height: 82vh;
-  width: auto; height: auto;
+  max-height: 92vh;
   object-fit: contain;
   margin: 0 auto;
   background: transparent;
   user-select: none;
   pointer-events: auto;
-  transform: scale(1.17);
-  filter: drop-shadow(0 0 40px #000c);
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 34px #000d);
 }
 
-.tap-anywhere-text {
-  font-size: 1.15rem;
+#tap-anywhere {
+  margin-top: 2vw;
   color: #ffe066;
-  letter-spacing: 1px;
-  margin-top: 1.6rem;
-  text-align: center;
-  opacity: 0.7;
-  animation: blink 1.8s infinite;
+  opacity: 0.6;
+  font-size: 1.25rem;
+  letter-spacing: 2px;
+  animation: tapBlink 1.2s infinite alternate;
   user-select: none;
+  pointer-events: none;
+}
+@keyframes tapBlink {
+  0% { opacity: 0.55; }
+  100% { opacity: 1; }
 }
 
-@keyframes blink {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 0.25; }
-}
-
-/* Roulette */
+/* ROULETTE */
 #roulette-screen {
   width: 100vw; height: 100vh;
   background: #090d1a;
-  display: flex; align-items: center; justify-content: center;
-  position: fixed; top: 0; left: 0; z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 20;
 }
+
 #roulette-container {
   background: rgba(0,0,0,0.12);
   border-radius: 32px;
@@ -61,112 +66,133 @@ body, html {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 74vw;
+  min-width: 72vw;
   min-height: 13vw;
   gap: 1vw;
   position: relative;
-  filter: blur(0); /* Effet animé JS */
-  transition: filter 0.5s;
+  transition: filter 0.3s;
 }
+
 .roulette-case {
-  width: 7vw; height: 10vw;
-  max-width: 100px; max-height: 120px;
-  border-radius: 12px;
-  background: #111;
+  width: 7vw;
+  height: 10vw;
+  max-width: 100px;
+  max-height: 120px;
+  border-radius: 13px;
+  background: #191919;
   margin: 0 0.5vw;
   box-shadow: 0 0 10px #ffe06666;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   border: 3px solid #ffe06699;
   position: relative;
   transition: box-shadow 0.3s;
 }
+
 .roulette-case img {
-  width: 80%; height: auto; display: block;
+  width: 82%; height: auto;
+  display: block;
 }
+
 .roulette-case.gold {
   border: 3px solid gold;
-  box-shadow: 0 0 18px 6px gold, 0 0 0 4px #ffe06699;
-  background: #fff8e1;
-  animation: goldShine 1.3s ease-in-out infinite alternate;
+  box-shadow: 0 0 24px 8px gold, 0 0 0 5px #ffe06688;
+  background: #fffbe7;
+  animation: goldShine 1.2s infinite alternate;
 }
 @keyframes goldShine {
-  0% { filter: brightness(1.06) drop-shadow(0 0 10px gold);}
-  100% { filter: brightness(1.28) drop-shadow(0 0 28px gold);}
+  0% { filter: drop-shadow(0 0 14px gold);}
+  100% { filter: drop-shadow(0 0 34px #ffe066); }
 }
 
-/* GOLD DROP ANIM */
+/* DROP GOLD */
 #gold-drop-screen {
-  position: fixed; z-index: 50;
-  left: 0; top: 0;
   width: 100vw; height: 100vh;
-  background: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.5s;
+  background: #090d1a;
+  position: fixed; top: 0; left: 0;
+  z-index: 30;
+  display: flex; align-items: center; justify-content: center;
 }
 
-.gold-drop-img {
-  max-width: 320px;
-  width: 65vw;
-  filter: drop-shadow(0 0 60px gold) drop-shadow(0 0 18px #fff9);
-  display: block;
-  margin: 0 auto;
-  animation: goldPop 1.2s cubic-bezier(.27,1.4,.77,1.13);
+#gold-drop-content {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  width: 100vw; height: 100vh;
 }
 
-@keyframes goldPop {
-  0%   { transform: scale(0.6) rotate(-16deg);}
-  50%  { transform: scale(1.18) rotate(3deg);}
-  70%  { transform: scale(0.9) rotate(-2deg);}
-  100% { transform: scale(1)   rotate(0);}
+#gold-drop-img {
+  width: 270px;
+  max-width: 66vw;
+  margin-bottom: 2.3rem;
+  filter: drop-shadow(0 0 44px gold);
+  animation: dropPulse 1.7s infinite alternate;
+}
+@keyframes dropPulse {
+  0% { transform: scale(1) rotate(-1deg);}
+  70% { transform: scale(1.1) rotate(2deg);}
+  100% { transform: scale(1.06) rotate(-1deg);}
+}
+.drop-flash {
+  animation: dropFlash 1.2s 1;
+}
+@keyframes dropFlash {
+  0% { filter: drop-shadow(0 0 0px gold);}
+  60% { filter: drop-shadow(0 0 90px gold) brightness(1.4);}
+  100% { filter: drop-shadow(0 0 44px gold);}
 }
 
-.golden-drop-text {
-  font-size: 2rem;
+#gold-drop-title {
+  font-size: 2.15rem;
   color: #ffe066;
-  letter-spacing: 2px;
-  margin: 1.6rem 0 0.5rem 0;
   font-weight: bold;
+  letter-spacing: 1.5px;
+  text-shadow: 0 2px 14px #000, 0 0 24px #ffe06644;
+  margin-bottom: 0.8rem;
   text-align: center;
-  text-shadow: 0 0 10px #222, 0 0 12px gold;
+}
+.gold-text { filter: drop-shadow(0 0 6px gold); }
+
+#gold-drop-tap {
+  font-size: 1.06rem;
+  color: #fff8;
+  opacity: 0;
+  margin-top: 1.2rem;
+  letter-spacing: 1.1px;
+  transition: opacity 0.6s;
+  text-align: center;
 }
 
-.continue-text {
-  font-size: 1.09rem;
-  color: #fff;
-  opacity: 0.55;
-  margin-top: 1.1rem;
-  text-align: center;
-  letter-spacing: 1.2px;
-  user-select: none;
-}
-
-/* Inventory */
+/* INVENTAIRE FINAL */
 #main-inventory {
   width: 100vw; height: 100vh;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   background: #090d1a;
-  position: fixed; top: 0; left: 0; z-index: 30;
+  position: fixed; top: 0; left: 0;
+  z-index: 40;
 }
-#main-inventory h1 {
-  color: #ffe066;
-  margin-bottom: 2rem;
-  font-size: 2.1rem;
-  letter-spacing: 2px;
+
+#main-coin-img {
+  width: 270px;
+  max-width: 66vw;
+  filter: drop-shadow(0 0 66px #ffe06688);
+  opacity: 0;
+  transform: scale(0.88);
+  transition: all 0.6s cubic-bezier(.4,2,.5,1.2);
 }
-.onetap-inventory-drop {
-  max-width: 250px; width: 70vw;
-  filter: drop-shadow(0 0 60px #ffa);
+.main-coin-appear {
+  opacity: 1;
+  transform: scale(1.11) rotate(-2deg);
+  filter: drop-shadow(0 0 130px gold) brightness(1.16);
 }
 
 @media (max-width: 700px) {
-  #tap2enter-img { max-width: 98vw; max-height: 70vh; }
-  #roulette-container { min-width: 98vw; min-height: 27vw; gap: 1.5vw; padding: 2vw;}
-  .roulette-case { width: 16vw; height: 18vw; max-width: 85px; max-height: 95px;}
-  .gold-drop-img { max-width: 85vw; width: 85vw;}
-  .golden-drop-text { font-size: 1.1rem; }
+  #tap2enter-img, #gold-drop-img, #main-coin-img {
+    max-width: 95vw !important;
+    width: 210px !important;
+  }
+  #gold-drop-title { font-size: 1.3rem;}
 }
+
