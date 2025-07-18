@@ -156,10 +156,26 @@ body, html {
   0% { opacity: 0.4; filter: blur(28px) brightness(1.2);}
   100% { opacity: 1; filter: blur(48px) brightness(2.4);}
 }
-#gold-drop-img, #onetap-logo-img, .onetap-inventory-drop {
-  width: 200px; max-width: 70vw;
-  filter: drop-shadow(0 0 35px gold) drop-shadow(0 0 18px #ffe066c7);
-  z-index: 2;
+/* ---- ANIM 3D GOLD ---- */
+#gold-drop-img {
+  animation: goldDrop3D 1.6s cubic-bezier(.33,1.34,.46,.85) both;
+}
+@keyframes goldDrop3D {
+  0%   { transform: scale(0.2) rotateY(-44deg) rotateZ(-12deg); opacity: 0; filter: blur(14px) brightness(1.2);}
+  40%  { transform: scale(1.28) rotateY(15deg) rotateZ(8deg); opacity: 1; filter: blur(2px) brightness(1.3);}
+  66%  { transform: scale(1.09) rotateY(-12deg) rotateZ(-5deg);}
+  84%  { transform: scale(1.18) rotateY(10deg) rotateZ(5deg);}
+  100% { transform: scale(1) rotateY(0deg) rotateZ(0deg); opacity: 1; filter: none;}
+}
+/* ---- ANIM 3D ONETAP ---- */
+#onetap-logo-img {
+  animation: onetap3DPop 1.45s cubic-bezier(.39,2.04,.41,.87) both;
+}
+@keyframes onetap3DPop {
+  0%   { transform: scale(0.38) rotateY(-38deg) rotateZ(-17deg) translateY(70px); opacity: 0;}
+  50%  { transform: scale(1.21) rotateY(10deg) rotateZ(4deg) translateY(-18px);}
+  82%  { transform: scale(1.07) rotateY(-7deg) rotateZ(-2deg) translateY(5px);}
+  100% { transform: scale(1) rotateY(0deg) rotateZ(0deg) translateY(0); opacity: 1;}
 }
 #gold-drop-text, #onetap-drop-text {
   color: gold;
