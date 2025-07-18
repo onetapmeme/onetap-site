@@ -7,17 +7,13 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Accueil -->
+  <!-- Écran d'accueil -->
   <div id="welcome-screen">
-    <img id="tap2enter-img"
-      src="assets/tap2enter_pc_static.png"
-      alt="Tap2Enter"
-      draggable="false"
-    />
-    <div class="tap-anywhere-text">Tap anywhere to begin</div>
+    <img id="tap2enter-img" src="assets/tap2enter_pc_static.png" alt="Tap2Enter" draggable="false" />
+    <div id="tap-anywhere">Tap anywhere to begin</div>
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
-    <audio id="music-welcome" src="assets/music_welcome.wav" loop preload="auto"></audio>
-    <audio id="music-main" src="assets/music_main.wav" loop preload="auto"></audio>
+    <audio id="music-welcome" src="assets/music_welcome.wav" preload="auto" loop></audio>
+    <audio id="music-main" src="assets/music_main.wav" preload="auto" loop></audio>
   </div>
 
   <!-- Roulette -->
@@ -27,17 +23,18 @@
     <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
   </div>
 
-  <!-- GOLD DROP ANIMATION -->
+  <!-- Drop Gold -->
   <div id="gold-drop-screen" style="display:none;">
-    <img id="gold-drop-img" class="gold-drop-img" src="assets/onetap_gold.png" alt="Golden Drop">
-    <div class="golden-drop-text">GOLDEN DROP UNLOCKED!</div>
-    <div class="continue-text">Tap to continue</div>
+    <div id="gold-drop-content">
+      <img id="gold-drop-img" src="assets/onetap_gold.png" alt="Drop Gold" />
+      <div id="gold-drop-title" class="gold-text">GOLDEN DROP UNLOCKED!</div>
+      <div id="gold-drop-tap">Tap to continue</div>
+    </div>
   </div>
 
   <!-- Inventaire Principal -->
   <section id="main-inventory" style="display:none;">
-    <h1>$ONETAP Inventory</h1>
-    <img src="assets/onetap_logo.png" alt="Drop OneTap" class="onetap-inventory-drop"/>
+    <img id="main-coin-img" src="assets/onetap_logo.png" alt="$ONETAP Coin" />
   </section>
 
   <script src="script.js"></script>
