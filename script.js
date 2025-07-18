@@ -233,38 +233,3 @@ muteBtn.addEventListener('click', () => {
   muteBtn.style.opacity = muted ? 0.33 : 0.62;
 });
 
-// ----- Affichage bouton Replay sur inventaire seulement -----
-const replayBtn = document.getElementById('replay-btn');
-function showReplayBtn() {
-  replayBtn.style.display = "flex";
-}
-function hideReplayBtn() {
-  replayBtn.style.display = "none";
-}
-const mainInventory = document.getElementById('main-inventory');
-mainInventory.addEventListener('mouseenter', showReplayBtn);
-mainInventory.addEventListener('mousemove', showReplayBtn);
-mainInventory.addEventListener('mouseleave', hideReplayBtn);
-mainInventory.addEventListener('touchstart', showReplayBtn);
-
-// ----- Fonction de Replay Animation -----
-replayBtn.addEventListener('click', () => {
-  // Haptique
-  if (window.navigator.vibrate) window.navigator.vibrate(32);
-  // Cache inventaire et relance toute l’anim depuis la roulette
-  mainInventory.style.display = "none";
-  // Reset musiques
-  musicEpic.pause();
-  musicEpic.currentTime = 0;
-  musicMain.pause();
-  musicMain.currentTime = 0;
-  // Optionnel : reset roulette
-  startRoulette();
-  replayBtn.style.display = "none";
-});
-
-// Affiche le bouton Replay après 2s sur inventaire (pour mobile)
-setTimeout(() => {
-  if (mainInventory.style.display === "flex")
-    replayBtn.style.display = "flex";
-}, 2500);
