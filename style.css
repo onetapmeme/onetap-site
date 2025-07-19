@@ -253,7 +253,7 @@ body, html {
 @media (max-width: 700px) {
   #tap2enter-img { max-width: 99vw; max-height: 60vh; }
   #watermark-logo { width: 120px; max-width: 67vw; bottom: 2vh; }
-  #gold-drop-img, #onetap-logo-img, .onetap-inventory-drop { width: 44vw; }
+  #gold-drop-img, #onetap-logo-img, .onetap-inventory-drop { width: 34vw; }
   #gold-drop-text, #onetap-drop-text { font-size: 1rem; }
   #main-inventory h1 { font-size: 1.10rem; }
   .ticker { font-size: 0.97rem; padding: 0.4em 0.6em;}
