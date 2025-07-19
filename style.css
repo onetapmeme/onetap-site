@@ -174,8 +174,8 @@ body, html {
   100% { transform: scale(1) rotateY(0deg) rotateZ(0deg); opacity: 1; filter: none;}
 }
 /* ---- ANIM 3D ONETAP ---- */
-#onetap-logo-img {
-  width: 110px;   /* Anciennement 200px */
+#gold-drop-img, #onetap-logo-img, .onetap-inventory-drop {
+  width: 120px;
   max-width: 36vw;
   filter: drop-shadow(0 0 32px gold) drop-shadow(0 0 15px #ffe066c7);
   z-index: 2;
@@ -260,3 +260,4 @@ body, html {
   .gold-flash { width: 170px; height: 200px; }
   #mute-btn { right: 10px; bottom: 10px; width: 32px; height: 32px;}
 }
+
