@@ -229,3 +229,65 @@ muteBtn.addEventListener('click', () => {
   }
   muteBtn.style.opacity = muted ? 0.33 : 0.62;
 });
+
+// ==== TOKENOMICS - Copy Contract ====
+document.getElementById('copy-contract-btn').addEventListener('click', function() {
+  const addr = document.getElementById('contract-address').innerText;
+  navigator.clipboard.writeText(addr);
+  this.textContent = "✅";
+  setTimeout(() => { this.textContent = "📋"; }, 1200);
+});
+
+// ==== FAKE CHART ====
+function drawFakeChart() {
+  const c = document.getElementById('fakeChart');
+  if (!c) return;
+  // adapt width/height to container
+  c.width = c.offsetWidth; c.height = c.offsetHeight;
+  const ctx = c.getContext('2d');
+  const w = c.width, h = c.height;
+  // Fake data
+  const pts = [0.23,0.41,0.25,0.52,0.66,0.42,0.81,0.71,0.95,0.78,1.18,1.05,0.91,1.43,2.08,1.77,2.7,2.58,2.35,2.9,3.1];
+  ctx.clearRect(0,0,w,h);
+  // Axis
+  ctx.strokeStyle = "#ffe06644";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(30,h-22); ctx.lineTo(w-14,h-22); ctx.stroke();
+  ctx.moveTo(30,h-22); ctx.lineTo(30,14); ctx.stroke();
+  // Line
+  ctx.strokeStyle = "#ffe066";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  for(let i=0;i<pts.length;i++){
+    let x = 30 + i*((w-50)/pts.length);
+    let y = h-22 - (pts[i]*((h-60)/3.5));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  // Dots
+  ctx.fillStyle = "#ffe066";
+  for(let i=0;i<pts.length;i++){
+    let x = 30 + i*((w-50)/pts.length);
+    let y = h-22 - (pts[i]*((h-60)/3.5));
+    ctx.beginPath(); ctx.arc(x,y,2.5,0,2*Math.PI); ctx.fill();
+  }
+  // Label
+  ctx.font = "bold 1.1rem Arial"; ctx.fillStyle="#ffe066b9";
+  ctx.fillText("ATH", w-55, 22);
+}
+window.addEventListener('DOMContentLoaded', drawFakeChart);
+window.addEventListener('resize', drawFakeChart);
+
+// ==== KILLFEED ====
+function showKillFeed(msg) {
+  const feed = document.getElementById('killfeed');
+  const el = document.createElement('div');
+  el.className = "kill-msg";
+  el.textContent = msg;
+  feed.appendChild(el);
+  setTimeout(()=>{ el.remove(); }, 3400);
+}
+// Exemple d'appel à placer dans tes scripts (drop gold, etc)
+// showKillFeed("0x9C...53 just dropped a GOLD! 💥");
+
