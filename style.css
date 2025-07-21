@@ -260,4 +260,124 @@ body, html {
   .gold-flash { width: 170px; height: 200px; }
   #mute-btn { right: 10px; bottom: 10px; width: 32px; height: 32px;}
 }
+/* --- TOKENOMICS SECTION --- */
+.info-section {
+  width: 100vw;
+  background: rgba(20,20,35,0.90);
+  padding: 3vw 0 2vw 0;
+  margin: 0; text-align: center;
+}
+.info-section h2 {
+  color: #ffe066;
+  font-size: 2.0rem;
+  margin-bottom: 1.6vw;
+  font-family: 'Press Start 2P', monospace, Arial;
+  letter-spacing: 0.03em;
+}
+.tokenomics-cards {
+  display: flex; flex-wrap: wrap; gap: 2vw 2vw;
+  justify-content: center;
+}
+.tokenomics-card {
+  background: #181c28e8;
+  border: 1.6px solid #ffe06633;
+  border-radius: 18px;
+  min-width: 190px;
+  padding: 1.2vw 2vw;
+  margin: 0.6vw;
+  box-shadow: 0 2px 12px #ffe06614;
+  display: flex; flex-direction: column; align-items: center;
+  font-size: 1.07rem;
+  color: #ffe066;
+  transition: transform 0.13s, box-shadow 0.13s;
+}
+.tokenomics-card:hover {
+  transform: scale(1.04);
+  box-shadow: 0 2px 24px #ffe06642;
+}
+.t-label {
+  font-size: 0.95rem;
+  color: #fff8;
+  margin-bottom: 0.1em;
+}
+.t-value {
+  font-size: 1.09rem;
+  color: #ffe066;
+  font-weight: bold;
+  letter-spacing: 0.02em;
+}
+.copy-contract {
+  display: flex; align-items: center; gap: 6px;
+}
+#copy-contract-btn {
+  background: none; border: none; cursor: pointer;
+  color: #ffe066; font-size: 1.2rem;
+  padding: 0;
+  filter: drop-shadow(0 0 4px #ffe066c7);
+  transition: color 0.1s;
+}
+#copy-contract-btn:hover { color: #fffac0; }
+
+/* --- CHART --- */
+.chart-container {
+  width: 92vw; max-width: 420px; height: 220px;
+  margin: 0 auto 3vw auto;
+  background: #171b28;
+  border-radius: 14px;
+  box-shadow: 0 2px 14px #ffe06611;
+  padding: 2vw 2vw;
+}
+canvas#fakeChart { width: 100%; height: 100%; }
+
+/* --- BADGE LOCKED --- */
+.liquidity-badge {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: #24253a;
+  color: #ffe066;
+  border: 1px solid #ffe06644;
+  border-radius: 12px;
+  padding: 0.3em 1.1em;
+  font-size: 1rem;
+  margin: 1.3vw auto;
+  box-shadow: 0 2px 7px #ffe0661c;
+}
+.liquidity-badge img {
+  width: 22px; height: 22px;
+  filter: drop-shadow(0 0 6px #ffe06699);
+}
+.liquidity-badge a {
+  color: #ffe066; text-decoration: underline dotted;
+  font-size: 0.98em; margin-left: 0.6em;
+}
+
+/* --- KILLFEED --- */
+#killfeed {
+  position: fixed;
+  top: 3vw; left: 50%; transform: translateX(-50%);
+  z-index: 101;
+  min-width: 260px; max-width: 80vw;
+  text-align: center;
+  pointer-events: none;
+  font-family: 'Press Start 2P', Arial;
+  font-size: 1rem;
+}
+.kill-msg {
+  background: #0a0c21ee;
+  color: #ffe066;
+  border-radius: 16px;
+  margin: 0.3em auto;
+  display: inline-block;
+  padding: 0.3em 1.3em;
+  box-shadow: 0 2px 12px #ffe0663c;
+  animation: feedIn 0.45s cubic-bezier(.6,1.68,.7,.98), feedOut 0.8s 2.6s cubic-bezier(.9,.11,.07,.86) forwards;
+}
+@keyframes feedIn { from {opacity:0; transform:translateY(-30px);} to {opacity:1; transform:none;} }
+@keyframes feedOut { to {opacity:0; transform:translateY(-16px);} }
+
+/* --- Responsive Tokenomics/Chart --- */
+@media (max-width: 700px) {
+  .tokenomics-card { min-width: 140px; padding: 1.2em 0.6em; font-size: 0.89rem;}
+  .info-section h2 { font-size: 1.19rem; }
+  .chart-container { height: 130px; }
+}
 
