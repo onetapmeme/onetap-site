@@ -288,6 +288,28 @@ function showKillFeed(msg) {
   feed.appendChild(el);
   setTimeout(()=>{ el.remove(); }, 3400);
 }
-// Exemple d'appel à placer dans tes scripts (drop gold, etc)
+// Exemple d'appel à placer dans les scripts (drop gold, etc)
 // showKillFeed("0x9C...53 just dropped a GOLD! 💥");
 
+// --- Tokenomics Overlay ---
+const tokenomicsOverlay = document.getElementById('tokenomics-overlay');
+const openTokenomics = document.getElementById('open-tokenomics');
+const closeTokenomics = document.getElementById('close-tokenomics');
+
+if (openTokenomics && closeTokenomics && tokenomicsOverlay) {
+  openTokenomics.addEventListener('click', () => {
+    tokenomicsOverlay.classList.add('open');
+    document.body.style.overflow = "hidden"; // évite le scroll derrière
+  });
+  closeTokenomics.addEventListener('click', () => {
+    tokenomicsOverlay.classList.remove('open');
+    document.body.style.overflow = "";
+  });
+  // Fermer si clic sur fond overlay hors modal
+  tokenomicsOverlay.addEventListener('click', (e) => {
+    if (e.target === tokenomicsOverlay) {
+      tokenomicsOverlay.classList.remove('open');
+      document.body.style.overflow = "";
+    }
+  });
+}
