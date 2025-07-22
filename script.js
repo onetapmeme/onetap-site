@@ -142,7 +142,9 @@ function showMainInventory() {
   document.getElementById('onetap-drop-screen').style.display = "none";
   document.getElementById('main-inventory').style.display = "flex";
   if (window.navigator.vibrate) window.navigator.vibrate(50);
+  document.getElementById('open-tokenomics').style.display = "block";
 }
+
 
 // ---------- Confetti Animation (Gold Drop) ----------
 function launchConfetti() {
