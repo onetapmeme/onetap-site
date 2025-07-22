@@ -407,6 +407,9 @@ canvas#fakeChart { width: 100%; height: 100%; }
   }
 }
 
+/* Cache par défaut le lien ou bouton vers la section tokenomics */
+#open-tokenomics { display: none; }
+
 /* Overlay modal Tokenomics */
 #tokenomics-overlay {
   display: none;  /* Affiché dynamiquement */
