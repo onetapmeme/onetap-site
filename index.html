@@ -2,152 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>$ONETAP – Meme Token</title>
-  <meta name="description" content="$ONETAP – Meme token on Base. One tap. No spray. Headshot only.">
-  <link rel="canonical" href="https://onetapmeme.github.io/onetap-site/"/>
-
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="$ONETAP – Meme Token">
-  <meta property="og:description" content="One tap. No spray. Headshot only.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://onetapmeme.github.io/onetap-site/">
-  <meta property="og:image" content="assets/onetap_logo.png">
-  <meta name="twitter:card" content="summary_large_image">
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#090d1a">
-  <link rel="icon" href="assets/onetap_logo.png" type="image/png">
-
-  <!-- Preload critical assets -->
-  <link rel="preload" as="image" href="assets/tap2enter_pc_static.png">
-  <link rel="preload" as="audio" href="assets/music_welcome.wav">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-
+  <title>$ONETAP – Meme Token Inventory</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Canvas particules permanent -->
+  <!-- Fond animé particules (permanent) -->
   <canvas id="background-canvas" aria-hidden="true"></canvas>
 
-  <!-- Sticky CTA (visible après l’inventaire) -->
-  <nav id="cta-bar" class="cta-bar" aria-label="Primary">
-    <a id="cta-buy" class="cta" href="#" target="_blank" rel="noopener">Buy</a>
-    <a id="cta-chart" class="cta" href="#" target="_blank" rel="noopener">Chart</a>
-    <button id="cta-copy" class="cta" aria-label="Copy contract">Copy CA</button>
-  </nav>
-
   <!-- Welcome -->
-  <div id="welcome-screen" role="dialog" aria-label="Welcome screen">
-    <img id="tap2enter-img" src="assets/tap2enter_pc_static.png" alt="Tap to enter" draggable="false"/>
-    <span id="press-anywhere-text">Tap anywhere to begin</span>
+  <section id="welcome-screen" aria-label="Welcome screen">
+    <img id="tap2enter-img"
+      src="assets/tap2enter_pc_static.png"
+      alt="Tap to enter"
+      draggable="false"
+    />
+    <span id="press-anywhere-text" aria-hidden="true">Tap anywhere to begin</span>
     <img id="watermark-logo" src="assets/onetap_logo.png" alt="" aria-hidden="true"/>
+
+    <!-- Sons accueil -->
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
     <audio id="music-welcome" src="assets/music_welcome.wav" preload="auto" loop></audio>
     <audio id="music-main" src="assets/music_main.wav" preload="auto" loop></audio>
     <audio id="music-epic" src="assets/music_epic.wav" preload="auto" loop></audio>
-  </div>
+  </section>
 
   <!-- Loader -->
-  <div id="loader" class="hidden" aria-live="polite">
+  <div id="loader" role="status" aria-live="polite" aria-label="Loading…" style="display:none;">
     <div class="spinner"></div>
     <div class="loading-text">Loading…</div>
   </div>
 
   <!-- Roulette -->
-  <div id="roulette-screen" class="hidden" role="region" aria-label="Roulette">
+  <section id="roulette-screen" aria-label="Roulette" style="display:none;">
     <div id="roulette-container"></div>
     <audio id="roulette-sound" src="assets/roulette_sound.wav" preload="auto"></audio>
     <audio id="drop-rare-sound" src="assets/drop_rare.wav" preload="auto"></audio>
-  </div>
+  </section>
 
   <!-- Gold Drop -->
-  <div id="gold-drop-screen" class="hidden" role="dialog" aria-label="Gold drop">
+  <section id="gold-drop-screen" aria-label="Gold drop" style="display:none;">
     <div class="gold-animation-wrapper">
       <div class="gold-flash" aria-hidden="true"></div>
-      <img id="gold-drop-img" src="assets/onetap_gold.png" alt="Gold item"/>
+      <img id="gold-drop-img" src="assets/onetap_gold.png" alt="Golden drop unlocked" />
       <div class="confetti" aria-hidden="true"></div>
     </div>
-    <span id="gold-drop-text">GOLDEN DROP UNLOCKED!</span>
-  </div>
+    <span id="gold-drop-text" aria-hidden="true">GOLDEN DROP UNLOCKED!</span>
+  </section>
 
   <!-- $ONETAP Final Drop -->
-  <div id="onetap-drop-screen" class="hidden" role="dialog" aria-label="$ONETAP drop">
+  <section id="onetap-drop-screen" aria-label="$ONETAP drop" style="display:none;">
     <div class="onetap-animation-wrapper">
-      <img id="onetap-logo-img" src="assets/onetap_logo.png" alt="$ONETAP Logo"/>
+      <img id="onetap-logo-img" src="assets/onetap_logo.png" alt="$ONETAP acquired" />
     </div>
-    <span id="onetap-drop-text">$ONETAP ACQUIRED!</span>
-    <button id="share-btn" class="btn subtle hidden">Share my Golden Drop</button>
-  </div>
+    <span id="onetap-drop-text" aria-hidden="true">$ONETAP ACQUIRED!</span>
+    <button id="share-btn" style="display:none;" aria-label="Share my golden drop">Share my Golden Drop</button>
+  </section>
 
   <!-- Inventaire -->
-  <main id="main-inventory" class="hidden" role="main">
+  <section id="main-inventory" aria-label="Inventory" style="display:none;">
     <h1>$ONETAP Inventory</h1>
-    <img src="assets/onetap_logo.png" alt="$ONETAP Logo" class="onetap-inventory-drop"/>
-    <div class="ticker" aria-live="polite">Fair Launch • Liquidity Locked • $ONETAP just hit a new ATH!</div>
+    <img src="assets/onetap_logo.png" alt="$ONETAP item" class="onetap-inventory-drop"/>
+    <div class="ticker">Fair Launch • Liquidity Locked • $ONETAP just hit a new ATH!</div>
+  </section>
 
-    <!-- Bouton Tokenomics -->
-    <button id="open-tokenomics" class="tokenomics-btn">📈 Tokenomics</button>
-  </main>
-
-  <!-- Tokenomics modal -->
-  <div id="tokenomics-overlay" class="modal" aria-hidden="true" aria-labelledby="tok-title" role="dialog">
-    <div class="tokenomics-modal" role="document">
-      <button id="close-tokenomics" class="close-btn" aria-label="Close">✖</button>
-      <h2 id="tok-title">Tokenomics</h2>
-      <div class="tokenomics-cards">
-        <div class="tok-card"><div class="tok-label">Network</div><div class="tok-value">BASE</div></div>
-        <div class="tok-card"><div class="tok-label">Taxes</div><div class="tok-value">3% <span class="tok-sub">(1% dev, 1% marketing, 1% LP)</span></div></div>
-        <div class="tok-card"><div class="tok-label">Fairlaunch</div><div class="tok-value">100%</div></div>
-      </div>
-      <section class="info-section">
-        <h3 class="sr-only">Details</h3>
-        <div class="tokenomics-cards">
-          <div class="tokenomics-card"><span class="t-label">Total Supply</span><span class="t-value">100,000,000 $ONETAP</span></div>
-          <div class="tokenomics-card"><span class="t-label">Liquidity</span><span class="t-value">Locked 3 months</span></div>
-          <div class="tokenomics-card"><span class="t-label">Contract</span>
-            <span class="t-value copy-contract" title="Copy to clipboard">
-              <span id="contract-address">0x000000000000000000000000000000000000ONET</span>
-              <button id="copy-contract-btn" class="btn-icon" aria-label="Copy contract">📋</button>
-            </span>
-          </div>
-        </div>
-      </section>
-      <section class="chart-container">
-        <canvas id="fakeChart" width="340" height="170" aria-label="Price chart placeholder"></canvas>
-      </section>
-      <div class="liquidity-badge">
-        <img src="assets/lock_icon.svg" alt="" aria-hidden="true"/> Liquidity Locked 3 months
-        <a id="lp-proof-link" href="#" target="_blank" rel="noopener">Proof</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mute -->
-  <button id="mute-btn" title="Mute/Unmute Music" aria-pressed="false" aria-label="Toggle sound">
-    <span id="ico-unmuted" aria-hidden="true">🔊</span>
-    <span id="ico-muted" class="hidden" aria-hidden="true">🔈</span>
+  <!-- Bouton Tokenomics (affiché quand inventaire visible) -->
+  <button id="open-tokenomics" class="tokenomics-btn" style="display:none;" aria-haspopup="dialog" aria-controls="tokenomics-overlay">
+    📈 Tokenomics
   </button>
 
-  <!-- Consent minimal -->
-  <div id="consent" class="consent-bar hidden" role="dialog" aria-live="polite">
-    <span>We use cookies for analytics. <a href="legal/privacy.html" target="_blank" rel="noopener">Learn more</a></span>
-    <div class="consent-actions">
-      <button id="consent-accept" class="btn">Accept</button>
-      <button id="consent-decline" class="btn outline">Decline</button>
+  <!-- Overlay Tokenomics -->
+  <div id="tokenomics-overlay" role="dialog" aria-modal="true" aria-labelledby="tokenomics-title">
+    <div class="tokenomics-modal">
+      <button id="close-tokenomics" class="close-btn" aria-label="Close tokenomics">✖</button>
+      <h2 id="tokenomics-title">Tokenomics</h2>
+      <div class="tokenomics-cards">
+        <div class="tok-card">
+          <div class="tok-label">Network</div>
+          <div class="tok-value">BASE</div>
+        </div>
+        <div class="tok-card">
+          <div class="tok-label">Taxes</div>
+          <div class="tok-value">3% <span class="tok-sub">(1% dev, 1% marketing, 1% LP)</span></div>
+        </div>
+        <div class="tok-card">
+          <div class="tok-label">Fairlaunch</div>
+          <div class="tok-value">100%</div>
+        </div>
+        <div class="tok-card">
+          <div class="tok-label">Liquidity</div>
+          <div class="tok-value">Locked 3 months</div>
+        </div>
+        <div class="tok-card">
+          <div class="tok-label">Contract</div>
+          <div class="tok-value">
+            <span id="contract-address">0x1234...abcd</span>
+            <button id="copy-contract-btn" title="Copy contract">📋</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini chart décoratif -->
+      <div class="chart-container">
+        <canvas id="fakeChart" width="420" height="220" aria-hidden="true"></canvas>
+      </div>
+
+      <div class="liquidity-badge">
+        <img src="assets/lock_icon.svg" alt="" aria-hidden="true"/>
+        Liquidity Locked 3 months
+        <a href="https://basescan.org/" target="_blank" rel="noopener">Proof</a>
+      </div>
     </div>
   </div>
 
-  <!-- JS -->
-  <script src="web3.js"></script>
+  <!-- Killfeed -->
+  <div id="killfeed" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Bouton Mute -->
+  <button id="mute-btn" title="Mute/Unmute Music" aria-pressed="false">
+    <span id="mute-ico" aria-hidden="true">🔊</span>
+  </button>
+
   <script src="script.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(()=>{});
-    }
-  </script>
 </body>
 </html>
