@@ -1,0 +1,11 @@
+{
+  "name": "$ONETAP",
+  "short_name": "ONETAP",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#090d1a",
+  "theme_color": "#090d1a",
+  "icons": [
+    { "src": "assets/onetap_logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
