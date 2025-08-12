@@ -27,6 +27,35 @@ const muteBtn      = document.getElementById('mute-btn');
 const muteIco      = document.getElementById('mute-ico');
 let muted = false;
 
+// Liste des IDs audio à gérer
+const audioIds = [
+  'music-welcome', 
+  'music-main', 
+  'music-epic', 
+  'headshot-sound', 
+  'roulette-sound', 
+  'drop-rare-sound'
+];
+
+const audios = audioIds.map(id => document.getElementById(id));
+
+document.getElementById('volume-slider').addEventListener('input', e => {
+  const volume = parseFloat(e.target.value);
+  audios.forEach(audio => {
+    if (audio) audio.volume = volume;
+  });
+  localStorage.setItem('onetap_volume', volume); // sauvegarde préférences
+});
+
+// Charger le volume sauvegardé
+window.addEventListener('load', () => {
+  const savedVolume = localStorage.getItem('onetap_volume');
+  if (savedVolume !== null) {
+    document.getElementById('volume-slider').value = savedVolume;
+    audios.forEach(audio => audio.volume = parseFloat(savedVolume));
+  }
+});
+
 // Constants roulette
 const NB_CASES_VISIBLE = 9;     // gold centré
 const NB_CASES_TOTAL   = 38;
