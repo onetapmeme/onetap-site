@@ -1,236 +1,318 @@
-body, html {
-  margin: 0; padding: 0;
-  width: 100vw; height: 100vh;
-  background: #090d1a;
-  overflow: hidden;
-  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+/* ===========================
+   $ONETAP v3.2 – style.css
+   =========================== */
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: #0e1322;
+  color: #fff;
+  overflow-x: hidden;
 }
 
-/* --- Canvas particles --- */
+/* -------- Background Particles -------- */
 #background-canvas {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
+  inset: 0;
   z-index: 0;
-  pointer-events: none;
 }
 
-/* Accueil */
+/* -------- Welcome Screen -------- */
 #welcome-screen {
-  width: 100vw; height: 100vh;
-  display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: rgba(0,0,0,0.85);
+  display: flex;
   flex-direction: column;
-  background: transparent;
-  position: fixed; top: 0; left: 0; z-index: 10;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  transition: opacity .6s ease;
 }
 #tap2enter-img {
-  max-width: 95vw;
-  max-height: 75vh;
-  object-fit: contain;
-  margin: 0 auto 2vw auto;
-  pointer-events: auto;
-  transform: scale(1.10);
-  filter: drop-shadow(0 0 40px #000b);
-  z-index: 2;
+  max-width: 80vw;
+  max-height: 60vh;
+  cursor: pointer;
 }
 #press-anywhere-text {
-  color: #ffe066;
-  font-size: 1.2rem;
-  opacity: 0.86;
-  margin-top: 1.2vw;
-  letter-spacing: 0.13em;
-  animation: pulseText 1.2s infinite alternate;
-  user-select: none;
-  z-index: 2;
-}
-@keyframes pulseText {
-  0% { opacity: 0.38; }
-  100% { opacity: 1; }
+  font-size: .95rem;
+  opacity: 0.6;
+  font-style: italic;
 }
 #watermark-logo {
   position: absolute;
-  bottom: 7vh;
-  right: 3vw;
-  width: 300px;
-  max-width: 60vw;
-  opacity: 0.05;
-  pointer-events: none;
-  z-index: 1;
+  bottom: 2vh;
+  opacity: 0.07;
+  max-width: 120px;
 }
 
-/* Loader */
+/* -------- Loader -------- */
 #loader {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  background: #090d1acc;
-  z-index: 30;
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  background: #0e1322dd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .spinner {
+  border: 5px solid rgba(255,255,255,0.1);
+  border-top: 5px solid #ffe066;
+  border-radius: 50%;
   width: 60px; height: 60px;
-  border: 6px solid #ffe06644;
-  border-top: 6px solid #ffe066;
-  border-radius: 50%; animation: spin 1s linear infinite;
-  margin-bottom: 1.2rem;
+  animation: spin 1.2s linear infinite;
 }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes spin { 100% { transform: rotate(360deg);} }
 .loading-text {
+  margin-top: .8rem;
+  font-size: 1rem;
   color: #ffe066;
-  font-size: 1.15rem;
-  letter-spacing: 0.09em;
-  opacity: 0.80;
 }
 
-/* Roulette */
+/* -------- Roulette -------- */
 #roulette-screen {
-  width: 100vw; height: 100vh;
-  background: transparent;
-  display: flex; align-items: center; justify-content: center;
-  position: fixed; top: 0; left: 0; z-index: 20;
+  position: fixed;
+  inset: 0;
+  z-index: 7;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #roulette-container {
-  background: rgba(0,0,0,0.12);
-  border-radius: 38px;
-  box-shadow: 0 0 40px 12px #ffe066, 0 0 0 6px #ffe06688;
-  padding: 2vw 2vw;
-  display: flex; align-items: center; justify-content: center;
-  min-width: 65vw; min-height: 12vw;
-  gap: 1.3vw; position: relative;
-  overflow: hidden;
-  transition: filter 0.5s;
+  display: flex;
+  gap: .4rem;
 }
-
 .roulette-case {
-  width: 7vw; height: 10vw; max-width: 100px; max-height: 120px;
-  border-radius: 13px;
-  background: #131313;
-  margin: 0 0.3vw;
-  box-shadow: 0 0 10px #ffe06666;
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-  border: 3px solid #ffe06699;
-  position: relative;
-  transition: box-shadow 0.3s, filter 0.18s;
-  filter: blur(0px);
+  width: 90px; height: 90px;
+  background: #111;
+  border: 2px solid #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.roulette-case img { width: 88%; height: auto; display: block; }
 .roulette-case.gold {
-  border: 3.5px solid gold;
-  box-shadow: 0 0 22px 9px gold, 0 0 0 4px #ffe06699;
-  background: #fff8e1;
-  z-index: 2;
-  animation: shine 0.9s infinite alternate;
+  border-color: gold;
+  animation: pulseGold 1s infinite alternate;
 }
-@keyframes shine {
-  0% { box-shadow: 0 0 14px 5px gold; }
-  100% { box-shadow: 0 0 44px 18px #ffe066, 0 0 0 4px #ffe06699;}
+@keyframes pulseGold {
+  from { box-shadow: 0 0 6px gold; }
+  to { box-shadow: 0 0 14px gold; }
 }
-#roulette-container.blurred .roulette-case:not(.gold) {
-  filter: blur(3px) brightness(0.97);
+.roulette-case img {
+  max-width: 100%;
+  max-height: 100%;
 }
 
-/* Gold Drop */
-#gold-drop-screen, #onetap-drop-screen, #main-inventory {
-  width: 100vw; height: 100vh;
-  position: fixed; top: 0; left: 0;
-  background: transparent;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  z-index: 28;
+/* -------- Gold Drop -------- */
+#gold-drop-screen,
+#onetap-drop-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  background: rgba(0,0,0,0.92);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  display: none;
+  transition: opacity .6s ease;
 }
-.gold-animation-wrapper, .onetap-animation-wrapper {
+.gold-animation-wrapper {
   position: relative;
-  display: flex; align-items: center; justify-content: center;
 }
 .gold-flash {
-  position: absolute; left: 50%; top: 50%;
-  width: 340px; height: 400px;
-  transform: translate(-50%,-54%);
-  background: radial-gradient(circle, gold 10%, #ffe066 50%, transparent 100%);
-  border-radius: 50%;
-  filter: blur(32px) brightness(1.8);
-  opacity: 0.94;
-  z-index: 1;
-  animation: goldFlash 0.9s cubic-bezier(.81,.11,.17,1.14) infinite alternate;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, gold, transparent 70%);
+  animation: flashPulse 1.2s ease-in-out infinite alternate;
 }
-@keyframes goldFlash {
-  0% { opacity: 0.4; filter: blur(28px) brightness(1.2);}
-  100% { opacity: 1; filter: blur(48px) brightness(2.4);}
-}
-/* ---- ANIM 3D GOLD ---- */
-#gold-drop-img {
-  width: 100px;   /* Anciennement 200px */
-  max-width: 32vw;
-  filter: drop-shadow(0 0 30px gold) drop-shadow(0 0 13px #ffe066c7);
-  z-index: 2;
+@keyframes flashPulse {
+  from { opacity: 0.4; transform: scale(1);}
+  to { opacity: 0.8; transform: scale(1.1);}
 }
 #gold-drop-img {
-  animation: goldDrop3D 1.6s cubic-bezier(.33,1.34,.46,.85) both;
+  width: 26vw;
+  min-width: 180px;
+  animation: drop3D 1s ease forwards;
 }
-@keyframes goldDrop3D {
-  0%   { transform: scale(0.2) rotateY(-44deg) rotateZ(-12deg); opacity: 0; filter: blur(14px) brightness(1.2);}
-  40%  { transform: scale(1.28) rotateY(15deg) rotateZ(8deg); opacity: 1; filter: blur(2px) brightness(1.3);}
-  66%  { transform: scale(1.09) rotateY(-12deg) rotateZ(-5deg);}
-  84%  { transform: scale(1.18) rotateY(10deg) rotateZ(5deg);}
-  100% { transform: scale(1) rotateY(0deg) rotateZ(0deg); opacity: 1; filter: none;}
-}
-/* ---- ANIM 3D ONETAP ---- */
-#gold-drop-img, #onetap-logo-img, .onetap-inventory-drop {
-  width: 120px;
-  max-width: 36vw;
-  filter: drop-shadow(0 0 32px gold) drop-shadow(0 0 15px #ffe066c7);
-  z-index: 2;
-}
-#onetap-logo-img {
-  animation: onetap3DPop 1.45s cubic-bezier(.39,2.04,.41,.87) both;
-}
-@keyframes onetap3DPop {
-  0%   { transform: scale(0.38) rotateY(-38deg) rotateZ(-17deg) translateY(70px); opacity: 0;}
-  50%  { transform: scale(1.21) rotateY(10deg) rotateZ(4deg) translateY(-18px);}
-  82%  { transform: scale(1.07) rotateY(-7deg) rotateZ(-2deg) translateY(5px);}
-  100% { transform: scale(1) rotateY(0deg) rotateZ(0deg) translateY(0); opacity: 1;}
-}
-#gold-drop-text, #onetap-drop-text {
+#gold-drop-text,
+#onetap-drop-text {
+  font-size: 1.3rem;
+  font-weight: bold;
   color: gold;
-  font-size: 1.7rem;
-  font-family: 'Press Start 2P', monospace, Arial;
-  margin-top: 2vw;
-  letter-spacing: 0.08em;
-  text-shadow: 0 0 12px #ffe066, 0 2px 2px #0c0733;
-  filter: brightness(1.18);
-  text-align: center;
-  user-select: none;
+  text-shadow: 0 0 6px #000;
+}
+.confetti-piece {
+  animation: fall 1.8s linear forwards;
+}
+@keyframes fall {
+  to { transform: translateY(240px) rotate(360deg); opacity: 0; }
 }
 
-/* Inventaire */
-#main-inventory h1 {
-  color: #ffe066;
-  text-align: center;
-  font-size: 2.2rem;
+/* -------- $ONETAP Drop -------- */
+.onetap-animation-wrapper img {
+  width: 30vw;
+  min-width: 200px;
+  animation: drop3D 1.2s ease forwards;
+}
+@keyframes drop3D {
+  0% { transform: scale(0.5) rotateX(80deg); opacity: 0; }
+  60% { transform: scale(1.1) rotateX(0deg); opacity: 1; }
+  100% { transform: scale(1) rotateX(0deg); }
+}
+#share-btn {
+  background: #ffe066;
+  border: none;
+  padding: .6rem 1.2rem;
   font-weight: bold;
-  margin-bottom: 3vw;
-  letter-spacing: 0.05em;
-  text-shadow: 0 0 13px #ffe06677, 0 3px 5px #090d1a;
+  color: #222;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+/* -------- Inventory -------- */
+#main-inventory {
+  position: fixed;
+  inset: 0;
+  background: #0e1322;
+  z-index: 4;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 4vh;
+  gap: 1rem;
+}
+.onetap-inventory-drop {
+  width: 22vw;
+  min-width: 160px;
 }
 .ticker {
-  margin-top: 2vw;
-  color: #fff8;
-  background: #1a1d2f44;
-  padding: 0.55em 1.6em;
-  border-radius: 10px;
-  font-size: 1.1rem;
-  letter-spacing: 0.08em;
-  box-shadow: 0 2px 8px #ffe06655;
-  border: 1.6px solid #ffe06677;
-  text-align: center;
-  opacity: 0.97;
+  background: #111;
+  border: 1px solid #ffe06644;
+  padding: .4rem 1rem;
+  font-size: .92rem;
+  border-radius: 5px;
 }
 
-/* --- Mute button --- */
+/* -------- Tokenomics Overlay -------- */
+.tokenomics-btn {
+  position: fixed;
+  bottom: 20px; left: 20px;
+  background: #ffe066;
+  color: #111;
+  border: none;
+  padding: .5rem .8rem;
+  font-size: .85rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  z-index: 9;
+}
+#tokenomics-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 10;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+#tokenomics-overlay.open { display: flex; }
+.tokenomics-modal {
+  background: #111827;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 620px;
+  text-align: center;
+}
+.tokenomics-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+  gap: .8rem;
+  margin-top: 1rem;
+}
+.tok-card {
+  background: #1a2036;
+  padding: .6rem;
+  border-radius: 8px;
+}
+.tok-label {
+  font-size: .8rem;
+  opacity: 0.6;
+}
+.tok-value {
+  font-weight: bold;
+  margin-top: .2rem;
+}
+.tok-sub {
+  font-size: .75rem;
+  opacity: 0.7;
+}
+.close-btn {
+  position: absolute;
+  top: 15px; right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #ffe066;
+}
+
+/* -------- Chart Placeholder -------- */
+.chart-container {
+  background: #0e1322;
+  border: 1px solid #ffe06622;
+  padding: 1rem;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+/* -------- Liquidity Badge -------- */
+.liquidity-badge {
+  margin-top: 1rem;
+  font-size: .85rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  justify-content: center;
+}
+
+/* -------- Killfeed -------- */
+#killfeed {
+  position: fixed;
+  top: 15px; right: 15px;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+}
+.kill-msg {
+  background: rgba(0,0,0,0.7);
+  padding: .3rem .6rem;
+  border-left: 3px solid #ffe066;
+  animation: fadeKill 3.8s forwards;
+}
+@keyframes fadeKill {
+  0%, 80% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(30px); }
+}
+
+/* -------- Mute Button -------- */
 #mute-btn {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
-  z-index: 99;
+  bottom: 20px; right: 20px;
+  z-index: 12;
   width: 38px; height: 38px;
   background: rgba(22,22,22,0.73);
   border: 1.5px solid #ffe066a0;
@@ -238,241 +320,20 @@ body, html {
   box-shadow: 0 2px 8px #ffe06644;
   color: gold;
   cursor: pointer;
-  opacity: 0.62;
-  transition: opacity .15s;
+  opacity: 0.7;
   display: flex; align-items: center; justify-content: center;
-  padding: 0;
+  transition: opacity .15s;
 }
-#mute-btn:active { opacity: 0.32; }
 #mute-btn:hover { opacity: 1; }
+#mute-btn:active { opacity: 0.32; }
 #mute-ico {
-  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
 }
 
-/* ----------- Mobile Responsive ----------- */
+/* -------- Responsive -------- */
 @media (max-width: 700px) {
-  #tap2enter-img { max-width: 99vw; max-height: 60vh; }
-  #watermark-logo { width: 120px; max-width: 67vw; bottom: 2vh; }
-  #gold-drop-img, #onetap-logo-img, .onetap-inventory-drop { width: 34vw; }
-  #gold-drop-text, #onetap-drop-text { font-size: 1rem; }
-  #main-inventory h1 { font-size: 1.10rem; }
-  .ticker { font-size: 0.97rem; padding: 0.4em 0.6em;}
-  .gold-flash { width: 170px; height: 200px; }
-  #mute-btn { right: 10px; bottom: 10px; width: 32px; height: 32px;}
-}
-/* --- TOKENOMICS SECTION --- */
-.info-section {
-  width: 100vw;
-  background: rgba(20,20,35,0.90);
-  padding: 3vw 0 2vw 0;
-  margin: 0; text-align: center;
-}
-.info-section h2 {
-  color: #ffe066;
-  font-size: 2.0rem;
-  margin-bottom: 1.6vw;
-  font-family: 'Press Start 2P', monospace, Arial;
-  letter-spacing: 0.03em;
-}
-.tokenomics-cards {
-  display: flex; flex-wrap: wrap; gap: 2vw 2vw;
-  justify-content: center;
-}
-.tokenomics-card {
-  background: #181c28e8;
-  border: 1.6px solid #ffe06633;
-  border-radius: 18px;
-  min-width: 190px;
-  padding: 1.2vw 2vw;
-  margin: 0.6vw;
-  box-shadow: 0 2px 12px #ffe06614;
-  display: flex; flex-direction: column; align-items: center;
-  font-size: 1.07rem;
-  color: #ffe066;
-  transition: transform 0.13s, box-shadow 0.13s;
-}
-.tokenomics-card:hover {
-  transform: scale(1.04);
-  box-shadow: 0 2px 24px #ffe06642;
-}
-.t-label {
-  font-size: 0.95rem;
-  color: #fff8;
-  margin-bottom: 0.1em;
-}
-.t-value {
-  font-size: 1.09rem;
-  color: #ffe066;
-  font-weight: bold;
-  letter-spacing: 0.02em;
-}
-.copy-contract {
-  display: flex; align-items: center; gap: 6px;
-}
-#copy-contract-btn {
-  background: none; border: none; cursor: pointer;
-  color: #ffe066; font-size: 1.2rem;
-  padding: 0;
-  filter: drop-shadow(0 0 4px #ffe066c7);
-  transition: color 0.1s;
-}
-#copy-contract-btn:hover { color: #fffac0; }
-
-/* --- CHART --- */
-.chart-container {
-  width: 92vw; max-width: 420px; height: 220px;
-  margin: 0 auto 3vw auto;
-  background: #171b28;
-  border-radius: 14px;
-  box-shadow: 0 2px 14px #ffe06611;
-  padding: 2vw 2vw;
-}
-canvas#fakeChart { width: 100%; height: 100%; }
-
-/* --- BADGE LOCKED --- */
-.liquidity-badge {
-  display: inline-flex; align-items: center; gap: 9px;
-  background: #24253a;
-  color: #ffe066;
-  border: 1px solid #ffe06644;
-  border-radius: 12px;
-  padding: 0.3em 1.1em;
-  font-size: 1rem;
-  margin: 1.3vw auto;
-  box-shadow: 0 2px 7px #ffe0661c;
-}
-.liquidity-badge img {
-  width: 22px; height: 22px;
-  filter: drop-shadow(0 0 6px #ffe06699);
-}
-.liquidity-badge a {
-  color: #ffe066; text-decoration: underline dotted;
-  font-size: 0.98em; margin-left: 0.6em;
-}
-
-/* --- KILLFEED --- */
-#killfeed {
-  position: fixed;
-  top: 3vw; left: 50%; transform: translateX(-50%);
-  z-index: 101;
-  min-width: 260px; max-width: 80vw;
-  text-align: center;
-  pointer-events: none;
-  font-family: 'Press Start 2P', Arial;
-  font-size: 1rem;
-}
-.kill-msg {
-  background: #0a0c21ee;
-  color: #ffe066;
-  border-radius: 16px;
-  margin: 0.3em auto;
-  display: inline-block;
-  padding: 0.3em 1.3em;
-  box-shadow: 0 2px 12px #ffe0663c;
-  animation: feedIn 0.45s cubic-bezier(.6,1.68,.7,.98), feedOut 0.8s 2.6s cubic-bezier(.9,.11,.07,.86) forwards;
-}
-@keyframes feedIn { from {opacity:0; transform:translateY(-30px);} to {opacity:1; transform:none;} }
-@keyframes feedOut { to {opacity:0; transform:translateY(-16px);} }
-
-/* --- Responsive Tokenomics/Chart --- */
-@media (max-width: 700px) {
-  .tokenomics-card { min-width: 140px; padding: 1.2em 0.6em; font-size: 0.89rem;}
-  .info-section h2 { font-size: 1.19rem; }
-  .chart-container { height: 130px; }
-}
-
-/* Bouton Tokenomics */
-.tokenomics-btn {
-  position: fixed;
-  left: 20px; bottom: 22px;
-  z-index: 60;
-  padding: 0.67em 1.2em;
-  background: rgba(255,224,102,0.16);
-  color: #ffe066;
-  border: 1.7px solid #ffe06688;
-  border-radius: 16px;
-  font-weight: bold;
-  letter-spacing: 0.08em;
-  font-size: 1.08rem;
-  box-shadow: 0 2px 13px #ffe06626;
-  cursor: pointer;
-  opacity: 0.78;
-  transition: opacity .18s, background .18s;
-}
-.tokenomics-btn:hover { opacity: 1; background: rgba(255,224,102,0.29);}
-@media (max-width: 700px) {
-  .tokenomics-btn {
-    left: 10px; bottom: 10px; font-size: 0.92rem; padding: 0.52em 0.93em;
-    border-radius: 10px;
-  }
-}
-
-/* Cache par défaut le lien ou bouton vers la section tokenomics */
-#open-tokenomics { display: none; }
-
-/* Overlay modal Tokenomics */
-#tokenomics-overlay {
-  display: none;  /* Affiché dynamiquement */
-  position: fixed; top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 120;
-  background: rgba(18,19,35,0.86);
-  backdrop-filter: blur(5px);
-  align-items: center; justify-content: center;
-}
-#tokenomics-overlay.open { display: flex; }
-.tokenomics-modal {
-  background: rgba(34,36,50,0.97);
-  border-radius: 18px;
-  padding: 2.5em 2.3em 1.7em 2.3em;
-  box-shadow: 0 0 60px 6px #ffe06622, 0 2px 34px #0c012b6b;
-  max-width: 92vw; width: 420px; max-height: 88vh;
-  display: flex; flex-direction: column; align-items: center;
-  position: relative;
-}
-.close-btn {
-  position: absolute; right: 1.1em; top: 1.1em;
-  background: transparent;
-  color: #ffe066;
-  border: none;
-  font-size: 1.65em;
-  opacity: 0.60; cursor: pointer;
-  transition: opacity .18s;
-  z-index: 2;
-}
-.close-btn:hover { opacity: 1; }
-.tokenomics-modal h2 {
-  color: #ffe066; font-family: 'Press Start 2P', monospace, Arial;
-  letter-spacing: 0.04em;
-  margin-bottom: 2em; font-size: 1.3em; text-align: center;
-}
-.tokenomics-cards {
-  width: 100%;
-  display: flex; justify-content: space-between; gap: 1.2em;
-  margin-bottom: 1.3em;
-}
-.tok-card {
-  flex: 1 1 0;
-  background: #191a28e6;
-  border-radius: 13px;
-  box-shadow: 0 2px 14px #ffe06626;
-  border: 1.5px solid #ffe06642;
-  padding: 1.2em 0.5em 0.95em 0.5em;
-  display: flex; flex-direction: column; align-items: center;
-}
-.tok-label {
-  font-size: 1em;
-  color: #ffe066dd;
-  margin-bottom: 0.45em;
-  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-}
-.tok-value {
-  font-size: 1.22em;
-  color: #fff; font-weight: 700;
-}
-.tok-sub { font-size: 0.95em; color: #ffe066a0; display: block; margin-top: 0.19em;}
-@media (max-width: 700px) {
-  .tokenomics-modal { padding: 1.1em 0.7em 1.3em 0.7em; width: 98vw; }
-  .tokenomics-cards { flex-direction: column; gap: 0.88em;}
-  .tok-card { padding: 0.82em 0.4em 0.73em 0.4em;}
+  #tap2enter-img { max-width: 98vw; max-height: 60vh; }
+  #gold-drop-img, .onetap-inventory-drop { width: 44vw; }
+  .onetap-animation-wrapper img { width: 46vw; }
+  .tokenomics-cards { grid-template-columns: 1fr 1fr; }
 }
