@@ -283,5 +283,45 @@ function launchConfetti(){
   }
   setTimeout(() => { container.innerHTML = ''; }, 2000);
 }
+// ========= Minimal EIP-1193 helpers (Base) =========
+const BASE = {
+  chainId: '0x2105', // 8453
+  chainName: 'Base',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: ['https://mainnet.base.org'],
+  blockExplorerUrls: ['https://basescan.org']
+};
+
+async function web3EnsureBase(){
+  if (!window.ethereum) return false;
+  try{
+    const chainId = await window.ethereum.request({ method:'eth_chainId' });
+    if (chainId !== BASE.chainId){
+      try{
+        await window.ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId: BASE.chainId }] });
+      }catch(switchErr){
+        if (switchErr.code === 4902){
+          await window.ethereum.request({ method:'wallet_addEthereumChain', params:[BASE] });
+        }else{ throw switchErr; }
+      }
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+// (optionnel) Ajouter le token dans le wallet (EIP-747)
+async function addTokenToWallet(address, symbol='ONETAP', decimals=18, imagePath='/assets/onetap_logo.png'){
+  if (!window.ethereum) return false;
+  try{
+    await window.ethereum.request({
+      method: 'wallet_watchAsset',
+      params: { type: 'ERC20', options: {
+        address, symbol, decimals, image: location.origin + imagePath
+      }}
+    });
+    pushKill('Token added to wallet!');
+    return true;
+  }catch(e){ pushKill('Add token refused'); return false; }
+}
 
 /* Fin */
