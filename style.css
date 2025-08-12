@@ -190,7 +190,7 @@ canvas#fakeChart{width:100%;height:100%}
 @keyframes feedIn{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:none}}
 @keyframes feedOut{to{opacity:0;transform:translateY(-16px)}}
 
-/* Mute */
+/* Music */
 #mute-btn{
   position:fixed;right:18px;bottom:18px;z-index:99;width:38px;height:38px;background:rgba(22,22,22,.72);
   border:1.5px solid rgba(255,224,102,.62);border-radius:50%;box-shadow:0 2px 8px rgba(255,224,102,.25);
@@ -199,6 +199,29 @@ canvas#fakeChart{width:100%;height:100%}
 #mute-btn:hover{opacity:1;transform:translateY(-1px)}
 #mute-btn:active{opacity:.35;transform:translateY(0)}
 #mute-ico{display:inline-flex;width:100%;height:100%;align-items:center;justify-content:center}
+
+#volume-control {
+  position: fixed;
+  bottom: 18px;
+  right: 60px; /* à gauche du bouton mute */
+  z-index: 99;
+  background: rgba(22,22,22,0.73);
+  border: 1.5px solid #ffe066a0;
+  border-radius: 10px;
+  padding: 4px 6px;
+  box-shadow: 0 2px 8px #ffe06644;
+  opacity: 0.62;
+  transition: opacity 0.15s;
+}
+
+#volume-control:hover {
+  opacity: 1;
+}
+
+#volume-slider {
+  width: 100px;
+  background: transparent;
+}
 
 /* Responsive */
 @media (max-width:700px){
