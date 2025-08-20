@@ -1,90 +1,72 @@
-/* ========= $ONETAP v3.2 – script.js ========= */
+/* ========= $ONETAP v3.3 – script.js ========= */
 
-// Audio refs
-const musicWelcome = document.getElementById('music-welcome');
-const musicMain    = document.getElementById('music-main');
-const musicEpic    = document.getElementById('music-epic');
-const headshot     = document.getElementById('headshot-sound');
-const rouletteSfx  = document.getElementById('roulette-sound');
-const dropRareSfx  = document.getElementById('drop-rare-sound');
+// --------- Helpers ---------
+function $(id){ return document.getElementById(id); }
 
-// Stages
-const welcome      = document.getElementById('welcome-screen');
-const loader       = document.getElementById('loader');
-const rouletteScr  = document.getElementById('roulette-screen');
-const rouletteBox  = document.getElementById('roulette-container');
-const goldDropScr  = document.getElementById('gold-drop-screen');
-const onetapScr    = document.getElementById('onetap-drop-screen');
-const mainInv      = document.getElementById('main-inventory');
+// --------- Audio refs ---------
+const musicWelcome = $('music-welcome');
+const musicMain    = $('music-main');
+const musicEpic    = $('music-epic');
+const headshot     = $('headshot-sound');
+const rouletteSfx  = $('roulette-sound');
+const dropRareSfx  = $('drop-rare-sound');
 
-// Tokenomics modal
-const openTokBtn   = document.getElementById('open-tokenomics');
-const tokOverlay   = document.getElementById('tokenomics-overlay');
-const closeTokBtn  = document.getElementById('close-tokenomics');
+// --------- Stage refs ---------
+const welcome      = $('welcome-screen');
+const loader       = $('loader');
+const rouletteScr  = $('roulette-screen');
+const rouletteBox  = $('roulette-container');
+const goldDropScr  = $('gold-drop-screen');
+const onetapScr    = $('onetap-drop-screen');
+const mainInv      = $('main-inventory');
 
-// Mute
-const muteBtn      = document.getElementById('mute-btn');
-const muteIco      = document.getElementById('mute-ico');
+// --------- Tokenomics modal ---------
+const openTokBtn   = $('open-tokenomics');   // affiché après inventaire
+const tokOverlay   = $('tokenomics-overlay');
+const closeTokBtn  = $('close-tokenomics');
+
+// --------- Mute & Volume ---------
+const muteBtn      = $('mute-btn');
+const muteIco      = $('mute-ico');
+const volSlider    = $('volume-slider');
+
 let muted = false;
-
-// Liste des IDs audio à gérer
 const audioIds = [
-  'music-welcome', 
-  'music-main', 
-  'music-epic', 
-  'headshot-sound', 
-  'roulette-sound', 
-  'drop-rare-sound'
+  'music-welcome','music-main','music-epic',
+  'headshot-sound','roulette-sound','drop-rare-sound'
 ];
+const audios = audioIds.map(id => $(id));
+const allAudios = [musicWelcome, musicMain, musicEpic, headshot, rouletteSfx, dropRareSfx];
 
-const audios = audioIds.map(id => document.getElementById(id));
-
-document.getElementById('volume-slider').addEventListener('input', e => {
-  const volume = parseFloat(e.target.value);
-  audios.forEach(audio => {
-    if (audio) audio.volume = volume;
-  });
-  localStorage.setItem('onetap_volume', volume); // sauvegarde préférences
-});
-
-// Charger le volume sauvegardé
-window.addEventListener('load', () => {
-  const savedVolume = localStorage.getItem('onetap_volume');
-  if (savedVolume !== null) {
-    document.getElementById('volume-slider').value = savedVolume;
-    audios.forEach(audio => audio.volume = parseFloat(savedVolume));
-  }
-});
-
-// Constants roulette
-const NB_CASES_VISIBLE = 9;     // gold centré
+// --------- Roulette constants ---------
+const NB_CASES_VISIBLE = 9;
 const NB_CASES_TOTAL   = 38;
-const SPIN_DURATION    = 7000;  // 7s
+const SPIN_DURATION    = 7000;
 
-// Particles background
+// --------- Particles boot ---------
 window.addEventListener('DOMContentLoaded', () => {
-  // Welcome music (tentative auto-play; mobile requiert parfois un user gesture)
-  try { musicWelcome.volume = 0.7; musicWelcome.play().catch(()=>{}); } catch{}
+  // tentative auto-play (mobile req. user gesture)
+  try { if (musicWelcome){ musicWelcome.volume = 0.7; musicWelcome.play().catch(()=>{}); } } catch {}
   initParticles();
 });
 
-// Tap to start
+// --------- Tap to start ---------
 let tapHandled = false;
 function handleTapStart(){
   if (tapHandled) return;
   tapHandled = true;
 
-  // Haptique mobile
   if (navigator.vibrate) navigator.vibrate(60);
+  try { headshot.currentTime = 0; headshot.play(); } catch {}
 
-  // Headshot + fade out welcome
-  try { headshot.currentTime = 0; headshot.play(); } catch{}
   setTimeout(() => {
-    try { musicWelcome.pause(); } catch{}
+    try { musicWelcome?.pause(); } catch {}
     welcome.style.opacity = 0;
+
     setTimeout(() => {
       welcome.style.display = 'none';
       loader.style.display = 'flex';
+
       setTimeout(() => {
         loader.style.display = 'none';
         startRoulette();
@@ -92,17 +74,15 @@ function handleTapStart(){
     }, 750);
   }, 850);
 }
-welcome.addEventListener('click', handleTapStart, {passive:true});
-welcome.addEventListener('touchstart', handleTapStart, {passive:true});
+welcome?.addEventListener('click', handleTapStart, {passive:true});
+welcome?.addEventListener('touchstart', handleTapStart, {passive:true});
 
-// Roulette logic
+// --------- Roulette ---------
 function startRoulette(){
-  // Main music
-  try { musicMain.volume = 0.58; musicMain.play().catch(()=>{}); } catch{}
+  try { if (musicMain){ musicMain.volume = 0.58; musicMain.play().catch(()=>{}); } } catch {}
   rouletteScr.style.display = 'flex';
   rouletteBox.innerHTML = '';
 
-  // Pool (toutes blanches sauf une gold)
   const pool = [];
   for (let i=0;i<NB_CASES_TOTAL-1;i++) pool.push('assets/case_blank.png');
   pool.push('assets/onetap_gold.png');
@@ -110,16 +90,17 @@ function startRoulette(){
   const totalScroll = pool.length * 8;
   const finalPos = (pool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
 
-  try { rouletteSfx.currentTime = 0; rouletteSfx.volume = 0.4; rouletteSfx.play(); } catch{}
+  try { rouletteSfx.currentTime = 0; rouletteSfx.volume = 0.4; rouletteSfx.play(); } catch {}
 
   const t0 = Date.now();
 
   function render(pos, blur=false){
     rouletteBox.innerHTML = '';
     if (blur) rouletteBox.classList.add('blurred'); else rouletteBox.classList.remove('blurred');
-    for(let i=0;i<NB_CASES_VISIBLE;i++){
+
+    for (let i=0;i<NB_CASES_VISIBLE;i++){
       const idx = (pos + i) % pool.length;
-      const isGold = (idx === pool.length-1 && i === Math.floor(NB_CASES_VISIBLE/2));
+      const isGold = (idx === pool.length - 1 && i === Math.floor(NB_CASES_VISIBLE/2));
       const cell = document.createElement('div');
       cell.className = 'roulette-case' + (isGold ? ' gold' : '');
       const img = document.createElement('img');
@@ -131,27 +112,25 @@ function startRoulette(){
   }
 
   function animate(){
-    const elapsed = Date.now() - t0;
+    const elapsed  = Date.now() - t0;
     const progress = Math.min(elapsed / SPIN_DURATION, 1);
-    const ease = 1 - Math.pow(1 - progress, 2.2);
-    const pos = Math.floor(totalScroll * ease);
-    const cur = (pos + finalPos) % pool.length;
+    const ease     = 1 - Math.pow(1 - progress, 2.2); // easing out
+    const pos      = Math.floor(totalScroll * ease);
+    const cur      = (pos + finalPos) % pool.length;
 
-    // blur au début, propre à la fin
     render(cur, progress < 0.8);
 
-    if (progress < 1){
-      requestAnimationFrame(animate);
-    } else {
-      try { rouletteSfx.pause(); } catch{}
-      try { dropRareSfx.currentTime = 0; dropRareSfx.play(); } catch{}
+    if (progress < 1) requestAnimationFrame(animate);
+    else {
+      try { rouletteSfx.pause(); } catch {}
+      try { dropRareSfx.currentTime = 0; dropRareSfx.play(); } catch {}
       setTimeout(showGoldDrop, 1200);
     }
   }
   animate();
 }
 
-// Gold Drop
+// --------- Gold Drop ---------
 function showGoldDrop(){
   rouletteScr.style.display = 'none';
   goldDropScr.style.display = 'flex';
@@ -159,11 +138,10 @@ function showGoldDrop(){
 
   setTimeout(() => {
     if (navigator.vibrate) navigator.vibrate(60);
-    // Clique pour continuer
-    goldDropScr.addEventListener('click', showOnetapDrop, { once:true });
-    goldDropScr.addEventListener('touchstart', showOnetapDrop, { once:true, passive:true });
 
-    // Prompt texte
+    goldDropScr.addEventListener('click',       showOnetapDrop, { once:true });
+    goldDropScr.addEventListener('touchstart',  showOnetapDrop, { once:true, passive:true });
+
     const hint = document.createElement('span');
     hint.textContent = 'Tap to continue';
     hint.style.cssText = 'color:#fff;font-size:1rem;opacity:.7;margin-top:2vw;animation:pulseText 1s infinite alternate;';
@@ -171,71 +149,84 @@ function showGoldDrop(){
   }, 900);
 }
 
-// ONETAP final + epic music
+// --------- Final $ONETAP + epic music ---------
 function showOnetapDrop(){
   goldDropScr.style.opacity = 0;
+
   setTimeout(() => {
     goldDropScr.style.display = 'none';
     onetapScr.style.display = 'flex';
 
-    // Swap musiques proprement
-    try { musicMain.pause(); } catch{}
+    try { musicMain?.pause(); } catch {}
     try {
-      musicEpic.pause();
-      musicEpic.currentTime = 0;
-      musicEpic.loop = true;
-      musicEpic.volume = 0.7;
-      musicEpic.play().catch(()=>{});
-    } catch{}
+      musicEpic?.pause();
+      if (musicEpic){
+        musicEpic.currentTime = 0;
+        musicEpic.loop = true;
+        musicEpic.volume = 0.7;
+        musicEpic.play().catch(()=>{});
+      }
+    } catch {}
 
     if (navigator.vibrate) navigator.vibrate(70);
 
     setTimeout(() => {
-      const share = document.getElementById('share-btn');
-      share.style.display = 'inline-block';
-      onetapScr.addEventListener('click', showMainInventory, { once:true });
+      const share = $('share-btn');
+      if (share){
+        share.style.display = 'inline-block';
+      }
+      onetapScr.addEventListener('click',      showMainInventory, { once:true });
       onetapScr.addEventListener('touchstart', showMainInventory, { once:true, passive:true });
     }, 2000);
   }, 650);
 }
 
-// Inventory
+// --------- Inventory ---------
 function showMainInventory(){
   onetapScr.style.display = 'none';
-  mainInv.style.display = 'flex';
+  mainInv.style.display   = 'flex';
   if (navigator.vibrate) navigator.vibrate(50);
 
-  // Affiche bouton tokenomics
-  openTokBtn.style.display = 'inline-flex';
-
-  // Petit killfeed
+  if (openTokBtn){ openTokBtn.style.display = 'inline-flex'; }
   pushKill('Welcome to your $ONETAP inventory!');
 }
 
-// Tokenomics modal
-openTokBtn.addEventListener('click', () => {
-  tokOverlay.classList.add('open');
-});
-closeTokBtn.addEventListener('click', () => {
-  tokOverlay.classList.remove('open');
-});
-tokOverlay.addEventListener('click', (e) => {
-  if (e.target === tokOverlay) tokOverlay.classList.remove('open');
+// --------- Tokenomics modal (A11y + ESC) ---------
+openTokBtn?.addEventListener('click', () => {
+  tokOverlay?.classList.add('open');
+  openTokBtn.setAttribute('aria-expanded','true');
+  // Focus trap (optionnel) :
+  // tokOverlay?.querySelector('.tokenomics-modal button, .tokenomics-modal a, .tokenomics-modal [tabindex]')
+  //   ?.focus();
 });
 
-// Copy contract
-const copyBtn = document.getElementById('copy-contract-btn');
-if (copyBtn){
-  copyBtn.addEventListener('click', async () => {
-    const addr = document.getElementById('contract-address').textContent.trim();
-    try { await navigator.clipboard.writeText(addr); pushKill('Contract copied!'); }
-    catch { pushKill('Copy failed'); }
-  });
+function closeTok(){
+  tokOverlay?.classList.remove('open');
+  openTokBtn?.setAttribute('aria-expanded','false');
+  openTokBtn?.focus?.();
 }
 
-// Killfeed helpers
+closeTokBtn?.addEventListener('click', closeTok);
+
+tokOverlay?.addEventListener('click', (e) => {
+  if (e.target === tokOverlay) closeTok();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (tokOverlay?.classList.contains('open') && e.key === 'Escape') closeTok();
+});
+
+// --------- Copy contract ---------
+$('copy-contract-btn')?.addEventListener('click', async () => {
+  const addr = $('contract-address')?.textContent.trim();
+  if (!addr) return pushKill('No contract found');
+  try { await navigator.clipboard.writeText(addr); pushKill('Contract copied!'); }
+  catch { pushKill('Copy failed'); }
+});
+
+// --------- Killfeed ---------
 function pushKill(text){
-  const feed = document.getElementById('killfeed');
+  const feed = $('killfeed'); if (!feed) return;
   const msg = document.createElement('div');
   msg.className = 'kill-msg';
   msg.textContent = text;
@@ -243,25 +234,73 @@ function pushKill(text){
   setTimeout(() => { msg.remove(); }, 3600);
 }
 
-// Mute
-const allAudios = [musicWelcome, musicMain, musicEpic, headshot, rouletteSfx, dropRareSfx];
-muteBtn.addEventListener('click', () => {
+// --------- Mute / Volume (persist) ---------
+(function initAudioPrefs(){
+  // volume
+  const savedVolume = localStorage.getItem('onetap_volume');
+  if (savedVolume !== null && volSlider){
+    volSlider.value = savedVolume;
+    audios.forEach(a => { if (a) a.volume = parseFloat(savedVolume); });
+  }
+  // muted
+  const savedMuted = localStorage.getItem('onetap_muted') === 'true';
+  if (savedMuted){
+    muted = true;
+    allAudios.forEach(a => { try{ a.muted = true; }catch{} });
+    if (muteIco) muteIco.textContent = '🔈';
+    muteBtn?.setAttribute('aria-pressed','true');
+    if (muteBtn) muteBtn.style.opacity = .35;
+  }
+})();
+
+if (volSlider){
+  volSlider.addEventListener('input', e => {
+    const volume = parseFloat(e.target.value);
+    audios.forEach(a => { if (a) a.volume = volume; });
+    localStorage.setItem('onetap_volume', volume);
+
+    // auto sync mute UI if volume=0
+    const shouldMute = (volume === 0);
+    if (shouldMute !== muted){
+      muted = shouldMute;
+      allAudios.forEach(a => { try{ a.muted = muted; }catch{} });
+      if (muteIco) muteIco.textContent = muted ? '🔈' : '🔊';
+      muteBtn?.setAttribute('aria-pressed', muted ? 'true' : 'false');
+      if (muteBtn) muteBtn.style.opacity = muted ? .35 : .7;
+      localStorage.setItem('onetap_muted', String(muted));
+    }
+  });
+}
+
+muteBtn?.addEventListener('click', () => {
   muted = !muted;
   allAudios.forEach(a => { try{ a.muted = muted; }catch{} });
-  muteIco.textContent = muted ? '🔈' : '🔊';
-  muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
-  muteBtn.style.opacity = muted ? .35 : .7;
+  if (muteIco) muteIco.textContent = muted ? '🔈' : '🔊';
+  muteBtn?.setAttribute('aria-pressed', muted ? 'true' : 'false');
+  if (muteBtn) muteBtn.style.opacity = muted ? .35 : .7;
+  localStorage.setItem('onetap_muted', String(muted));
 });
 
-// Particles
+// --------- iOS visibility: reprise audio si non muté ---------
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && !muted){
+    if (onetapScr?.style.display === 'flex') { musicEpic?.play().catch(()=>{}); }
+    else if (rouletteScr?.style.display === 'flex') { musicMain?.play().catch(()=>{}); }
+  }
+}, {passive:true});
+
+// --------- Particles ---------
 function initParticles(){
-  const canvas = document.getElementById('background-canvas');
+  const canvas = $('background-canvas'); if (!canvas) return;
   const ctx = canvas.getContext('2d');
   let W = canvas.width = window.innerWidth;
   let H = canvas.height = window.innerHeight;
 
   const P = [];
-  for(let i=0;i<38;i++){
+  const lowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+  const COUNT = lowPower ? 22 : 38;
+
+  for (let i=0;i<COUNT;i++){
     const r = 1 + Math.random()*2;
     P.push({
       x: Math.random()*W, y: Math.random()*H, r,
@@ -272,7 +311,7 @@ function initParticles(){
 
   function step(){
     ctx.clearRect(0,0,W,H);
-    for(const p of P){
+    for (const p of P){
       ctx.beginPath();
       ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
       ctx.fillStyle = p.col;
@@ -294,7 +333,7 @@ function initParticles(){
   });
 }
 
-// Confetti
+// --------- Confetti ---------
 function launchConfetti(){
   const container = document.querySelector('.confetti');
   if (!container) return;
@@ -304,15 +343,18 @@ function launchConfetti(){
     el.className = 'confetti-piece';
     el.style.cssText = `
       position:absolute;width:11px;height:15px;left:${Math.random()*98}%;
-      top:${Math.random()*44+20}%;background:${['gold','#ffe066','#fff','#f6c62b','#ead044'][Math.floor(Math.random()*5)]};
-      opacity:${0.75 + Math.random()*0.23};transform:rotate(${Math.random()*360}deg) scale(${0.7+Math.random()*0.4});
+      top:${Math.random()*44+20}%;
+      background:${['gold','#ffe066','#fff','#f6c62b','#ead044'][Math.floor(Math.random()*5)]};
+      opacity:${0.75 + Math.random()*0.23};
+      transform:rotate(${Math.random()*360}deg) scale(${0.7+Math.random()*0.4});
       border-radius:2px;z-index:7;
     `;
     container.appendChild(el);
   }
   setTimeout(() => { container.innerHTML = ''; }, 2000);
 }
-// ========= Minimal EIP-1193 helpers (Base) =========
+
+// --------- Minimal EIP-1193 helpers (Base) ---------
 const BASE = {
   chainId: '0x2105', // 8453
   chainName: 'Base',
@@ -327,18 +369,23 @@ async function web3EnsureBase(){
     const chainId = await window.ethereum.request({ method:'eth_chainId' });
     if (chainId !== BASE.chainId){
       try{
-        await window.ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId: BASE.chainId }] });
+        await window.ethereum.request({
+          method:'wallet_switchEthereumChain',
+          params:[{ chainId: BASE.chainId }]
+        });
       }catch(switchErr){
         if (switchErr.code === 4902){
           await window.ethereum.request({ method:'wallet_addEthereumChain', params:[BASE] });
-        }else{ throw switchErr; }
+        }else{
+          throw switchErr;
+        }
       }
     }
     return true;
   }catch(e){ return false; }
 }
 
-// (optionnel) Ajouter le token dans le wallet (EIP-747)
+// Ajouter le token au wallet (EIP-747)
 async function addTokenToWallet(address, symbol='ONETAP', decimals=18, imagePath='/assets/onetap_logo.png'){
   if (!window.ethereum) return false;
   try{
@@ -350,7 +397,22 @@ async function addTokenToWallet(address, symbol='ONETAP', decimals=18, imagePath
     });
     pushKill('Token added to wallet!');
     return true;
-  }catch(e){ pushKill('Add token refused'); return false; }
+  }catch(e){
+    pushKill('Add token refused');
+    return false;
+  }
 }
 
-/* Fin */
+// (expose handler si tu ajoutes un bouton dans la modale)
+$('btn-add-wallet')?.addEventListener('click', async () => {
+  const addr = $('contract-address')?.textContent.trim() || '';
+  if (!addr) return pushKill('No contract found');
+  await addTokenToWallet(addr, 'ONETAP', 18);
+});
+
+// (optionnel) s’assurer d’être sur Base avant Buy (si tu as un lien #buy-link)
+$('buy-link')?.addEventListener('click', async () => {
+  await web3EnsureBase();
+});
+
+/* ========= Fin ========= */
