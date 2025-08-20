@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>$ONETAP – Meme Token Inventory</title>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
-  <!-- PWA and Icon -->
+
+  <!-- PWA / Icons -->
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#090d1a">
-<link rel="icon" href="assets/onetap_logo.png">
+  <meta name="theme-color" content="#090d1a">
+  <link rel="icon" href="assets/onetap_logo.png">
+  <!-- iOS PWA (optionnel) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="assets/onetap_logo.png">
+
+  <!-- SEO / Social -->
+  <meta name="description" content="$ONETAP is a community meme token on Base. Fair launch. Liquidity locked.">
+  <meta name="keywords" content="ONETAP, meme coin, Base chain, crypto, token, fair launch">
+  <meta property="og:title" content="$ONETAP" />
+  <meta property="og:description" content="Community meme token on Base. Fair launch. Liquidity locked." />
+  <!-- Remplace l’URL ci‑dessous par l’URL absolue de ta social card -->
+  <meta property="og:image" content="https://onetapmeme.github.io/onetap-site/assets/social-card.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://onetapmeme.github.io/onetap-site/">
+  <meta name="twitter:card" content="summary_large_image" />
 </head>
 <body>
   <!-- Fond animé particules (permanent) -->
@@ -70,12 +88,19 @@
     <div class="ticker">Fair Launch • Liquidity Locked • $ONETAP just hit a new ATH!</div>
   </section>
 
-  <!-- Bouton Tokenomics (affiché quand inventaire visible) -->
-  <button id="open-tokenomics" class="tokenomics-btn" style="display:none;" aria-haspopup="dialog" aria-controls="tokenomics-overlay">
+  <!-- Bouton Tokenomics (rendu quand inventaire visible par JS) -->
+  <button
+    id="open-tokenomics"
+    class="tokenomics-btn"
+    style="display:none;"
+    aria-haspopup="dialog"
+    aria-controls="tokenomics-overlay"
+    aria-expanded="false"
+  >
     📈 Tokenomics
   </button>
 
-  <!-- Overlay Tokenomics -->
+  <!-- Overlay Tokenomics (caché par CSS: #tokenomics-overlay { display:none }) -->
   <div id="tokenomics-overlay" role="dialog" aria-modal="true" aria-labelledby="tokenomics-title">
     <div class="tokenomics-modal">
       <button id="close-tokenomics" class="close-btn" aria-label="Close tokenomics">✖</button>
@@ -121,24 +146,25 @@
 
   <!-- Killfeed -->
   <div id="killfeed" aria-live="polite" aria-atomic="true"></div>
-  
+
   <!-- Contrôle volume discret -->
-<div id="volume-control">
-  <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
-</div>
+  <div id="volume-control" aria-label="Volume">
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Master volume">
+  </div>
 
   <!-- Bouton Mute -->
   <button id="mute-btn" title="Mute/Unmute Music" aria-pressed="false">
     <span id="mute-ico" aria-hidden="true">🔊</span>
   </button>
 
-  <script src="script.js"></script>
+  <!-- JS principal (defer pour ne pas bloquer le rendu) -->
+  <script src="script.js" defer></script>
   <script>
-  if ('serviceWorker' in navigator){
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').catch(()=>{});
-    });
-  }
-</script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(()=>{});
+      });
+    }
+  </script>
 </body>
 </html>
