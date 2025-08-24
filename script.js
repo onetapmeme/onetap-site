@@ -37,6 +37,46 @@ const CONFIG = {
   if (m) CONFIG.DEX_EMBED = `https://dexscreener.com/base/${m[1]}?embed=1&theme=dark`;
 })();
 
+// =======================
+// Gestion Audio Avancée
+// =======================
+
+// Liste des musiques (déjà définies dans ton code)
+const MUSIC = [musicWelcome, musicMain, musicEpic];
+
+// Mix global (master & sous-groupes)
+const MIX = {
+  master: 1.0,
+  music: 0.7,
+  sfx: 0.8
+};
+
+// Crossfade : transition douce entre musiques
+async function fadeTo(nextAudio, {inMs=900, outMs=600} = {}){
+  const all = MUSIC.filter(Boolean);
+  // fade out des autres
+  const outs = all.filter(a=>a!==nextAudio).map(a=>fade(a, 0, outMs));
+  await Promise.allSettled(outs);
+  // start + fade in du prochain
+  try { 
+    nextAudio.volume = 0; 
+    await nextAudio.play(); 
+  } catch {}
+  await fade(nextAudio, MIX.master*MIX.music, inMs);
+}
+
+function fade(audio, target, ms){
+  return new Promise(res=>{
+    const start = audio.volume, t0 = performance.now();
+    function step(t){
+      const p = Math.min(1, (t - t0)/ms);
+      audio.volume = start + (target - start)*p;
+      if (p<1) requestAnimationFrame(step); else res();
+    }
+    requestAnimationFrame(step);
+  });
+}
+
 // ===== Audio Mixer v1 =====
 const MIX = {
   master: parseFloat(localStorage.getItem('vol_master') ?? '1'),
