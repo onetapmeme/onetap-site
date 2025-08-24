@@ -6,15 +6,38 @@ permissions:
   contents: read
   pages: write
   id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Run smoke tests
+        run: node tests/smoke.test.js
+      - name: Link checker
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: >-
+            --verbose --no-progress
+            --accept 200,429
+            ./index.html ./legal/*.html ./seo/sitemap.xml
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
   build:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
+        with: { path: '.' }
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
