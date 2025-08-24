@@ -441,3 +441,30 @@ async function addTokenToWallet(address, symbol='ONETAP', decimals=18){
     return true;
   }catch{ pushKill('Add token refused'); return false; }
 }
+
+function trapFocus(modal, firstFocusEl){
+  const focusables = modal.querySelectorAll('button,a,textarea,input,select,[tabindex]:not([tabindex="-1"])');
+  const first = firstFocusEl || focusables[0];
+  const last  = focusables[focusables.length-1];
+  function loop(e){
+    if(e.key!=='Tab') return;
+    if(e.shiftKey && document.activeElement===first){ last.focus(); e.preventDefault(); }
+    else if(!e.shiftKey && document.activeElement===last){ first.focus(); e.preventDefault(); }
+  }
+  modal.addEventListener('keydown', loop);
+  first?.focus();
+  return ()=> modal.removeEventListener('keydown', loop);
+}
+
+// open/close
+let untrap = null, openerBtn = document.getElementById('open-tokenomics');
+document.getElementById('open-tokenomics')?.addEventListener('click', ()=>{
+  populateTokenomicsUI();
+  document.getElementById('tokenomics-overlay').classList.add('open');
+  untrap = trapFocus(document.querySelector('.tokenomics-modal'), document.getElementById('close-tokenomics'));
+});
+document.getElementById('close-tokenomics')?.addEventListener('click', ()=>{
+  document.getElementById('tokenomics-overlay').classList.remove('open');
+  untrap?.(); openerBtn?.focus();
+});
+
