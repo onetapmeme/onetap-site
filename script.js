@@ -37,6 +37,61 @@ const CONFIG = {
   if (m) CONFIG.DEX_EMBED = `https://dexscreener.com/base/${m[1]}?embed=1&theme=dark`;
 })();
 
+// ===== Audio Mixer v1 =====
+const MIX = {
+  master: parseFloat(localStorage.getItem('vol_master') ?? '1'),
+  music:  parseFloat(localStorage.getItem('vol_music')  ?? '0.8'),
+  sfx:    parseFloat(localStorage.getItem('vol_sfx')    ?? '1'),
+  duckingDb: -12,          // baisse de la musique en dB pendant un SFX fort
+  duckMs: 1200,            // durée ducking ms
+  _duckTimer: null,
+};
+
+const A = {
+  welcome: document.getElementById('music-welcome'),
+  main:    document.getElementById('music-main'),
+  epic:    document.getElementById('music-epic'),
+  head:    document.getElementById('headshot-sound'),
+  roll:    document.getElementById('roulette-sound'),
+  rare:    document.getElementById('drop-rare-sound'),
+};
+const MUSIC = [A.welcome, A.main, A.epic];
+const SFX   = [A.head, A.roll, A.rare];
+
+function applyGains(){
+  const m = MIX.master;
+  MUSIC.forEach(a => { if(a){ a.volume = m * MIX.music; }});
+  SFX.forEach(a   => { if(a){ a.volume = m * MIX.sfx;   }});
+}
+
+function setMaster(v){ MIX.master = clamp01(v); localStorage.setItem('vol_master', String(MIX.master)); applyGains(); }
+function setMusic (v){ MIX.music  = clamp01(v); localStorage.setItem('vol_music',  String(MIX.music));  applyGains(); }
+function setSfx   (v){ MIX.sfx    = clamp01(v); localStorage.setItem('vol_sfx',    String(MIX.sfx));    applyGains(); }
+function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+function dbToLin(db){ return Math.pow(10, db/20); }
+
+function duckMusicOnce(){
+  if (!MUSIC.length) return;
+  clearTimeout(MIX._duckTimer);
+  const factor = dbToLin(MIX.duckingDb); // ~0.25 pour -12 dB
+  MUSIC.forEach(a => { if(a){ a.volume = MIX.master * MIX.music * factor; }});
+  MIX._duckTimer = setTimeout(applyGains, MIX.duckMs);
+}
+
+// branchements UI (3 sliders si tu veux)
+document.getElementById('volume-slider')?.addEventListener('input', e => setMaster(parseFloat(e.target.value)));
+// (optionnel) si tu ajoutes #music-slider/#sfx-slider :
+document.getElementById('music-slider')?.addEventListener('input', e => setMusic(parseFloat(e.target.value)));
+document.getElementById('sfx-slider')?.addEventListener('input', e => setSfx(parseFloat(e.target.value)));
+
+window.addEventListener('load', applyGains);
+
+// Exemple: joue un SFX "fort" avec ducking
+function playRare(){
+  try { A.rare.currentTime = 0; A.rare.play().catch(()=>{}); duckMusicOnce(); } catch {}
+}
+
 /* ====== Audio refs ====== */
 const musicWelcome = document.getElementById('music-welcome');
 const musicMain    = document.getElementById('music-main');
