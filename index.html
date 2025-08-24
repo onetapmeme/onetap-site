@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>$ONETAP – Meme Token Inventory</title>
 
@@ -10,23 +11,39 @@
   <meta name="theme-color" content="#090d1a">
   <link rel="icon" href="assets/onetap_logo.png">
 
+  <!-- Security (meta CSP for GitHub Pages; keep no inline scripts) -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+                 img-src 'self' data: https:;
+                 media-src 'self' https:;
+                 style-src 'self' 'unsafe-inline';
+                 script-src 'self';
+                 connect-src 'self' https://mainnet.base.org;
+                 frame-src https://dexscreener.com;
+                 object-src 'none';
+                 base-uri 'self';
+                 form-action 'self'">
+
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="color-scheme" content="dark">
+
   <!-- SEO / Social -->
   <meta name="description" content="$ONETAP is a community meme token on Base. Fair launch. Liquidity locked.">
   <meta name="keywords" content="ONETAP, meme coin, Base chain, crypto, token, fair launch">
-  <meta property="og:title" content="$ONETAP"/>
-  <meta property="og:description" content="Community meme token on Base. Fair launch. Liquidity locked."/>
-  <meta property="og:image" content="assets/social-card.png"/>
-  <meta property="og:type" content="website"/>
-  <meta name="twitter:card" content="summary_large_image"/>
+  <meta property="og:title" content="$ONETAP" />
+  <meta property="og:description" content="Community meme token on Base. Fair launch. Liquidity locked." />
+  <meta property="og:image" content="assets/social-card.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- (Facultatif pour d’autres charts lib) -->
+  <!-- (Optionnel) Chart.js si tu préfères canvas maison, laisse-le absent -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script> -->
 </head>
 <body>
-  <!-- Fond particules -->
+  <!-- Fond animé particules (permanent) -->
   <canvas id="background-canvas" aria-hidden="true"></canvas>
 
   <!-- Welcome -->
@@ -34,39 +51,35 @@
     <img id="tap2enter-img" src="assets/tap2enter_pc_static.png" alt="Tap to enter" draggable="false"/>
     <span id="press-anywhere-text" aria-hidden="true">Tap anywhere to begin</span>
     <img id="watermark-logo" src="assets/onetap_logo.png" alt="" aria-hidden="true"/>
-    <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
-    <audio id="music-welcome" src="assets/music_welcome.wav" preload="auto" loop></audio>
-    <audio id="music-main"    src="assets/music_main.wav"    preload="auto" loop></audio>
-    <audio id="music-epic"    src="assets/music_epic.wav"    preload="auto" loop></audio>
-  </section>
 
-  <!-- Loader -->
-  <div id="loader" role="status" aria-live="polite" aria-label="Loading…" style="display:none;">
-    <div class="spinner"></div>
-    <div class="loading-text">Loading…</div>
-  </div>
+    <!-- Sons (formats recommandés: .ogg) -->
+    <audio id="headshot-sound"   src="assets/explosion.ogg" preload="auto"></audio>
+    <audio id="music-welcome"    src="assets/music_welcome.ogg" preload="auto" loop></audio>
+    <audio id="music-main"       src="assets/music_main.ogg"    preload="auto"></audio>
+    <audio id="music-epic"       src="assets/music_epic.ogg"    preload="auto" loop></audio>
+    <audio id="roulette-tick"    src="assets/roulette_tick.ogg" preload="auto"></audio>
+    <audio id="drop-rare-sound"  src="assets/drop_rare.ogg"     preload="auto"></audio>
+  </section>
 
   <!-- Roulette -->
   <section id="roulette-screen" aria-label="Roulette" style="display:none;">
     <div id="roulette-container"></div>
-    <audio id="roulette-sound"  src="assets/roulette_sound.wav" preload="auto"></audio>
-    <audio id="drop-rare-sound" src="assets/drop_rare.wav"      preload="auto"></audio>
   </section>
 
   <!-- Gold Drop -->
   <section id="gold-drop-screen" aria-label="Gold drop" style="display:none;">
     <div class="gold-animation-wrapper">
       <div class="gold-flash" aria-hidden="true"></div>
-      <img id="gold-drop-img" src="assets/onetap_gold.png" alt="Golden drop unlocked"/>
+      <img id="gold-drop-img" src="assets/onetap_gold.png" alt="Golden drop unlocked" />
       <div class="confetti" aria-hidden="true"></div>
     </div>
     <span id="gold-drop-text" aria-hidden="true">GOLDEN DROP UNLOCKED!</span>
   </section>
 
-  <!-- Final Drop -->
+  <!-- $ONETAP Final Drop -->
   <section id="onetap-drop-screen" aria-label="$ONETAP drop" style="display:none;">
     <div class="onetap-animation-wrapper">
-      <img id="onetap-logo-img" src="assets/onetap_logo.png" alt="$ONETAP acquired"/>
+      <img id="onetap-logo-img" src="assets/onetap_logo.png" alt="$ONETAP acquired" />
     </div>
     <span id="onetap-drop-text" aria-hidden="true">$ONETAP ACQUIRED!</span>
     <button id="share-btn" style="display:none;" aria-label="Share my golden drop">Share my Golden Drop</button>
@@ -79,7 +92,7 @@
     <div class="ticker">Fair Launch • Liquidity Locked • $ONETAP just hit a new ATH!</div>
   </section>
 
-  <!-- Tokenomics bouton -->
+  <!-- Bouton Tokenomics -->
   <button id="open-tokenomics" class="tokenomics-btn" style="display:none;" aria-haspopup="dialog" aria-controls="tokenomics-overlay">
     📈 Tokenomics
   </button>
@@ -89,7 +102,6 @@
     <div class="tokenomics-modal">
       <button id="close-tokenomics" class="close-btn" aria-label="Close tokenomics">✖</button>
 
-      <!-- Header -->
       <header class="tok-header">
         <h2 id="tokenomics-title">$ONETAP Tokenomics</h2>
         <p class="tok-subtitle">Transparent • Fair • Built on <strong>Base</strong></p>
@@ -100,20 +112,35 @@
         </div>
       </header>
 
-      <!-- KPIs -->
       <section class="tok-kpis">
-        <div class="kpi"><div class="kpi-label">Total Supply</div><div class="kpi-value" id="tok-supply">—</div><div class="kpi-foot">$ONETAP</div></div>
-        <div class="kpi"><div class="kpi-label">Taxes</div><div class="kpi-value" id="tok-tax">—</div><div class="kpi-foot">1% Dev • 1% Mkt • 1% LP</div></div>
-        <div class="kpi"><div class="kpi-label">Network</div><div class="kpi-value">Base</div><div class="kpi-foot">Chain ID 8453</div></div>
-        <div class="kpi"><div class="kpi-label">Liquidity</div><div class="kpi-value" id="tok-lock">Locked</div><div class="kpi-foot" id="tok-lock-foot">—</div></div>
+        <div class="kpi">
+          <div class="kpi-label">Total Supply</div>
+          <div class="kpi-value" id="tok-supply">100,000,000</div>
+          <div class="kpi-foot">$ONETAP</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Taxes</div>
+          <div class="kpi-value" id="tok-tax">3%</div>
+          <div class="kpi-foot">1% Dev • 1% Mkt • 1% LP</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Network</div>
+          <div class="kpi-value">Base</div>
+          <div class="kpi-foot">Chain ID 8453</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Liquidity</div>
+          <div class="kpi-value" id="tok-lock">Locked</div>
+          <div class="kpi-foot">3 months</div>
+        </div>
       </section>
 
-      <!-- Donut + Distribution -->
       <section class="tok-viz">
         <div class="donut-card">
           <canvas id="tok-donut" width="220" height="220" aria-hidden="true"></canvas>
           <ul class="donut-legend" id="tok-legend"></ul>
         </div>
+
         <div class="dist-card">
           <h3>Allocation</h3>
           <div class="dist-rows" id="tok-dist"></div>
@@ -121,12 +148,11 @@
         </div>
       </section>
 
-      <!-- Contract / Actions -->
       <section class="tok-actions">
         <div class="contract-box">
           <div class="contract-label">Contract</div>
           <div class="contract-line">
-            <code id="contract-address">0x0000…0000</code>
+            <code id="contract-address">0x0000...0000</code>
             <button id="copy-contract-btn" class="ghost-btn" title="Copy">📋</button>
             <a id="basescan-link" class="ghost-btn" target="_blank" rel="noopener" title="View on BaseScan">🔎</a>
           </div>
@@ -140,12 +166,7 @@
         <div class="proof-row">
           <a id="audit-link"   class="pro-link" target="_blank" rel="noopener">Audit</a>
           <a id="lp-proof-link" class="pro-link" target="_blank" rel="noopener">LP Lock Proof</a>
-          <button id="add-wallet-btn" class="pro-link">Add to Wallet</button>
-        </div>
-
-        <!-- Dexscreener (lazy) -->
-        <div class="chart-container" id="dexscreener-wrap" style="display:none">
-          <iframe id="dexscreener-embed" title="Dexscreener" loading="lazy" width="100%" height="340" frameborder="0"></iframe>
+          <button id="add-wallet-btn" class="pro-link" type="button">Add to Wallet</button>
         </div>
       </section>
     </div>
@@ -154,32 +175,37 @@
   <!-- Killfeed -->
   <div id="killfeed" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Volume Master -->
-  <div id="volume-control" title="Master volume">
-    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Volume"/>
+  <!-- Mixer: Master / Music / SFX -->
+  <button id="mixer-btn" title="Volume mixer" aria-expanded="false">🎚️</button>
+  <div id="mixer-panel" role="region" aria-label="Volume mixer">
+    <div class="slider-row">
+      <label for="vol-master">Master</label>
+      <input type="range" id="vol-master" min="0" max="1" step="0.01" value="1">
+    </div>
+    <div class="slider-row">
+      <label for="vol-music">Music</label>
+      <input type="range" id="vol-music" min="0" max="1" step="0.01" value="0.8">
+    </div>
+    <div class="slider-row">
+      <label for="vol-sfx">SFX</label>
+      <input type="range" id="vol-sfx" min="0" max="1" step="0.01" value="0.8">
+    </div>
   </div>
 
-  <!-- Mute -->
-  <button id="mute-btn" title="Mute/Unmute Music" aria-pressed="false">
+  <!-- Bouton Mute -->
+  <button id="mute-btn" title="Mute/Unmute" aria-pressed="false">
     <span id="mute-ico" aria-hidden="true">🔊</span>
   </button>
 
-  <!-- Scripts -->
-  <script src="script.js"></script>
-  <script>
-    if ('serviceWorker' in navigator){
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(()=>{});
-      });
-    }
-  </script>
-
-  <!-- Footer légal -->
+  <!-- (Optionnel) Footer légal -->
   <div class="legal">
     <a href="legal/disclaimer.html">Disclaimer</a> •
-    <a href="legal/non-affiliation.html">Non‑Affiliation</a> •
+    <a href="legal/non-affiliation.html">Non-Affiliation</a> •
     <a href="legal/terms.html">Terms</a> •
     <a href="legal/privacy.html">Privacy</a>
   </div>
+
+  <!-- Scripts externes uniquement (CSP) -->
+  <script src="script.js"></script>
 </body>
 </html>
