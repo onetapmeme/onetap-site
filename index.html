@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>$ONETAP – Meme Token Inventory</title>
 
@@ -13,20 +13,20 @@
   <!-- SEO / Social -->
   <meta name="description" content="$ONETAP is a community meme token on Base. Fair launch. Liquidity locked.">
   <meta name="keywords" content="ONETAP, meme coin, Base chain, crypto, token, fair launch">
-  <meta property="og:title" content="$ONETAP" />
-  <meta property="og:description" content="Community meme token on Base. Fair launch. Liquidity locked." />
-  <meta property="og:image" content="assets/social-card.png" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:title" content="$ONETAP"/>
+  <meta property="og:description" content="Community meme token on Base. Fair launch. Liquidity locked."/>
+  <meta property="og:image" content="assets/social-card.png"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 
-  <!-- Chart.js (pour le pie chart Tokenomics) -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+  <!-- (Facultatif pour d’autres charts lib) -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script> -->
 </head>
 <body>
-  <!-- Fond animé particules (permanent) -->
+  <!-- Fond particules -->
   <canvas id="background-canvas" aria-hidden="true"></canvas>
 
   <!-- Welcome -->
@@ -34,8 +34,6 @@
     <img id="tap2enter-img" src="assets/tap2enter_pc_static.png" alt="Tap to enter" draggable="false"/>
     <span id="press-anywhere-text" aria-hidden="true">Tap anywhere to begin</span>
     <img id="watermark-logo" src="assets/onetap_logo.png" alt="" aria-hidden="true"/>
-
-    <!-- Sons accueil -->
     <audio id="headshot-sound" src="assets/explosion.wav" preload="auto"></audio>
     <audio id="music-welcome" src="assets/music_welcome.wav" preload="auto" loop></audio>
     <audio id="music-main"    src="assets/music_main.wav"    preload="auto" loop></audio>
@@ -59,16 +57,16 @@
   <section id="gold-drop-screen" aria-label="Gold drop" style="display:none;">
     <div class="gold-animation-wrapper">
       <div class="gold-flash" aria-hidden="true"></div>
-      <img id="gold-drop-img" src="assets/onetap_gold.png" alt="Golden drop unlocked" />
+      <img id="gold-drop-img" src="assets/onetap_gold.png" alt="Golden drop unlocked"/>
       <div class="confetti" aria-hidden="true"></div>
     </div>
     <span id="gold-drop-text" aria-hidden="true">GOLDEN DROP UNLOCKED!</span>
   </section>
 
-  <!-- $ONETAP Final Drop -->
+  <!-- Final Drop -->
   <section id="onetap-drop-screen" aria-label="$ONETAP drop" style="display:none;">
     <div class="onetap-animation-wrapper">
-      <img id="onetap-logo-img" src="assets/onetap_logo.png" alt="$ONETAP acquired" />
+      <img id="onetap-logo-img" src="assets/onetap_logo.png" alt="$ONETAP acquired"/>
     </div>
     <span id="onetap-drop-text" aria-hidden="true">$ONETAP ACQUIRED!</span>
     <button id="share-btn" style="display:none;" aria-label="Share my golden drop">Share my Golden Drop</button>
@@ -81,83 +79,87 @@
     <div class="ticker">Fair Launch • Liquidity Locked • $ONETAP just hit a new ATH!</div>
   </section>
 
-  <!-- Bouton Tokenomics (affiché quand inventaire visible) -->
+  <!-- Tokenomics bouton -->
   <button id="open-tokenomics" class="tokenomics-btn" style="display:none;" aria-haspopup="dialog" aria-controls="tokenomics-overlay">
     📈 Tokenomics
   </button>
 
-  <!-- Overlay Tokenomics -->
+  <!-- Overlay Tokenomics (Pro) -->
   <div id="tokenomics-overlay" role="dialog" aria-modal="true" aria-labelledby="tokenomics-title">
     <div class="tokenomics-modal">
       <button id="close-tokenomics" class="close-btn" aria-label="Close tokenomics">✖</button>
-      <h2 id="tokenomics-title">Tokenomics</h2>
 
-      <!-- Cartes rapides -->
-      <div class="tokenomics-cards">
-        <div class="tok-card">
-          <div class="tok-label">Network</div>
-          <div class="tok-value">BASE</div>
+      <!-- Header -->
+      <header class="tok-header">
+        <h2 id="tokenomics-title">$ONETAP Tokenomics</h2>
+        <p class="tok-subtitle">Transparent • Fair • Built on <strong>Base</strong></p>
+        <div class="tok-badges">
+          <span class="badge badge-ok">Fair Launch</span>
+          <span class="badge badge-lock">LP Locked</span>
+          <span class="badge badge-audit">Audit</span>
         </div>
-        <div class="tok-card">
-          <div class="tok-label">Total Supply</div>
-          <div class="tok-value"><span id="supply-total">100,000,000</span> $ONETAP</div>
+      </header>
+
+      <!-- KPIs -->
+      <section class="tok-kpis">
+        <div class="kpi"><div class="kpi-label">Total Supply</div><div class="kpi-value" id="tok-supply">—</div><div class="kpi-foot">$ONETAP</div></div>
+        <div class="kpi"><div class="kpi-label">Taxes</div><div class="kpi-value" id="tok-tax">—</div><div class="kpi-foot">1% Dev • 1% Mkt • 1% LP</div></div>
+        <div class="kpi"><div class="kpi-label">Network</div><div class="kpi-value">Base</div><div class="kpi-foot">Chain ID 8453</div></div>
+        <div class="kpi"><div class="kpi-label">Liquidity</div><div class="kpi-value" id="tok-lock">Locked</div><div class="kpi-foot" id="tok-lock-foot">—</div></div>
+      </section>
+
+      <!-- Donut + Distribution -->
+      <section class="tok-viz">
+        <div class="donut-card">
+          <canvas id="tok-donut" width="220" height="220" aria-hidden="true"></canvas>
+          <ul class="donut-legend" id="tok-legend"></ul>
         </div>
-        <div class="tok-card">
-          <div class="tok-label">Taxes</div>
-          <div class="tok-value">3% <span class="tok-sub">(1% dev, 1% marketing, 1% LP)</span></div>
+        <div class="dist-card">
+          <h3>Allocation</h3>
+          <div class="dist-rows" id="tok-dist"></div>
+          <div class="dist-note"><span class="dot dot-mint"></span> No team mint • No VC allocation</div>
         </div>
-        <div class="tok-card">
-          <div class="tok-label">Fairlaunch</div>
-          <div class="tok-value">100%</div>
-        </div>
-        <div class="tok-card">
-          <div class="tok-label">Liquidity</div>
-          <div class="tok-value">Locked <span id="lp-countdown">—</span></div>
-        </div>
-        <div class="tok-card">
-          <div class="tok-label">Contract</div>
-          <div class="tok-value">
-            <span id="contract-address">0x0000000000000000000000000000000000000000</span>
-            <button id="copy-contract-btn" title="Copy contract">📋</button>
+      </section>
+
+      <!-- Contract / Actions -->
+      <section class="tok-actions">
+        <div class="contract-box">
+          <div class="contract-label">Contract</div>
+          <div class="contract-line">
+            <code id="contract-address">0x0000…0000</code>
+            <button id="copy-contract-btn" class="ghost-btn" title="Copy">📋</button>
+            <a id="basescan-link" class="ghost-btn" target="_blank" rel="noopener" title="View on BaseScan">🔎</a>
           </div>
         </div>
-      </div>
 
-      <!-- Pie chart (supply/taxes breakdown) -->
-      <div class="chart-container">
-        <canvas id="supplyChart" width="420" height="220" aria-label="Supply distribution pie chart"></canvas>
-      </div>
+        <div class="cta-row">
+          <a id="buy-link"   class="cta cta-buy"   target="_blank" rel="noopener">Buy $ONETAP</a>
+          <a id="chart-link" class="cta cta-chart" target="_blank" rel="noopener">Open Chart</a>
+        </div>
 
-      <!-- Dexscreener (lazy) -->
-      <div class="chart-container" id="dexscreener-wrap" style="display:none">
-        <iframe id="dexscreener-embed" title="Dexscreener" loading="lazy" width="100%" height="320" frameborder="0"></iframe>
-      </div>
+        <div class="proof-row">
+          <a id="audit-link"   class="pro-link" target="_blank" rel="noopener">Audit</a>
+          <a id="lp-proof-link" class="pro-link" target="_blank" rel="noopener">LP Lock Proof</a>
+          <button id="add-wallet-btn" class="pro-link">Add to Wallet</button>
+        </div>
 
-      <!-- Proof & CTA -->
-      <div class="liquidity-badge">
-        <img src="assets/lock_icon.svg" alt="" aria-hidden="true"/>
-        Liquidity Locked – <span id="lp-badge-countdown">—</span>
-        <a id="lp-proof" href="#" target="_blank" rel="noopener">Proof</a>
-      </div>
-
-      <div class="cta-group">
-        <a id="cta-buy"   class="cta-btn" href="#" target="_blank" rel="noopener">💸 Buy</a>
-        <a id="cta-chart" class="cta-btn" href="#" target="_blank" rel="noopener">📈 Chart</a>
-        <button id="cta-addwallet" class="cta-btn" type="button">➕ Add to Wallet</button>
-        <a id="cta-audit" class="cta-btn ghost" href="#" target="_blank" rel="noopener">🔍 Audit</a>
-      </div>
+        <!-- Dexscreener (lazy) -->
+        <div class="chart-container" id="dexscreener-wrap" style="display:none">
+          <iframe id="dexscreener-embed" title="Dexscreener" loading="lazy" width="100%" height="340" frameborder="0"></iframe>
+        </div>
+      </section>
     </div>
   </div>
 
   <!-- Killfeed -->
   <div id="killfeed" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- Contrôle volume discret -->
+  <!-- Volume Master -->
   <div id="volume-control" title="Master volume">
     <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Volume"/>
   </div>
 
-  <!-- Bouton Mute -->
+  <!-- Mute -->
   <button id="mute-btn" title="Mute/Unmute Music" aria-pressed="false">
     <span id="mute-ico" aria-hidden="true">🔊</span>
   </button>
@@ -172,7 +174,7 @@
     }
   </script>
 
-  <!-- (Optionnel) Footer légal léger -->
+  <!-- Footer légal -->
   <div class="legal">
     <a href="legal/disclaimer.html">Disclaimer</a> •
     <a href="legal/non-affiliation.html">Non‑Affiliation</a> •
