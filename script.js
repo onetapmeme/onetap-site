@@ -1,13 +1,13 @@
-/* ========= $ONETAP v5.2 – script.js ========= */
+/* ========= $ONETAP v5.2 – script.js (fix audio + guards) ========= */
 
 /** ====================== CONFIG ====================== **/
 const CONFIG = {
   CONTRACT:      '0x0000000000000000000000000000000000000000', // remplace
-  BUY_URL:       'https://app.uniswap.org/swap?chain=base',    // ouvre buy sur Base
-  CHART_URL:     'https://dexscreener.com/base',               // page Base
-  AUDIT_URL:     'assets/audit.pdf',                           // mets ton PDF
-  LP_PROOF_URL:  'https://basescan.org',                       // preuve LP
-  BASESCAN_ADDR: 'https://basescan.org',                       // lien token/holder
+  BUY_URL:       'https://app.uniswap.org/swap?chain=base',
+  CHART_URL:     'https://dexscreener.com/base',
+  AUDIT_URL:     'assets/audit.pdf',
+  LP_PROOF_URL:  'https://basescan.org',
+  BASESCAN_ADDR: 'https://basescan.org',
   SUPPLY:        100_000_000,
   TAX_TOTAL:     3,
   TAX_BREAKDOWN: { dev:1, marketing:1, lp:1 },
@@ -50,27 +50,29 @@ const muteBtn      = document.getElementById('mute-btn');
 const muteIco      = document.getElementById('mute-ico');
 
 /** ====================== AUDIO ====================== **/
+const tickEl = document.getElementById('roulette-tick') || document.getElementById('roulette-sound');
 const audio = {
   headshot:  document.getElementById('headshot-sound'),
   welcome:   document.getElementById('music-welcome'),
   main:      document.getElementById('music-main'),
   epic:      document.getElementById('music-epic'),
-  tick:      document.getElementById('roulette-tick'),
+  tick:      tickEl,
   dropRare:  document.getElementById('drop-rare-sound'),
 };
 
 let muted = false;
 
-// mixer state
+// mixer state (guards)
 const mixer = {
   master: parseFloat(localStorage.getItem('vol_master') ?? '1'),
   music:  parseFloat(localStorage.getItem('vol_music')  ?? '0.8'),
   sfx:    parseFloat(localStorage.getItem('vol_sfx')    ?? '0.8'),
 };
 
-volMaster.value = mixer.master;
-volMusic.value  = mixer.music;
-volSfx.value    = mixer.sfx;
+// init sliders if present
+if (volMaster) volMaster.value = mixer.master;
+if (volMusic)  volMusic.value  = mixer.music;
+if (volSfx)    volSfx.value    = mixer.sfx;
 
 function applyVolumes(){
   const m = mixer.master;
@@ -78,72 +80,103 @@ function applyVolumes(){
   [audio.welcome, audio.main, audio.epic].forEach(a => { if(a){ a.volume = m * mixer.music; }});
   // sfx
   [audio.headshot, audio.tick, audio.dropRare].forEach(a => { if(a){ a.volume = m * mixer.sfx; }});
+  // boucle gapless si instanciée
+  if (mainLoop) mainLoop.volume = m * mixer.music;
 }
 applyVolumes();
 
-volMaster.addEventListener('input', e => {
-  mixer.master = parseFloat(e.target.value);
+volMaster?.addEventListener('input', e => {
+  mixer.master = parseFloat(e.target.value || '1');
   localStorage.setItem('vol_master', mixer.master);
   applyVolumes();
 });
-volMusic.addEventListener('input', e => {
-  mixer.music = parseFloat(e.target.value);
+volMusic?.addEventListener('input', e => {
+  mixer.music = parseFloat(e.target.value || '1');
   localStorage.setItem('vol_music', mixer.music);
   applyVolumes();
 });
-volSfx.addEventListener('input', e => {
-  mixer.sfx = parseFloat(e.target.value);
+volSfx?.addEventListener('input', e => {
+  mixer.sfx = parseFloat(e.target.value || '1');
   localStorage.setItem('vol_sfx', mixer.sfx);
   applyVolumes();
 });
 
 // mute
-muteBtn.addEventListener('click', () => {
+muteBtn?.addEventListener('click', () => {
   muted = !muted;
-  Object.values(audio).forEach(a => { try{ a.muted = muted; }catch{} });
-  muteIco.textContent = muted ? '🔈' : '🔊';
-  muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
-  muteBtn.style.opacity = muted ? .4 : .8;
+  Object.values(audio).forEach(a => { try{ if(a) a.muted = muted; }catch{} });
+  if (mainLoop) mainLoop.muted = muted;
+  if (muteIco) muteIco.textContent = muted ? '🔈' : '🔊';
+  muteBtn?.setAttribute('aria-pressed', muted ? 'true' : 'false');
+  if (muteBtn) muteBtn.style.opacity = muted ? .4 : .8;
 });
 
 // mixer toggle
-mixerBtn.addEventListener('click', () => {
-  const open = mixerPanel.classList.toggle('open');
-  mixerBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+mixerBtn?.addEventListener('click', () => {
+  const open = mixerPanel?.classList.toggle('open');
+  mixerBtn?.setAttribute('aria-expanded', open ? 'true' : 'false');
 });
 
-// try welcome music autoplay
+/* ===== Déverrouillage audio fiable (iOS/Chrome) ===== */
+let audioUnlocked = false;
+function unlockAudioOnce(){
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  const els = Object.values(audio).filter(Boolean);
+  els.forEach(a=>{
+    try{
+      a.muted = false;
+      const p = a.play();
+      if (p && typeof p.then==='function'){ p.then(()=>a.pause()).catch(()=>{}); } else { a.pause(); }
+    }catch{}
+  });
+
+  // boucle main gapless: saute éventuelle latence de tête
+  try {
+    audio.main && audio.main.addEventListener('loadedmetadata', ()=>{
+      if (audio.main.duration && audio.main.currentTime < 0.05) audio.main.currentTime = 0.05;
+    }, { once:true });
+  }catch{}
+  applyVolumes();
+}
+['pointerdown','touchstart','click','keydown'].forEach(ev=>{
+  window.addEventListener(ev, unlockAudioOnce, { once:true, passive:true });
+});
+
+// tenter la welcome en ambiance (si autorisé)
 document.addEventListener('DOMContentLoaded', () => {
-  try { audio.welcome.play().catch(()=>{}); } catch{}
+  try { audio.welcome?.play().catch(()=>{}); } catch{}
 });
 
-/** ===== Seamless loop for main music (crossfade) ===== **/
+/** ===== Boucle “main” gapless par cross-fade ===== **/
 class SeamlessLoop {
   constructor(el, fadeMs=120){
     this.fade = fadeMs/1000;
     this.a = el;
-    this.b = el.cloneNode(true);
+    this.b = el ? el.cloneNode(true) : null;
+    if (!this.a || !this.b) return;
     this.b.loop = false;
     this.a.loop = false;
     this.active = this.a;
     this.passive = this.b;
-    this.enabled = false;
     this.timer = null;
     this.started = false;
+    this._muted = false;
+    this._vol = this.a.volume || 1;
     this.setup();
   }
   setup(){
-    [this.a, this.b].forEach(x => { x.volume = this.a.volume; x.muted = this.a.muted; });
+    [this.a, this.b].forEach(x => { x.volume = this._vol; x.muted = this._muted; });
     const sync = () => {
-      this.passive.currentTime = 0;
+      if (!this.passive) return;
+      this.passive.currentTime = 0.05; // évite clic/latence de tête
       this.passive.volume = 0;
       this.passive.play().catch(()=>{});
-      // crossfade
       const t0 = performance.now();
       const tick = (now) => {
         const p = Math.min((now - t0)/ (this.fade*1000), 1);
-        this.passive.volume = (this.a.volume) * p;
-        this.active.volume  = (this.a.volume) * (1 - p);
+        this.passive.volume = this._vol * p;
+        this.active.volume  = this._vol * (1 - p);
         if (p < 1) requestAnimationFrame(tick); else {
           this.active.pause();
           [this.active, this.passive] = [this.passive, this.active];
@@ -153,33 +186,38 @@ class SeamlessLoop {
       requestAnimationFrame(tick);
     };
     this.arm = () => {
-      const left = Math.max(this.active.duration - this.active.currentTime - this.fade, 0.15);
+      const left = Math.max((this.active.duration||0) - (this.active.currentTime||0) - this.fade, 0.15);
       clearTimeout(this.timer);
       this.timer = setTimeout(sync, left*1000);
     };
   }
   start(){
-    if (this.started) return;
+    if (!this.a || !this.b || this.started) return;
     this.started = true;
-    this.a.currentTime = 0;
+    this.a.currentTime = 0.05;
     this.a.play().then(()=>this.arm()).catch(()=>{});
   }
   pause(){
     clearTimeout(this.timer);
-    [this.a, this.b].forEach(x => x.pause());
+    this.a?.pause(); this.b?.pause();
     this.started = false;
   }
   set volume(v){
-    [this.a,this.b].forEach(x => x.volume = v);
+    this._vol = v;
+    if (this.a) this.a.volume = v;
+    if (this.b) this.b.volume = v;
   }
   set muted(m){
-    [this.a,this.b].forEach(x => x.muted = m);
+    this._muted = m;
+    if (this.a) this.a.muted = m;
+    if (this.b) this.b.muted = m;
   }
 }
-const mainLoop = new SeamlessLoop(audio.main, 160);
+const mainLoop = audio.main ? new SeamlessLoop(audio.main, 160) : null;
 
 /** ====================== PARTICLES BG ====================== **/
 (function initParticles(){
+  if (!canvasBG) return;
   const ctx = canvasBG.getContext('2d');
   let W = canvasBG.width = innerWidth;
   let H = canvasBG.height = innerHeight;
@@ -189,15 +227,14 @@ const mainLoop = new SeamlessLoop(audio.main, 160);
     const r = 1+Math.random()*2;
     P.push({x:Math.random()*W,y:Math.random()*H,r, col:Math.random()<.6?'#ffe066aa':'#ffffff99', dx:-0.25+Math.random()*0.5, dy:0.2+Math.random()*0.5});
   }
-  function step(){
+  (function step(){
     ctx.clearRect(0,0,W,H);
     for(const p of P){
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.col;ctx.globalAlpha=.65;ctx.fill();
       p.x+=p.dx;p.y+=p.dy;if(p.y>H)p.y=0;if(p.x>W)p.x=0;if(p.x<0)p.x=W;
     }
     ctx.globalAlpha=1;requestAnimationFrame(step);
-  }
-  step();
+  })();
   addEventListener('resize',()=>{W=canvasBG.width=innerWidth;H=canvasBG.height=innerHeight;});
 })();
 
@@ -207,18 +244,18 @@ function handleTapStart(){
   if (tapHandled) return;
   tapHandled = true;
   if (navigator.vibrate) navigator.vibrate(60);
-  try { audio.headshot.currentTime = 0; audio.headshot.play(); } catch {}
+  try { audio.headshot && (audio.headshot.currentTime = 0, audio.headshot.play()); } catch {}
   setTimeout(()=>{
-    try { audio.welcome.pause(); } catch {}
-    welcome.style.opacity = 0;
+    try { audio.welcome?.pause(); } catch {}
+    if (welcome) welcome.style.opacity = 0;
     setTimeout(()=>{
-      welcome.style.display='none';
+      if (welcome) welcome.style.display='none';
       startRoulette(); // direct (loader supprimé)
     }, 500);
   }, 420);
 }
-welcome.addEventListener('click', handleTapStart, {passive:true});
-welcome.addEventListener('touchstart', handleTapStart, {passive:true});
+welcome?.addEventListener('click', handleTapStart, {passive:true});
+welcome?.addEventListener('touchstart', handleTapStart, {passive:true});
 
 /** ====================== ROULETTE ====================== **/
 const NB_CASES_VISIBLE = 9;     // gold centré
@@ -226,10 +263,13 @@ const NB_CASES_TOTAL   = 38;
 const SPIN_DURATION    = 7000;
 
 function startRoulette(){
-  // Musiques
-  try { audio.main.volume = mixer.master*mixer.music; mainLoop.start(); } catch{}
-  rouletteScr.style.display='flex';
-  rouletteBox.innerHTML = '';
+  // musique main (gapless loop si dispo)
+  try {
+    if (mainLoop){ mainLoop.volume = mixer.master*mixer.music; mainLoop.start(); }
+    else { audio.main?.play().catch(()=>{}); }
+  } catch{}
+  if (rouletteScr) rouletteScr.style.display='flex';
+  if (rouletteBox) rouletteBox.innerHTML = '';
 
   // Pool (blancs + 1 gold)
   const pool = [];
@@ -242,6 +282,7 @@ function startRoulette(){
   const t0 = performance.now();
 
   function render(pos, blur=false){
+    if (!rouletteBox) return;
     rouletteBox.innerHTML = '';
     rouletteBox.classList.toggle('blurred', blur);
     for(let i=0;i<NB_CASES_VISIBLE;i++){
@@ -259,11 +300,12 @@ function startRoulette(){
 
   // tick décéléré (rythme)
   (function scheduleTicks(){
+    if (!audio.tick) return;
     const now = performance.now();
     const progress = Math.min((now - t0) / SPIN_DURATION, 1);
     const speed = 1 - Math.pow(progress, 2.4); // rapide -> lent
     const delay = 40 + 420 * (1 - speed);      // 40ms -> ~460ms
-    try { audio.tick.currentTime = 0; audio.tick.play(); } catch{}
+    try { audio.tick.currentTime = 0; audio.tick.play().catch(()=>{}); } catch{}
     if (progress < 1) setTimeout(scheduleTicks, delay);
   })();
 
@@ -277,7 +319,7 @@ function startRoulette(){
     if (progress < 1){
       requestAnimationFrame(animate);
     } else {
-      try { audio.dropRare.currentTime=0; audio.dropRare.play(); } catch{}
+      try { audio.dropRare && (audio.dropRare.currentTime=0, audio.dropRare.play()); } catch{}
       setTimeout(showGoldDrop, 900);
     }
   }
@@ -286,52 +328,54 @@ function startRoulette(){
 
 /** ====================== DROPS ====================== **/
 function showGoldDrop(){
-  rouletteScr.style.display='none';
-  goldDropScr.style.display='flex';
+  if (rouletteScr) rouletteScr.style.display='none';
+  if (goldDropScr) goldDropScr.style.display='flex';
   launchConfetti();
   setTimeout(()=>{
     if (navigator.vibrate) navigator.vibrate(60);
     // hint
-    const hint = document.createElement('span');
-    hint.textContent = 'Tap to continue';
-    hint.style.cssText = 'color:#fff;font-size:1rem;opacity:.7;margin-top:2vw;animation:pulseText 1s infinite alternate;';
-    goldDropScr.appendChild(hint);
-    goldDropScr.addEventListener('click', showOnetapDrop, { once:true });
-    goldDropScr.addEventListener('touchstart', showOnetapDrop, { once:true, passive:true });
+    if (goldDropScr){
+      const hint = document.createElement('span');
+      hint.textContent = 'Tap to continue';
+      hint.style.cssText = 'color:#fff;font-size:1rem;opacity:.7;margin-top:2vw;animation:pulseText 1s infinite alternate;';
+      goldDropScr.appendChild(hint);
+      goldDropScr.addEventListener('click', showOnetapDrop, { once:true });
+      goldDropScr.addEventListener('touchstart', showOnetapDrop, { once:true, passive:true });
+    }
   }, 700);
 }
 
 function showOnetapDrop(){
-  goldDropScr.style.opacity=0;
+  if (goldDropScr) goldDropScr.style.opacity=0;
   setTimeout(()=>{
-    goldDropScr.style.display='none';
-    onetapScr.style.display='flex';
-    try { mainLoop.pause(); } catch{}
-    try { audio.epic.currentTime=0; audio.epic.play().catch(()=>{}); } catch{}
+    if (goldDropScr) goldDropScr.style.display='none';
+    if (onetapScr) onetapScr.style.display='flex';
+    try { mainLoop && mainLoop.pause(); } catch{}
+    try { audio.epic && (audio.epic.currentTime=0, audio.epic.play().catch(()=>{})); } catch{}
     if (navigator.vibrate) navigator.vibrate(70);
     setTimeout(()=>{
-      shareBtn.style.display='inline-block';
-      onetapScr.addEventListener('click', showMainInventory, { once:true });
-      onetapScr.addEventListener('touchstart', showMainInventory, { once:true, passive:true });
+      if (shareBtn) shareBtn.style.display='inline-block';
+      onetapScr?.addEventListener('click', showMainInventory, { once:true });
+      onetapScr?.addEventListener('touchstart', showMainInventory, { once:true, passive:true });
     }, 1800);
   }, 520);
 }
 
 function showMainInventory(){
-  onetapScr.style.display='none';
-  mainInv.style.display='flex';
+  if (onetapScr) onetapScr.style.display='none';
+  if (mainInv) mainInv.style.display='flex';
   if (navigator.vibrate) navigator.vibrate(50);
-  openTokBtn.style.display='inline-flex';
+  if (openTokBtn) openTokBtn.style.display='inline-flex';
   pushKill('Welcome to your $ONETAP inventory!');
 }
 
 /** ====================== TOKENOMICS ====================== **/
-openTokBtn.addEventListener('click', () => {
+openTokBtn?.addEventListener('click', () => {
   populateTokenomicsUI();
-  tokOverlay.classList.add('open');
+  tokOverlay?.classList.add('open');
 });
-closeTokBtn.addEventListener('click', () => tokOverlay.classList.remove('open'));
-tokOverlay.addEventListener('click', (e) => { if (e.target === tokOverlay) tokOverlay.classList.remove('open'); });
+closeTokBtn?.addEventListener('click', () => tokOverlay?.classList.remove('open'));
+tokOverlay?.addEventListener('click', (e) => { if (e.target === tokOverlay) tokOverlay.classList.remove('open'); });
 
 function populateTokenomicsUI(){
   const pretty = (n)=> n.toLocaleString('en-US');
@@ -438,6 +482,7 @@ function launchConfetti(){
 /** ====================== Killfeed ====================== **/
 function pushKill(text){
   const feed = document.getElementById('killfeed');
+  if (!feed) return;
   const msg = document.createElement('div');
   msg.className = 'kill-msg'; msg.textContent = text;
   feed.appendChild(msg); setTimeout(()=>msg.remove(), 3600);
