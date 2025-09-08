@@ -1,4 +1,4 @@
-/* ========= $ONETAP v5.2 – script.js (fix audio + guards) ========= */
+/* ========= $ONETAP v5.2.3 – script.js (boot fix + audio) ========= */
 
 /** ====================== CONFIG ====================== **/
 const CONFIG = {
@@ -8,7 +8,7 @@ const CONFIG = {
   AUDIT_URL:     'assets/audit.pdf',
   LP_PROOF_URL:  'https://basescan.org',
   BASESCAN_ADDR: 'https://basescan.org',
-  SUPPLY:        100_000_000,
+  SUPPLY:        100000000,              // <— sans séparateur
   TAX_TOTAL:     3,
   TAX_BREAKDOWN: { dev:1, marketing:1, lp:1 },
   LOCK_INFO:     '3 months',
@@ -18,18 +18,15 @@ const CONFIG = {
     { label: 'CEX & Growth', value: 12, color: '#34d399' },
     { label: 'Community',    value: 10, color: '#f472b6' }
   ],
-  SW_VERSION: 'onetap-v5-2'
+  SW_VERSION: 'onetap-v5-3'
 };
 
 /** ====================== SELECTORS ====================== **/
 const canvasBG = document.getElementById('background-canvas');
 
 const welcome      = document.getElementById('welcome-screen');
-const tapImg       = document.getElementById('tap2enter-img');
-
 const rouletteScr  = document.getElementById('roulette-screen');
 const rouletteBox  = document.getElementById('roulette-container');
-
 const goldDropScr  = document.getElementById('gold-drop-screen');
 const onetapScr    = document.getElementById('onetap-drop-screen');
 const mainInv      = document.getElementById('main-inventory');
@@ -62,62 +59,52 @@ const audio = {
 
 let muted = false;
 
-// mixer state (guards)
+// mixer state
 const mixer = {
   master: parseFloat(localStorage.getItem('vol_master') ?? '1'),
   music:  parseFloat(localStorage.getItem('vol_music')  ?? '0.8'),
   sfx:    parseFloat(localStorage.getItem('vol_sfx')    ?? '0.8'),
 };
 
-// init sliders if present
 if (volMaster) volMaster.value = mixer.master;
 if (volMusic)  volMusic.value  = mixer.music;
 if (volSfx)    volSfx.value    = mixer.sfx;
 
 function applyVolumes(){
   const m = mixer.master;
-  // music
   [audio.welcome, audio.main, audio.epic].forEach(a => { if(a){ a.volume = m * mixer.music; }});
-  // sfx
   [audio.headshot, audio.tick, audio.dropRare].forEach(a => { if(a){ a.volume = m * mixer.sfx; }});
-  // boucle gapless si instanciée
   if (mainLoop) mainLoop.volume = m * mixer.music;
 }
 applyVolumes();
 
-volMaster?.addEventListener('input', e => {
+volMaster && volMaster.addEventListener('input', e => {
   mixer.master = parseFloat(e.target.value || '1');
   localStorage.setItem('vol_master', mixer.master);
   applyVolumes();
 });
-volMusic?.addEventListener('input', e => {
+volMusic && volMusic.addEventListener('input', e => {
   mixer.music = parseFloat(e.target.value || '1');
   localStorage.setItem('vol_music', mixer.music);
   applyVolumes();
 });
-volSfx?.addEventListener('input', e => {
+volSfx && volSfx.addEventListener('input', e => {
   mixer.sfx = parseFloat(e.target.value || '1');
   localStorage.setItem('vol_sfx', mixer.sfx);
   applyVolumes();
 });
 
 // mute
-muteBtn?.addEventListener('click', () => {
+muteBtn && muteBtn.addEventListener('click', () => {
   muted = !muted;
   Object.values(audio).forEach(a => { try{ if(a) a.muted = muted; }catch{} });
   if (mainLoop) mainLoop.muted = muted;
   if (muteIco) muteIco.textContent = muted ? '🔈' : '🔊';
-  muteBtn?.setAttribute('aria-pressed', muted ? 'true' : 'false');
+  muteBtn && muteBtn.setAttribute('aria-pressed', muted ? 'true' : 'false');
   if (muteBtn) muteBtn.style.opacity = muted ? .4 : .8;
 });
 
-// mixer toggle
-mixerBtn?.addEventListener('click', () => {
-  const open = mixerPanel?.classList.toggle('open');
-  mixerBtn?.setAttribute('aria-expanded', open ? 'true' : 'false');
-});
-
-/* ===== Déverrouillage audio fiable (iOS/Chrome) ===== */
+/* ===== Déverrouillage audio fiable (tap/clic) ===== */
 let audioUnlocked = false;
 function unlockAudioOnce(){
   if (audioUnlocked) return;
@@ -130,12 +117,12 @@ function unlockAudioOnce(){
       if (p && typeof p.then==='function'){ p.then(()=>a.pause()).catch(()=>{}); } else { a.pause(); }
     }catch{}
   });
-
-  // boucle main gapless: saute éventuelle latence de tête
   try {
-    audio.main && audio.main.addEventListener('loadedmetadata', ()=>{
-      if (audio.main.duration && audio.main.currentTime < 0.05) audio.main.currentTime = 0.05;
-    }, { once:true });
+    if (audio.main) {
+      audio.main.addEventListener('loadedmetadata', ()=>{
+        if (audio.main.duration && audio.main.currentTime < 0.05) audio.main.currentTime = 0.05;
+      }, { once:true });
+    }
   }catch{}
   applyVolumes();
 }
@@ -143,53 +130,46 @@ function unlockAudioOnce(){
   window.addEventListener(ev, unlockAudioOnce, { once:true, passive:true });
 });
 
-// tenter la welcome en ambiance (si autorisé)
+// ambiance welcome si autorisé
 document.addEventListener('DOMContentLoaded', () => {
-  try { audio.welcome?.play().catch(()=>{}); } catch{}
+  try { audio.welcome && audio.welcome.play().catch(()=>{}); } catch{}
 });
 
-/** ===== Boucle “main” gapless par cross-fade ===== **/
+/** ===== Boucle “main” gapless par cross-fade ===== */
 class SeamlessLoop {
-  constructor(el, fadeMs=120){
+  constructor(el, fadeMs=160){
     this.fade = fadeMs/1000;
     this.a = el;
     this.b = el ? el.cloneNode(true) : null;
     if (!this.a || !this.b) return;
-    this.b.loop = false;
-    this.a.loop = false;
-    this.active = this.a;
-    this.passive = this.b;
-    this.timer = null;
-    this.started = false;
-    this._muted = false;
-    this._vol = this.a.volume || 1;
-    this.setup();
+    this.a.loop = false; this.b.loop = false;
+    this.active = this.a; this.passive = this.b;
+    this.timer = null; this.started = false;
+    this._muted = false; this._vol = this.a.volume || 1;
+    [this.a,this.b].forEach(x=>{ x.volume=this._vol; x.muted=this._muted; });
   }
-  setup(){
-    [this.a, this.b].forEach(x => { x.volume = this._vol; x.muted = this._muted; });
-    const sync = () => {
-      if (!this.passive) return;
-      this.passive.currentTime = 0.05; // évite clic/latence de tête
-      this.passive.volume = 0;
-      this.passive.play().catch(()=>{});
-      const t0 = performance.now();
-      const tick = (now) => {
-        const p = Math.min((now - t0)/ (this.fade*1000), 1);
-        this.passive.volume = this._vol * p;
-        this.active.volume  = this._vol * (1 - p);
-        if (p < 1) requestAnimationFrame(tick); else {
-          this.active.pause();
-          [this.active, this.passive] = [this.passive, this.active];
-          this.arm();
-        }
-      };
-      requestAnimationFrame(tick);
+  arm(){
+    const left = Math.max((this.active.duration||0) - (this.active.currentTime||0) - this.fade, 0.15);
+    clearTimeout(this.timer);
+    this.timer = setTimeout(()=>this.sync(), left*1000);
+  }
+  sync(){
+    if (!this.passive) return;
+    this.passive.currentTime = 0.05;
+    this.passive.volume = 0;
+    this.passive.play().catch(()=>{});
+    const t0 = performance.now();
+    const tick = (now)=>{
+      const p = Math.min((now - t0)/ (this.fade*1000), 1);
+      this.passive.volume = this._vol * p;
+      this.active.volume  = this._vol * (1 - p);
+      if (p < 1) requestAnimationFrame(tick); else {
+        this.active.pause();
+        [this.active, this.passive] = [this.passive, this.active];
+        this.arm();
+      }
     };
-    this.arm = () => {
-      const left = Math.max((this.active.duration||0) - (this.active.currentTime||0) - this.fade, 0.15);
-      clearTimeout(this.timer);
-      this.timer = setTimeout(sync, left*1000);
-    };
+    requestAnimationFrame(tick);
   }
   start(){
     if (!this.a || !this.b || this.started) return;
@@ -197,21 +177,9 @@ class SeamlessLoop {
     this.a.currentTime = 0.05;
     this.a.play().then(()=>this.arm()).catch(()=>{});
   }
-  pause(){
-    clearTimeout(this.timer);
-    this.a?.pause(); this.b?.pause();
-    this.started = false;
-  }
-  set volume(v){
-    this._vol = v;
-    if (this.a) this.a.volume = v;
-    if (this.b) this.b.volume = v;
-  }
-  set muted(m){
-    this._muted = m;
-    if (this.a) this.a.muted = m;
-    if (this.b) this.b.muted = m;
-  }
+  pause(){ clearTimeout(this.timer); this.a&&this.a.pause(); this.b&&this.b.pause(); this.started=false; }
+  set volume(v){ this._vol=v; if(this.a) this.a.volume=v; if(this.b) this.b.volume=v; }
+  set muted(m){ this._muted=m; if(this.a) this.a.muted=m; if(this.b) this.b.muted=m; }
 }
 const mainLoop = audio.main ? new SeamlessLoop(audio.main, 160) : null;
 
@@ -246,32 +214,30 @@ function handleTapStart(){
   if (navigator.vibrate) navigator.vibrate(60);
   try { audio.headshot && (audio.headshot.currentTime = 0, audio.headshot.play()); } catch {}
   setTimeout(()=>{
-    try { audio.welcome?.pause(); } catch {}
+    try { audio.welcome && audio.welcome.pause(); } catch {}
     if (welcome) welcome.style.opacity = 0;
     setTimeout(()=>{
       if (welcome) welcome.style.display='none';
-      startRoulette(); // direct (loader supprimé)
+      startRoulette(); // direct
     }, 500);
   }, 420);
 }
-welcome?.addEventListener('click', handleTapStart, {passive:true});
-welcome?.addEventListener('touchstart', handleTapStart, {passive:true});
+welcome && welcome.addEventListener('click', handleTapStart, {passive:true});
+welcome && welcome.addEventListener('touchstart', handleTapStart, {passive:true});
 
 /** ====================== ROULETTE ====================== **/
-const NB_CASES_VISIBLE = 9;     // gold centré
+const NB_CASES_VISIBLE = 9;
 const NB_CASES_TOTAL   = 38;
 const SPIN_DURATION    = 7000;
 
 function startRoulette(){
-  // musique main (gapless loop si dispo)
   try {
     if (mainLoop){ mainLoop.volume = mixer.master*mixer.music; mainLoop.start(); }
-    else { audio.main?.play().catch(()=>{}); }
+    else { audio.main && audio.main.play().catch(()=>{}); }
   } catch{}
   if (rouletteScr) rouletteScr.style.display='flex';
   if (rouletteBox) rouletteBox.innerHTML = '';
 
-  // Pool (blancs + 1 gold)
   const pool = [];
   for (let i=0;i<NB_CASES_TOTAL-1;i++) pool.push('assets/case_blank.png');
   pool.push('assets/onetap_gold.png');
@@ -298,21 +264,21 @@ function startRoulette(){
     }
   }
 
-  // tick décéléré (rythme)
+  // tick décéléré (rythme musical jusqu'au stop)
   (function scheduleTicks(){
     if (!audio.tick) return;
     const now = performance.now();
     const progress = Math.min((now - t0) / SPIN_DURATION, 1);
-    const speed = 1 - Math.pow(progress, 2.4); // rapide -> lent
-    const delay = 40 + 420 * (1 - speed);      // 40ms -> ~460ms
+    const speed = 1 - Math.pow(progress, 2.4);
+    const delay = 40 + 420 * (1 - speed);
     try { audio.tick.currentTime = 0; audio.tick.play().catch(()=>{}); } catch{}
     if (progress < 1) setTimeout(scheduleTicks, delay);
   })();
 
-  function animate(){
+  (function animate(){
     const elapsed = performance.now() - t0;
     const progress = Math.min(elapsed / SPIN_DURATION, 1);
-    const ease = 1 - Math.pow(1 - progress, 2.3); // frein tardif
+    const ease = 1 - Math.pow(1 - progress, 2.3);
     const pos = Math.floor(totalScroll * ease);
     const cur = (pos + finalPos) % pool.length;
     render(cur, progress < .75);
@@ -322,8 +288,7 @@ function startRoulette(){
       try { audio.dropRare && (audio.dropRare.currentTime=0, audio.dropRare.play()); } catch{}
       setTimeout(showGoldDrop, 900);
     }
-  }
-  animate();
+  })();
 }
 
 /** ====================== DROPS ====================== **/
@@ -333,7 +298,6 @@ function showGoldDrop(){
   launchConfetti();
   setTimeout(()=>{
     if (navigator.vibrate) navigator.vibrate(60);
-    // hint
     if (goldDropScr){
       const hint = document.createElement('span');
       hint.textContent = 'Tap to continue';
@@ -355,8 +319,8 @@ function showOnetapDrop(){
     if (navigator.vibrate) navigator.vibrate(70);
     setTimeout(()=>{
       if (shareBtn) shareBtn.style.display='inline-block';
-      onetapScr?.addEventListener('click', showMainInventory, { once:true });
-      onetapScr?.addEventListener('touchstart', showMainInventory, { once:true, passive:true });
+      onetapScr && onetapScr.addEventListener('click', showMainInventory, { once:true });
+      onetapScr && onetapScr.addEventListener('touchstart', showMainInventory, { once:true, passive:true });
     }, 1800);
   }, 520);
 }
@@ -370,12 +334,12 @@ function showMainInventory(){
 }
 
 /** ====================== TOKENOMICS ====================== **/
-openTokBtn?.addEventListener('click', () => {
+openTokBtn && openTokBtn.addEventListener('click', () => {
   populateTokenomicsUI();
-  tokOverlay?.classList.add('open');
+  tokOverlay && tokOverlay.classList.add('open');
 });
-closeTokBtn?.addEventListener('click', () => tokOverlay?.classList.remove('open'));
-tokOverlay?.addEventListener('click', (e) => { if (e.target === tokOverlay) tokOverlay.classList.remove('open'); });
+closeTokBtn && closeTokBtn.addEventListener('click', () => tokOverlay && tokOverlay.classList.remove('open'));
+tokOverlay && tokOverlay.addEventListener('click', (e) => { if (e.target === tokOverlay) tokOverlay.classList.remove('open'); });
 
 function populateTokenomicsUI(){
   const pretty = (n)=> n.toLocaleString('en-US');
@@ -387,24 +351,23 @@ function populateTokenomicsUI(){
   if (taxEl)    taxEl.textContent    = CONFIG.TAX_TOTAL + '%';
   if (lockEl)   lockEl.textContent   = 'Locked';
 
-  // Contract / Links
   const contractEl = document.getElementById('contract-address');
   if (contractEl) contractEl.textContent = CONFIG.CONTRACT.slice(0,6)+'…'+CONFIG.CONTRACT.slice(-4);
-  document.getElementById('copy-contract-btn')?.addEventListener('click', async ()=>{
+  const copy = document.getElementById('copy-contract-btn');
+  copy && copy.addEventListener('click', async ()=>{
     try{ await navigator.clipboard.writeText(CONFIG.CONTRACT); pushKill('Contract copied!'); }
     catch{ pushKill('Copy failed'); }
   });
+
   const bscan = document.getElementById('basescan-link'); if (bscan) bscan.href = CONFIG.BASESCAN_ADDR;
   const buy   = document.getElementById('buy-link');      if (buy)   buy.href   = CONFIG.BUY_URL;
   const chart = document.getElementById('chart-link');    if (chart) chart.href = CONFIG.CHART_URL;
   const audit = document.getElementById('audit-link');    if (audit) audit.href = CONFIG.AUDIT_URL;
   const lp    = document.getElementById('lp-proof-link'); if (lp)    lp.href    = CONFIG.LP_PROOF_URL;
 
-  document.getElementById('add-wallet-btn')?.addEventListener('click', ()=>{
-    addTokenToWallet(CONFIG.CONTRACT, 'ONETAP', 18);
-  });
+  const addw = document.getElementById('add-wallet-btn');
+  addw && addw.addEventListener('click', ()=> addTokenToWallet(CONFIG.CONTRACT, 'ONETAP', 18));
 
-  // Distribution
   const distWrap = document.getElementById('tok-dist');
   const legend   = document.getElementById('tok-legend');
   if (!distWrap || !legend) return;
@@ -462,20 +425,18 @@ function launchConfetti(){
     life: 0, max: 120 + Math.random()*80
   }));
   let running = true;
-  function step(){
+  (function step(){
     ctx.clearRect(0,0,W,H);
     for(const p of parts){
       p.life++;
-      p.vy += 0.02; // gravity
-      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      p.vy += 0.02; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
       ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
       ctx.fillStyle = p.col; ctx.globalAlpha = Math.max(0, 1 - p.life/p.max);
       ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
     }
     if (parts.every(p=>p.life>=p.max || p.y>H+30)) running=false;
     if (running) requestAnimationFrame(step); else host.innerHTML='';
-  }
-  step();
+  })();
   addEventListener('resize',()=>{W=cvs.width=host.clientWidth;H=cvs.height=host.clientHeight;});
 }
 
@@ -528,3 +489,4 @@ if ('serviceWorker' in navigator){
     navigator.serviceWorker.register('./sw.js').catch(()=>{});
   });
 }
+
