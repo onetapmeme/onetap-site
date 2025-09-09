@@ -1,36 +1,25 @@
 // ========= $ONETAP v5.2.3 – sw.js =========
-const CACHE = 'onetap-v5-3';
+// sw.js
+const CACHE = 'onetap-v5-3'; 
 
-const CORE = [
-  './',
-  './index.html',
-  './style.css',
-  './script.js',
-  './manifest.json',
-  // ajoute ici tes assets critiques si besoin:
-  './assets/onetap_logo.png',
-];
-
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE)
-      .then((c) => c.addAll(CORE))
-      .then(() => self.skipWaiting())
-  );
+self.addEventListener('install', e=>{
+  e.waitUntil(caches.open(CACHE).then(c=>c.addAll([
+    './','./index.html','./style.css','./script.js','./manifest.json',
+    './assets/explosion.wav','./assets/music_welcome.wav','./assets/music_main.wav',
+    './assets/music_epic.wav','./assets/roulette_sound.wav','./assets/drop_rare.wav'
+  ])).then(()=>self.skipWaiting()));
 });
-
-self.addEventListener('activate', (e) => {
-  e.waitUntil((async () => {
+self.addEventListener('activate', e=> e.waitUntil(
+  (async ()=>{ 
     const keys = await caches.keys();
-    await Promise.all(
-      keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-    );
+    await Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)));
     await self.clients.claim();
-  })());
+  })()
+));
+self.addEventListener('fetch', e=>{
+  e.respondWith(caches.match(e.request).then(res=>res || fetch(e.request)));
 });
 
-self.addEventListener('fetch', (e) => {
-  const req = e.request;
 
   // Network-first pour les navigations HTML (évite les écrans blancs quand index change)
   if (req.mode === 'navigate') {
