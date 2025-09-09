@@ -55,14 +55,14 @@ const muteIco     = $('mute-ico');
 
 /** ====================== AUDIO ====================== **/
 const audio = {
-  headshot:  $('headshot-sound'),
-  welcome:   $('music-welcome'),
-  main:      $('music-main'),
-  epic:      $('music-epic'),
-  tick:      $('roulette-tick'),
-  dropRare:  $('drop-rare-sound'),
+  headshot:  document.getElementById('headshot-sound'),
+  welcome:   document.getElementById('music-welcome'),
+  main:      document.getElementById('music-main'),
+  epic:      document.getElementById('music-epic'),
+  tick:      document.getElementById('roulette-sound'), // <<< aligné avec assets/roulette_sound.wav
+  dropRare:  document.getElementById('drop-rare-sound'),
 };
-let muted = false;
+
 
 // mixer state (avec valeurs par défaut si sliders absents)
 const mixer = {
@@ -122,6 +122,21 @@ if (mixerBtn && mixerPanel){
 document.addEventListener('DOMContentLoaded', () => {
   try { audio.welcome?.play()?.catch(()=>{}); } catch{}
 });
+
+// Volume securité no 0 localstorage
+
+const clamp01 = (v, def=1)=> {
+  v = Number.isFinite(v) ? v : def;
+  return (v < 0 || v > 1) ? def : v;
+};
+
+mixer.master = clamp01(mixer.master, 1);
+mixer.music  = clamp01(mixer.music,  0.8);
+mixer.sfx    = clamp01(mixer.sfx,    0.8);
+if (volMaster) volMaster.value = mixer.master;
+if (volMusic)  volMusic.value  = mixer.music;
+if (volSfx)    volSfx.value    = mixer.sfx;
+applyVolumes();
 
 /** ===== Seamless loop for main music (crossfade) ===== **/
 class SeamlessLoop {
@@ -205,6 +220,27 @@ const mainLoop = new SeamlessLoop(audio.main, 160);
 })();
 
 /** ====================== FLOW ====================== **/
+// Empêche les blocages autoplay (iOS, Chrome mobile)
+let audioUnlocked = false;
+function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  const list = [audio.welcome, audio.main, audio.epic, audio.headshot, audio.tick, audio.dropRare];
+  list.forEach(a=>{
+    if (!a) return;
+    a.muted = false;
+    // applique les volumes actuels
+    const isMusic = (a === audio.welcome || a === audio.main || a === audio.epic);
+    try {
+      a.volume = (isMusic ? mixer.master*mixer.music : mixer.master*mixer.sfx);
+      const p = a.play();
+      if (p?.then) p.then(()=>{ a.pause(); a.currentTime = 0; }).catch(()=>{});
+      else { a.pause(); a.currentTime = 0; }
+    } catch {}
+  });
+}
+
+//  handleTapStart()
 let tapHandled = false;
 function handleTapStart(){
   if (tapHandled) return;
@@ -268,13 +304,14 @@ function startRoulette(){
 
   // tick décéléré (rythme)
   (function scheduleTicks(){
-    const now = performance.now();
-    const progress = Math.min((now - t0) / SPIN_DURATION, 1);
-    const speed = 1 - Math.pow(progress, 2.4); // rapide -> lent
-    const delay = 40 + 420 * (1 - speed);      // 40ms -> ~460ms
-    try { if (audio.tick){ audio.tick.currentTime = 0; audio.tick.play(); } } catch{}
-    if (progress < 1) setTimeout(scheduleTicks, delay);
-  })();
+  const now = performance.now();
+  const progress = Math.min((now - t0) / SPIN_DURATION, 1);
+  const speed = 1 - Math.pow(progress, 2.4); // rapide -> lent
+  const delay = 40 + 420 * (1 - speed);      // 40ms -> ~460ms
+  try { audio.tick.currentTime = 0; audio.tick.play(); } catch{}
+  if (progress < 1) setTimeout(scheduleTicks, delay);
+})();
+
 
   function animate(){
     const elapsed = performance.now() - t0;
