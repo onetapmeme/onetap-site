@@ -109,6 +109,22 @@ a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
 .close-btn{position:absolute;right:.9em;top:.9em;background:transparent;color:var(--gold);border:none;font-size:1.4em;opacity:.7;cursor:pointer;transition:opacity .18s}
 .close-btn:hover{opacity:1}
 
+/* Share my Golden Drop */
+
+#share-btn {
+  display:none;
+  margin-top: 1.2rem;
+  background: linear-gradient(90deg, #ffe066, #ffd54d);
+  color: #14152b;
+  border: 0; border-radius: 12px;
+  padding: .85em 1.4em;
+  font-weight: 800; letter-spacing: .05em;
+  box-shadow: 0 6px 18px rgba(255,224,102,.25);
+  cursor: pointer; transition: transform .08s ease, filter .12s ease;
+}
+#share-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+#share-btn:active { transform: translateY(0); }
+
 /* === TOKENOMICS PRO === */
 .tok-header{text-align:center;margin-bottom:.2rem}
 .tok-header h2{margin:0 0 .2rem;font-family:var(--font-pixel);color:var(--gold);font-size:clamp(1.05rem,2.2vw,1.4rem);letter-spacing:.04em}
