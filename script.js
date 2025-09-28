@@ -102,6 +102,7 @@ if (volSfx) volSfx.addEventListener('input', e => {
 });
 
 // Mute
+let muted = false;
 if (muteBtn) muteBtn.addEventListener('click', () => {
   muted = !muted;
   Object.values(audio).forEach(a => { if(a){ a.muted = muted; } });
