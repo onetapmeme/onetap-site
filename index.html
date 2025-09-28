@@ -43,6 +43,19 @@
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script> -->
 </head>
 <body>
+    <header class="site-topbar" role="banner">
+    <a class="site-topbar__brand" href="#welcome-screen">
+      <img src="assets/onetap_logo.png" alt="ONETAP" aria-hidden="true" />
+      <span class="brand-text">$ONETAP</span>
+    </a>
+    <nav class="legal-nav" aria-label="Legal links">
+      <a href="legal/disclaimer.html">Disclaimer</a>
+      <a href="legal/non-affiliation.html">Non-Affiliation</a>
+      <a href="legal/terms.html">Terms</a>
+      <a href="legal/privacy.html">Privacy</a>
+    </nav>
+  </header>
+
   <!-- Fond animé particules (permanent) -->
   <canvas id="background-canvas" aria-hidden="true"></canvas>
 
@@ -53,7 +66,7 @@
     <img id="watermark-logo" src="assets/onetap_logo.png" alt="" aria-hidden="true"/>
  </section>
   
- <!-- Sons (doivent correspondre exactement aux fichiers de /assets) -->
+  <!-- Sons (doivent correspondre exactement aux fichiers de /assets) -->
 <audio id="headshot-sound"  src="assets/explosion.wav"     preload="auto"></audio>
 <audio id="music-welcome"   src="assets/music_welcome.wav" preload="auto"></audio>
 <audio id="music-main"      src="assets/music_main.wav"    preload="auto"></audio>
