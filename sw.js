@@ -1,29 +1,38 @@
-// ========= $ONETAP v5.2.3 – sw.js =========
-// sw.js
-const CACHE = 'onetap-v5-3'; 
+// ========= $ONETAP — sw.js (clean) =========
+const CACHE = 'onetap-v5-6-gh';
 
-self.addEventListener('install', e=>{
-  e.waitUntil(caches.open(CACHE).then(c=>c.addAll([
-    './','./index.html','./style.css','./script.js','./manifest.json',
-    './assets/explosion.wav','./assets/music_welcome.wav','./assets/music_main.wav',
-    './assets/music_epic.wav','./assets/roulette_sound.wav','./assets/drop_rare.wav'
-  ])).then(()=>self.skipWaiting()));
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE).then((cache) =>
+      cache.addAll([
+        './','./index.html','./style.css','./script.js','./manifest.json',
+        // précache aussi les visuels de la 1ère scène (confort)
+        './assets/onetap_logo.png','./assets/tap2enter_pc_static.png',
+        './assets/case_blank.png','./assets/onetap_gold.png',
+        // audio
+        './assets/explosion.wav','./assets/music_welcome.wav','./assets/music_main.wav',
+        './assets/music_epic.wav','./assets/roulette_sound.wav','./assets/drop_rare.wav'
+      ])
+    ).then(() => self.skipWaiting())
+  );
 });
-self.addEventListener('activate', e=> e.waitUntil(
-  (async ()=>{ 
+
+self.addEventListener('activate', (event) => {
+  event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)));
+    await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
     await self.clients.claim();
-  })()
-));
-self.addEventListener('fetch', e=>{
-  e.respondWith(caches.match(e.request).then(res=>res || fetch(e.request)));
+  })());
 });
 
+// Un seul fetch listener :
+// - navigations HTML → network-first (fallback cache/index)
+// - assets (CSS/JS/img/audio) → cache-first
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
 
-  // Network-first pour les navigations HTML (évite les écrans blancs quand index change)
   if (req.mode === 'navigate') {
-    e.respondWith((async () => {
+    event.respondWith((async () => {
       try {
         const fresh = await fetch(req);
         const cache = await caches.open(CACHE);
@@ -37,8 +46,7 @@ self.addEventListener('fetch', e=>{
     return;
   }
 
-  // Cache-first pour le reste (CSS/JS/Assets)
-  e.respondWith((async () => {
+  event.respondWith((async () => {
     const cached = await caches.match(req);
     if (cached) return cached;
     try {
