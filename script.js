@@ -277,37 +277,75 @@ function startRoulette(){
   rouletteScr.style.display='flex';
   rouletteBox.innerHTML = '';
 
+  const track = document.createElement('div');
+  track.className = 'roulette-track';
+  rouletteBox.appendChild(track);
+
   // Pool (blancs + 1 gold)
   const pool = [];
   for (let i=0;i<NB_CASES_TOTAL-1;i++) pool.push('assets/case_blank.png');
   pool.push('assets/onetap_gold.png');
 
   const totalScroll = pool.length * 8;
-  const finalPos = (pool.length - 1) - Math.floor(NB_CASES_VISIBLE/2);
+  const centerIndex = Math.floor(NB_CASES_VISIBLE/2);
+  const finalPos = (pool.length - 1) - centerIndex;
 
+  const caseMetrics = { width: 0, gap: 0 };
+  let lastBase = -1;
   const t0 = performance.now();
 
-  function render(pos, blur=false){
-    rouletteBox.innerHTML = '';
-    rouletteBox.classList.toggle('blurred', blur);
-    for(let i=0;i<NB_CASES_VISIBLE;i++){
-      const idx = (pos + i) % pool.length;
-      const isGold = (idx === pool.length-1 && i === Math.floor(NB_CASES_VISIBLE/2));
+ function measureCases(){
+    const first = track.querySelector('.roulette-case');
+    if (!first) return;
+    const rect = first.getBoundingClientRect();
+    caseMetrics.width = rect.width;
+    const style = getComputedStyle(track);
+    const gapValue = parseFloat(style.columnGap || style.gap || getComputedStyle(rouletteBox).columnGap || '0');
+    caseMetrics.gap = Number.isFinite(gapValue) ? gapValue : 0;
+  }
+
+  function updateCases(baseIndex){
+    track.innerHTML = '';
+    const needed = NB_CASES_VISIBLE + 1; // +1 pour défilement fractionnaire
+    for(let i=0;i<needed;i++){
+      const idx = (baseIndex + i) % pool.length;
+      const isGold = (idx === pool.length-1 && i === centerIndex);
       const cell = document.createElement('div');
       cell.className = 'roulette-case' + (isGold ? ' gold' : '');
       const img = document.createElement('img');
       img.src = pool[idx];
       img.alt = isGold ? 'Golden case' : 'Blank case';
       cell.appendChild(img);
-      rouletteBox.appendChild(cell);
+      track.appendChild(cell);
     }
+    lastBase = baseIndex;
+    requestAnimationFrame(measureCases);
+  }
+
+  function applyShift(frac){
+    if (!caseMetrics.width){
+      measureCases();
+      if (!caseMetrics.width) return;
+    }
+    const offset = frac * (caseMetrics.width + caseMetrics.gap);
+    track.style.transform = `translateX(${-offset}px)`;
+  }
+
+  function render(absOffset, blur=false){
+    const baseIndex = Math.floor(absOffset) % pool.length;
+    if (baseIndex !== lastBase){
+      updateCases(baseIndex);
+    }
+    rouletteBox.classList.toggle('blurred', blur);
+    const frac = absOffset - Math.floor(absOffset);
+    applyShift(frac);
   }
 
   // tick décéléré (rythme)
   (function scheduleTicks(){
   const now = performance.now();
   const progress = Math.min((now - t0) / SPIN_DURATION, 1);
-  const speed = 1 - Math.pow(progress, 2.4); // rapide -> lent
+  const speed = 1 - Math.pow(progress, 2.8); // rapide -> lent
   const delay = 40 + 420 * (1 - speed);      // 40ms -> ~460ms
   try { audio.tick.currentTime = 0; audio.tick.play(); } catch{}
   if (progress < 1) setTimeout(scheduleTicks, delay);
@@ -317,10 +355,10 @@ function startRoulette(){
   function animate(){
     const elapsed = performance.now() - t0;
     const progress = Math.min(elapsed / SPIN_DURATION, 1);
-    const ease = 1 - Math.pow(1 - progress, 2.3); // frein tardif
-    const pos = Math.floor(totalScroll * ease);
-    const cur = (pos + finalPos) % pool.length;
-    render(cur, progress < .75);
+    const ease = 1 - Math.pow(1 - progress, 3.1); // frein tardif + smooth
+    const absolute = totalScroll * ease;
+    const offset = absolute + finalPos;
+    render(offset, progress < .78);
     if (progress < 1){
       requestAnimationFrame(animate);
     } else {
