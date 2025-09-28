@@ -28,13 +28,14 @@ const $ = (id)=> document.getElementById(id);
 const canvasBG = $('background-canvas');
 
 // Stages
-const welcome     = $('welcome-screen');
-const tapImg      = $('tap2enter-img');
-const rouletteScr = $('roulette-screen');
-const rouletteBox = $('roulette-container');
-const goldDropScr = $('gold-drop-screen');
-const onetapScr   = $('onetap-drop-screen');
-const mainInv     = $('main-inventory');
+const welcome      = $('welcome-screen');
+const tapImg       = $('tap2enter-img');
+const watermark    = $('watermark-logo');
+const rouletteScr  = $('roulette-screen');
+const rouletteBox  = $('roulette-container');
+const goldDropScr  = $('gold-drop-screen');
+const onetapScr    = $('onetap-drop-screen');
+const mainInv      = $('main-inventory');
 
 // UI
 const shareBtn    = $('share-btn');
@@ -251,6 +252,7 @@ function handleTapStart(){
   setTimeout(()=>{
     try { audio.welcome?.pause(); } catch {}
     if (welcome){
+      if (watermark) watermark.style.display = 'none';
       welcome.style.opacity = 0;
       setTimeout(()=>{
         welcome.style.display='none';
